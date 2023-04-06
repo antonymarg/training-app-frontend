@@ -1,6 +1,6 @@
-import Home from "./Home";
-import Login from "./Login";
-import Trainer from "./Trainer";
-import Participant from "./Participant";
+import Home from "./HomePage";
+import Login from "./LoginPage";
+import Trainer from "./TrainerPage";
+import Participant from "./ParticipantPage";
 
 export { Home, Login, Trainer, Participant };

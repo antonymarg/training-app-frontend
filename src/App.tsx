@@ -1,27 +1,18 @@
-import { useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { Home } from "./Routes";
-
-const USER_TYPES = {
-  PUBLIC: "public",
-  TRAINER: "trainer",
-  PARTICIPANT: "participant",
-};
+import { useSelector } from "react-redux";
+import { getUserRole } from "./userSlice";
 
 function App() {
-  const [userType, setUserType] = useState(USER_TYPES.PUBLIC);
-
+  const userType = useSelector(getUserRole);
   return (
     <div className="container">
       <p>
         Your current status is <b>{userType}</b>
       </p>
       <Routes>
-        <Route
-          path="/"
-          element={<Home userType={userType} setUserType={setUserType} />}
-        />
+        <Route path="/" element={<Home />} />
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
     </div>
