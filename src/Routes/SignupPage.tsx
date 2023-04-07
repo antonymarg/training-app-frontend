@@ -7,24 +7,42 @@ import {
   InputLabel,
   MenuItem,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { UserRole } from "../types";
-import { createUser } from "../userSlice";
-import firebase, { auth } from "../firebase";
+import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase";
+
+const registerUser = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  return createUserWithEmailAndPassword(auth, email, password);
+};
+
+const addUserData = async (userInfo: any) => {
+  setDoc(doc(db, "users", userInfo.userId), userInfo)
+    .then((e) => e)
+    .catch((e) => console.log(e));
+};
 
 const SignupPage = () => {
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [role, setRole] = useState<UserRole>("participant");
 
   const onSignUp = async () => {
-    //validate
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch {}
+    let user = { name, email, role };
+    registerUser({ email, password })
+      .then((e) => addUserData({ userId: e.user.uid, ...user }))
+      .then((e) => navigate("/login"))
+      .catch((e) => console.log(e));
   };
   return (
     <form>

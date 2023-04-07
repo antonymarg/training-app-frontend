@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { UserRole } from "./types";
-import firebase from "./firebase";
 
 type UserProfile = {
   email: string;
