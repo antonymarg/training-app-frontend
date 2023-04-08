@@ -10,7 +10,7 @@ import {
 import { UserRole } from "../types";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router";
+import { redirect } from "react-router";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -31,7 +31,6 @@ const addUserData = async (userInfo: any) => {
 };
 
 const SignupPage = () => {
-  const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -41,7 +40,7 @@ const SignupPage = () => {
     let user = { name, email, role };
     registerUser({ email, password })
       .then((e) => addUserData({ userId: e.user.uid, ...user }))
-      .then((e) => navigate("/login"))
+      .then((e) => redirect("/login"))
       .catch((e) => console.log(e));
   };
   return (

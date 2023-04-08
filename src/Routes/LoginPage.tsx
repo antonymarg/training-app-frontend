@@ -6,11 +6,10 @@ import { signInWithEmailAndPassword } from "@firebase/auth";
 import { auth } from "../firebase";
 import { getDoc, doc } from "@firebase/firestore";
 import { db } from "../firebase";
-import { useNavigate } from "react-router";
+import { redirect } from "react-router";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isAlertVisible, setAlertVisible] = useState(false);
@@ -21,7 +20,7 @@ const LoginPage = () => {
       .then((e) => getDoc(doc(db, "users", e.user.uid)))
       .then((e) => dispatch(setUserRole(e.data()?.role)))
       .then((e) => dispatch(login()))
-      .then((e) => navigate("/"))
+      .then((e) => redirect("/"))
       .catch((e) => setAlertVisible(true));
   };
 
