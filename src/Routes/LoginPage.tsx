@@ -2,8 +2,11 @@ import { useState } from "react";
 import { Alert, TextField, Button, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { login, setUserRole } from "../userSlice";
-
-const ACCEPTED_EMAIL = ["trainer@app.com", "participant@app.com"];
+import { signInWithEmailAndPassword } from "@firebase/auth";
+import { auth } from "../firebase";
+import { getDoc, doc } from "@firebase/firestore";
+import { db } from "../firebase";
+import { redirect } from "react-router";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -12,12 +15,13 @@ const LoginPage = () => {
   const [isAlertVisible, setAlertVisible] = useState(false);
 
   const onLoginClick = () => {
-    setAlertVisible(false);
-    if (!ACCEPTED_EMAIL.includes(email) || password !== "1234")
-      return setAlertVisible(true);
-    let userType = email.split("@")[0];
-    dispatch(login());
-    dispatch(setUserRole(userType));
+    //validate
+    signInWithEmailAndPassword(auth, email, password)
+      .then((e) => getDoc(doc(db, "users", e.user.uid)))
+      .then((e) => dispatch(setUserRole(e.data()?.role)))
+      .then((e) => dispatch(login()))
+      .then((e) => redirect("/"))
+      .catch((e) => setAlertVisible(true));
   };
 
   return (

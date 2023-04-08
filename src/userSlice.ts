@@ -32,10 +32,18 @@ export const userSlice = createSlice({
       state.isLoggedIn = false;
       state.role = "public";
     },
+    createUser: (state, action) => {
+      state.isLoggedIn = true;
+      state.role = action.payload.role;
+      state.profile = {
+        email: action.payload.email,
+        name: action.payload.name,
+      };
+    },
   },
 });
 
-export const { setUserRole, login, logout } = userSlice.actions;
+export const { setUserRole, login, logout, createUser } = userSlice.actions;
 
 export const getUserProfile = (state: RootState) => state.user.profile;
 export const isUserLoggedIn = (state: RootState) => state.user.isLoggedIn;

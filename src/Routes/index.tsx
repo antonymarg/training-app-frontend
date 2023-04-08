@@ -1,6 +1,15 @@
-import Home from "./HomePage";
-import Login from "./LoginPage";
-import Trainer from "./TrainerPage";
-import Participant from "./ParticipantPage";
+import HomePage from "./HomePage";
+import LoginPage from "./LoginPage";
+import TrainerPage from "./TrainerPage";
+import ParticipantPage from "./ParticipantPage";
+import SignupPage from "./SignupPage";
+import PublicPage from "./PublicPage";
 
-export { Home, Login, Trainer, Participant };
+export {
+  HomePage,
+  LoginPage,
+  TrainerPage,
+  ParticipantPage,
+  SignupPage,
+  PublicPage,
+};
