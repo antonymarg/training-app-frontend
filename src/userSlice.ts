@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { UserRole } from "./types";
+import { UserRole } from "./lib/types";
 
 type UserProfile = {
   email: string;
@@ -15,7 +15,7 @@ interface UserState {
 
 const initialState: UserState = {
   isLoggedIn: false,
-  role: "public",
+  role: null,
 };
 
 export const userSlice = createSlice({
@@ -25,12 +25,21 @@ export const userSlice = createSlice({
     setUserRole: (state, action) => {
       state.role = action.payload;
     },
-    login: (state) => {
-      state.isLoggedIn = true;
+    login: (state, action) => {
+      state = {
+        ...state,
+        isLoggedIn: true,
+        role: action.payload.role,
+        profile: {
+          email: action.payload.email,
+          name: action.payload.name,
+        },
+      };
+      return state;
     },
     logout: (state) => {
       state.isLoggedIn = false;
-      state.role = "public";
+      state.role = null;
     },
     createUser: (state, action) => {
       state.isLoggedIn = true;
@@ -48,5 +57,6 @@ export const { setUserRole, login, logout, createUser } = userSlice.actions;
 export const getUserProfile = (state: RootState) => state.user.profile;
 export const isUserLoggedIn = (state: RootState) => state.user.isLoggedIn;
 export const getUserRole = (state: RootState) => state.user.role;
+export const getUser = (state: RootState) => state.user;
 
 export default userSlice.reducer;

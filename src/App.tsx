@@ -2,14 +2,15 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { HomePage, LoginPage, SignupPage } from "./Routes";
 import { useSelector } from "react-redux";
-import { getUserRole } from "./userSlice";
+import { getUser } from "./userSlice";
 
 function App() {
-  const userType = useSelector(getUserRole);
+  const user = useSelector(getUser);
   return (
     <div className="container">
       <p>
-        Your current status is <b>{userType}</b>
+        Hey {user.profile?.name ?? "stranger"}! Your current status is{" "}
+        <b>{user.role ?? "new user"}.</b>
       </p>
       <Routes>
         <Route path="/" element={<HomePage />} />
