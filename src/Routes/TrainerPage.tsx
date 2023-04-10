@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { logout } from "../userSlice";
+import { logout } from "../Store/userSlice";
 
 const TrainerPage = () => {
   const dispatch = useDispatch();

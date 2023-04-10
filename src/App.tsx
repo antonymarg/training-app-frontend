@@ -2,7 +2,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { HomePage, LoginPage, SignupPage } from "./Routes";
 import { useSelector } from "react-redux";
-import { getUser } from "./userSlice";
+import { getUser } from "./Store/userSlice";
 
 function App() {
   const user = useSelector(getUser);

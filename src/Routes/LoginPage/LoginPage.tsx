@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Alert, TextField, Button, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { login } from "../../userSlice";
+import { login } from "../../Store/userSlice";
 import { UserCredentials } from "../../lib/types";
 import { LoginFormErrors } from "./LoginForm.types";
 import { firebase } from "../../Firebase";

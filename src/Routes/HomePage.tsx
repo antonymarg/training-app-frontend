@@ -1,7 +1,7 @@
 import ParticipantPage from "./ParticipantPage";
 import TrainerPage from "./TrainerPage";
 import { useSelector } from "react-redux";
-import { getUserRole } from "../userSlice";
+import { getUserRole } from "../Store/userSlice";
 import PublicPage from "./PublicPage";
 
 const HomePage = () => {
