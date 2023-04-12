@@ -1,10 +1,10 @@
-import { UserRole } from "../../lib/types";
+import { IUserRole } from '../../Models/User/types';
 
 export type SignUpFormData = {
   email: string;
   password: string;
   name: string;
-  role: UserRole;
+  role: IUserRole;
 };
 
 export type SignUpFormErrors = {

@@ -1,2 +1,4 @@
-import { userModule } from "./Users";
-export const firebase = { userModule };
+import { userModule } from './userModule/';
+import firebase, { auth, db } from './firebase';
+
+export { userModule, firebase, db, auth };

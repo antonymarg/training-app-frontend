@@ -1,12 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "./reducers/userReducer";
-import { initialState } from "./initialState";
+import { configureStore } from '@reduxjs/toolkit';
+import { rootReducer } from '../Models';
 
 const store = configureStore({
-  reducer: {
-    user: userReducer,
-  },
-  preloadedState: initialState,
+  reducer: rootReducer,
 });
 
 export default store;
