@@ -1,21 +1,25 @@
-import { useState, useEffect } from "react";
-import { Alert, TextField, Button, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { login } from "../../userSlice";
-import { UserCredentials } from "../../lib/types";
-import { LoginFormErrors } from "./LoginForm.types";
-import { firebase } from "../../Firebase";
-import { useNavigate } from "react-router";
+import { useState, useEffect } from 'react';
+import { Alert, TextField, Button, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+
+import { userModule } from '../../Firebase/';
+import { updateUserLogin, updateUserProfile } from '../../Models/User/actions';
+
+import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
+import { IUserProfile } from '../../Models/User/types';
+import { LoginFormErrors } from './LoginForm.types';
+
 const defaultFormState = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 };
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState<UserCredentials>(defaultFormState);
+  const [formData, setFormData] = useState<IUserCredentials>(defaultFormState);
   const [errors, setErrors] = useState<LoginFormErrors>({});
 
   useEffect(() => {
@@ -26,23 +30,26 @@ const LoginPage = () => {
   const onLoginClick = () => {
     setErrors({});
     if (!formData.email || !formData.password)
-      return setErrors({ genericError: "Empty fields" });
+      return setErrors({ genericError: 'Empty fields' });
 
-    firebase.userModule
+    userModule
       .signInWithUserAndEmail(formData)
-      .then(({ user }) => firebase.userModule.getUser(user.uid))
-      .then((e) => dispatch(login(e?.data())))
-      .then(() => navigate("/"))
+      .then(({ user }) => userModule.getUser(user.uid))
+      .then((e) => {
+        dispatch(updateUserLogin());
+        dispatch(updateUserProfile(e?.data() as IUserProfile));
+      })
+      .then(() => navigate('/'))
       .catch((error) => {
         switch (error.code) {
-          case "auth/invalid-email":
-            setErrors({ emailError: "This email is invalid" });
+          case 'auth/invalid-email':
+            setErrors({ emailError: 'This email is invalid' });
             break;
-          case "auth/wrong-password":
-            setErrors({ passwordError: "This password is wrong" });
+          case 'auth/wrong-password':
+            setErrors({ passwordError: 'This password is wrong' });
             break;
           default:
-            setErrors({ genericError: "A sudden error occurred" });
+            setErrors({ genericError: 'A sudden error occurred' });
         }
       });
   };
@@ -52,10 +59,10 @@ const LoginPage = () => {
       {errors.genericError && <Alert severity="error">Wrong user data!</Alert>}
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "50%",
-          gap: "20px",
+          display: 'flex',
+          flexDirection: 'column',
+          width: '50%',
+          gap: '20px',
         }}
       >
         <div>
@@ -85,7 +92,7 @@ const LoginPage = () => {
         <Button
           variant="contained"
           size="large"
-          style={{ borderRadius: "50px", alignSelf: "center" }}
+          style={{ borderRadius: '50px', alignSelf: 'center' }}
           onClick={onLoginClick}
         >
           Login

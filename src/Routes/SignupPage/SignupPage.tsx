@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import {
   TextField,
   Button,
@@ -7,17 +7,17 @@ import {
   InputLabel,
   MenuItem,
   Alert,
-} from "@mui/material";
-import { firebase } from "../../Firebase";
-import { UserRole } from "../../lib/types";
-import { SignUpFormData, SignUpFormErrors } from "./SignupPage.types";
-import { useNavigate } from "react-router";
+} from '@mui/material';
+import { userModule } from '../../Firebase';
+import { IUserRole } from '../../Models/User/types';
+import { SignUpFormData, SignUpFormErrors } from './SignupPage.types';
+import { useNavigate } from 'react-router';
 
 const defaultFormState: SignUpFormData = {
-  name: "",
-  email: "",
-  password: "",
-  role: "participant",
+  name: '',
+  email: '',
+  password: '',
+  role: 'participant',
 };
 
 const SignupPage = () => {
@@ -36,29 +36,29 @@ const SignupPage = () => {
     if (!formData.email || !formData.password || !formData.name) return;
 
     const { password, ...newUser } = formData;
-    firebase.userModule
+    userModule
       .signUpUserWithEmailAndPassword({
         email: newUser.email,
         password,
       })
       .then(({ user }) => {
-        return firebase.userModule.createUserData({
+        return userModule.createUserData({
           userId: user.uid,
           ...newUser,
         });
       })
-      .then(() => navigate("/login"))
+      .then(() => navigate('/login'))
       .catch((error) => {
         console.log(error);
         switch (error.code) {
-          case "auth/invalid-email":
-            setErrors({ emailError: "This email is invalid" });
+          case 'auth/invalid-email':
+            setErrors({ emailError: 'This email is invalid' });
             break;
-          case "auth/weak-password":
-            setErrors({ passwordError: "This password is weak" });
+          case 'auth/weak-password':
+            setErrors({ passwordError: 'This password is weak' });
             break;
           default:
-            setErrors({ genericError: "A sudden error occurred" });
+            setErrors({ genericError: 'A sudden error occurred' });
         }
       });
   };
@@ -69,10 +69,10 @@ const SignupPage = () => {
       )}
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-          gap: "20px",
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          gap: '20px',
         }}
       >
         <div>
@@ -113,16 +113,16 @@ const SignupPage = () => {
           labelId="role-label"
           value={formData.role}
           onChange={(e) =>
-            setFormData({ ...formData, role: e.target.value as UserRole })
+            setFormData({ ...formData, role: e.target.value as IUserRole })
           }
         >
-          <MenuItem value={"participant"}>Participant</MenuItem>
-          <MenuItem value={"trainer"}>Trainer</MenuItem>
+          <MenuItem value={'participant'}>Participant</MenuItem>
+          <MenuItem value={'trainer'}>Trainer</MenuItem>
         </Select>
         <Button
           variant="contained"
           size="large"
-          style={{ borderRadius: "50px", alignSelf: "center" }}
+          style={{ borderRadius: '50px', alignSelf: 'center' }}
           onClick={onSignUp}
         >
           Sign now!

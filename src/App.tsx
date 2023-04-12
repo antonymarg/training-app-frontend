@@ -1,16 +1,16 @@
-import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import { HomePage, LoginPage, SignupPage } from "./Routes";
-import { useSelector } from "react-redux";
-import { getUser } from "./userSlice";
+import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import { HomePage, LoginPage, SignupPage } from './Routes';
+import { useSelector } from 'react-redux';
+import { getUser } from './Models/User/selectors';
 
 function App() {
   const user = useSelector(getUser);
   return (
     <div className="container">
       <p>
-        Hey {user.profile?.name ?? "stranger"}! Your current status is{" "}
-        <b>{user.role ?? "new user"}.</b>
+        Hey {user.profile?.name ?? 'stranger'}! Your current status is{' '}
+        <b>{user.profile?.role ?? 'new user'}.</b>
       </p>
       <Routes>
         <Route path="/" element={<HomePage />} />

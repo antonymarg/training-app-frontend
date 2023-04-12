@@ -1,9 +1,9 @@
-import { useDispatch } from "react-redux";
-import { logout } from "../userSlice";
+import { useDispatch } from 'react-redux';
+import { updateUserLogout } from '../Models/User/actions';
 
 const ParticipantPage = () => {
   const dispatch = useDispatch();
-  const handleLogout = () => dispatch(logout());
+  const handleLogout = () => dispatch(updateUserLogout());
   return (
     <div className="App">
       <div className="container">Participant</div>
