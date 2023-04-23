@@ -8,60 +8,80 @@ import {
   MenuItem,
   Alert,
 } from '@mui/material';
-import { userModule } from '../../Firebase';
-import { IUserRole } from '../../Models/User/types';
-import { SignUpFormData, SignUpFormErrors } from './SignupPage.types';
+import {
+  ISignupWithEmailFormData,
+  ISignUpFormErrors,
+  IUserRole,
+} from '../../Models/User/types';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { startSignupWithEmail } from '../../Models/User/actions';
 
-const defaultFormState: SignUpFormData = {
+const defaultFormState: ISignupWithEmailFormData = {
   name: '',
   email: '',
   password: '',
   role: 'participant',
 };
 
+// catch (error: any) {
+//   console.log(error);
+//   switch (error.code) {
+//     case 'auth/invalid-email':
+//       createUserWithEmailFailed({ emailError: 'This email is invalid' });
+//       break;
+//     case 'auth/weak-password':
+//       createUserWithEmailFailed({
+//         passwordError: 'This password is weak',
+//       });
+//       break;
+//     default:
+//       createUserWithEmailFailed({
+//         genericError: 'A sudden error occurred',
+//       });
+//   }
+
+const validateForm = (
+  formData: ISignupWithEmailFormData
+): { isValid: boolean; errors: ISignUpFormErrors } => {
+  if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
+    return {
+      isValid: false,
+      errors: { emailError: 'Please enter a valid email' },
+    };
+  if (!formData.name)
+    return {
+      isValid: false,
+      errors: { nameError: 'The name cannot be empty' },
+    };
+  if (formData.password.length < 6)
+    return {
+      isValid: false,
+      errors: {
+        passwordError: 'Your password cannot be less than 6 characters long',
+      },
+    };
+  return { isValid: true, errors: {} };
+};
+
 const SignupPage = () => {
-  const [formData, setFormData] = useState<SignUpFormData>(defaultFormState);
-  const [errors, setErrors] = useState<SignUpFormErrors>({});
+  const [formData, setFormData] =
+    useState<ISignupWithEmailFormData>(defaultFormState);
+  const [errors, setErrors] = useState<ISignUpFormErrors>({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setFormData(defaultFormState);
     setErrors({});
   }, []);
 
-  const onSignUp = async () => {
-    setErrors({});
-
-    if (!formData.email || !formData.password || !formData.name) return;
-
-    const { password, ...newUser } = formData;
-    userModule
-      .signUpUserWithEmailAndPassword({
-        email: newUser.email,
-        password,
-      })
-      .then(({ user }) => {
-        return userModule.createUserData({
-          userId: user.uid,
-          ...newUser,
-        });
-      })
-      .then(() => navigate('/login'))
-      .catch((error) => {
-        console.log(error);
-        switch (error.code) {
-          case 'auth/invalid-email':
-            setErrors({ emailError: 'This email is invalid' });
-            break;
-          case 'auth/weak-password':
-            setErrors({ passwordError: 'This password is weak' });
-            break;
-          default:
-            setErrors({ genericError: 'A sudden error occurred' });
-        }
-      });
+  const onSignUpWithEmail = () => {
+    let validation = validateForm(formData);
+    if (!validation.isValid) return setErrors(validation.errors);
+    dispatch(startSignupWithEmail(formData));
   };
+
   return (
     <form>
       {errors.genericError && (
@@ -123,7 +143,7 @@ const SignupPage = () => {
           variant="contained"
           size="large"
           style={{ borderRadius: '50px', alignSelf: 'center' }}
-          onClick={onSignUp}
+          onClick={onSignUpWithEmail}
         >
           Sign now!
         </Button>

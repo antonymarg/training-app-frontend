@@ -2,13 +2,9 @@ import { useState, useEffect } from 'react';
 import { Alert, TextField, Button, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-
-import { userModule } from '../../Firebase/';
-import { updateUserLogin, updateUserProfile } from '../../Models/User/actions';
-
+import { startLoginWithEmail } from '../../Models/User/actions';
 import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
-import { IUserProfile } from '../../Models/User/types';
-import { LoginFormErrors } from './LoginForm.types';
+import { ILoginFormErrors } from './LoginForm.types';
 
 const defaultFormState = {
   email: '',
@@ -20,7 +16,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<IUserCredentials>(defaultFormState);
-  const [errors, setErrors] = useState<LoginFormErrors>({});
+  const [errors, setErrors] = useState<ILoginFormErrors>({});
 
   useEffect(() => {
     setFormData(defaultFormState);
@@ -29,29 +25,23 @@ const LoginPage = () => {
 
   const onLoginClick = () => {
     setErrors({});
-    if (!formData.email || !formData.password)
-      return setErrors({ genericError: 'Empty fields' });
-
-    userModule
-      .signInWithUserAndEmail(formData)
-      .then(({ user }) => userModule.getUser(user.uid))
-      .then((e) => {
-        dispatch(updateUserLogin());
-        dispatch(updateUserProfile(e?.data() as IUserProfile));
-      })
-      .then(() => navigate('/'))
-      .catch((error) => {
-        switch (error.code) {
-          case 'auth/invalid-email':
-            setErrors({ emailError: 'This email is invalid' });
-            break;
-          case 'auth/wrong-password':
-            setErrors({ passwordError: 'This password is wrong' });
-            break;
-          default:
-            setErrors({ genericError: 'A sudden error occurred' });
-        }
-      });
+    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
+      return {
+        isValid: false,
+        errors: { emailError: 'Please enter a valid email' },
+      };
+    dispatch(startLoginWithEmail(formData));
+    // .catch((error) => {
+    //   switch (error.code) {
+    //     case 'auth/invalid-email':
+    //       setErrors({ emailError: 'This email is invalid' });
+    //       break;
+    //     case 'auth/wrong-password':
+    //       setErrors({ passwordError: 'This password is wrong' });
+    //       break;
+    //     default:
+    //       setErrors({ genericError: 'A sudden error occurred' });
+    //   }}
   };
 
   return (

@@ -5,9 +5,10 @@ import {
 import { getDoc, setDoc, doc } from '@firebase/firestore';
 import { auth, db } from '../';
 import { IUserCredentials, IUserInfoOnSignUp } from './userModule.types';
+import { IUserProfile } from '../../Models/User/types';
 
-const getUser = (userId: string) => {
-  return getDoc(doc(db, 'users', userId));
+const getUser = async (userId: string) => {
+  return await getDoc(doc(db, 'users', userId));
 };
 
 const signUpUserWithEmailAndPassword = async (
@@ -20,7 +21,7 @@ const signUpUserWithEmailAndPassword = async (
   );
 };
 
-const createUserData = async (userInfo: IUserInfoOnSignUp) => {
+const createUserProfile = async (userInfo: IUserInfoOnSignUp) => {
   return await setDoc(doc(db, 'users', userInfo.userId), userInfo);
 };
 
@@ -35,6 +36,6 @@ const signInWithUserAndEmail = async (credentials: IUserCredentials) => {
 export const userModule = {
   getUser,
   signUpUserWithEmailAndPassword,
-  createUserData,
+  createUserProfile,
   signInWithUserAndEmail,
 };
