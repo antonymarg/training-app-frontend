@@ -8,60 +8,74 @@ import {
   MenuItem,
   Alert,
 } from '@mui/material';
-import { userModule } from '../../Firebase';
-import { IUserRole } from '../../Models/User/types';
-import { SignUpFormData, SignUpFormErrors } from './SignupPage.types';
+import {
+  ISignupWithEmailFormData,
+  ISignUpFormErrors,
+  IUserRole,
+} from '../../Models/User/types';
 import { useNavigate } from 'react-router';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../../Models/User/selectors';
+import { startSignupWithEmailThunk } from '../../Models/User/thunks';
+import { AppDispatch } from '../../Store';
 
-const defaultFormState: SignUpFormData = {
+const defaultFormState: ISignupWithEmailFormData = {
   name: '',
   email: '',
   password: '',
   role: 'participant',
 };
 
+const validateForm = (
+  formData: ISignupWithEmailFormData
+): { isValid: boolean; errors: ISignUpFormErrors } => {
+  if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
+    return {
+      isValid: false,
+      errors: { emailError: 'Please enter a valid email' },
+    };
+  if (!formData.name)
+    return {
+      isValid: false,
+      errors: { nameError: 'The name cannot be empty' },
+    };
+  if (formData.password.length < 6)
+    return {
+      isValid: false,
+      errors: {
+        passwordError: 'Your password cannot be less than 6 characters long',
+      },
+    };
+  return { isValid: true, errors: {} };
+};
+
 const SignupPage = () => {
-  const [formData, setFormData] = useState<SignUpFormData>(defaultFormState);
-  const [errors, setErrors] = useState<SignUpFormErrors>({});
+  const [formData, setFormData] =
+    useState<ISignupWithEmailFormData>(defaultFormState);
+  const [errors, setErrors] = useState<ISignUpFormErrors>({});
+  const user = useSelector(getUser);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     setFormData(defaultFormState);
     setErrors({});
   }, []);
 
-  const onSignUp = async () => {
-    setErrors({});
+  useEffect(() => {
+    if (user.hasUserSignedUp) navigate('/login');
+  }, [user.hasUserSignedUp, navigate]);
 
-    if (!formData.email || !formData.password || !formData.name) return;
+  useEffect(() => {
+    if (user.error?.signupError) setErrors(user.error?.signupError);
+  }, [user.error?.signupError]);
 
-    const { password, ...newUser } = formData;
-    userModule
-      .signUpUserWithEmailAndPassword({
-        email: newUser.email,
-        password,
-      })
-      .then(({ user }) => {
-        return userModule.createUserData({
-          userId: user.uid,
-          ...newUser,
-        });
-      })
-      .then(() => navigate('/login'))
-      .catch((error) => {
-        console.log(error);
-        switch (error.code) {
-          case 'auth/invalid-email':
-            setErrors({ emailError: 'This email is invalid' });
-            break;
-          case 'auth/weak-password':
-            setErrors({ passwordError: 'This password is weak' });
-            break;
-          default:
-            setErrors({ genericError: 'A sudden error occurred' });
-        }
-      });
+  const onSignUpWithEmail = () => {
+    let validation = validateForm(formData);
+    if (!validation.isValid) return setErrors(validation.errors);
+    dispatch(startSignupWithEmailThunk(formData));
   };
+
   return (
     <form>
       {errors.genericError && (
@@ -123,7 +137,7 @@ const SignupPage = () => {
           variant="contained"
           size="large"
           style={{ borderRadius: '50px', alignSelf: 'center' }}
-          onClick={onSignUp}
+          onClick={onSignUpWithEmail}
         >
           Sign now!
         </Button>

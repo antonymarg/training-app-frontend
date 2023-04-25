@@ -1,2 +1,3 @@
-import store from './store';
+import store, { AppDispatch } from './store';
 export { store };
+export type { AppDispatch };

@@ -1,35 +1,46 @@
+import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
 import { createAction } from '../../lib/actionCreator';
-import { IUserProfile } from './types';
+import {
+  ISignupWithEmailFormData,
+  IUserProfile,
+  IUserId,
+  ILoginFormErrors,
+  IUserError,
+} from './types';
 
 const userActionCreator = createAction('USER');
 
+// REDUCER ACTIONS
 export const updateUserLogin = userActionCreator('UPDATE_USER_LOGIN');
 export const updateUserLogout = userActionCreator('UPDATE_USER_LOGOUT');
 export const updateUserProfile = userActionCreator<IUserProfile>(
   'UPDATE_USER_PROFILE'
 );
+export const updateUserError =
+  userActionCreator<IUserError>('UPDATE_USER_ERROR');
 
-// export const INIT_SIGNUP_WITH_EMAIL = 'INIT_SIGNUP_WITH_EMAIL';
-// export const SIGNUP_WITH_EMAIL_VALIDATION_SUCCESS =
-//   'SIGNUP_WITH_EMAIL_VALIDATION_SUCCESS';
-// export const SIGNUP_WITH_EMAIL_VALIDATION_FAILED =
-//   'SIGNUP_WITH_EMAIL_VALIDATION_FAILED';
-// export const CREATE_USER = 'CREATE_USER';
-// export const CREATE_USER_SUCCESS = 'CREATE_USER_SUCCESS';
-// export const CREATE_USER_FAILED = 'CREATE_USER_FAILED';
-// export const CREATE_USER_PROFILE = 'CREATE_USER_PROFILE';
-// export const CREATE_USER_PROFILE_SUCCESS = 'CREATE_USER_PROFILE_SUCCESS';
-// export const CREATE_USER_PROFILE_FAILED = 'CREATE_USER_PROFILE_FAILED';
-// export const INIT_LOGIN_WITH_EMAIL = 'INIT_LOGIN_WITH_EMAIL';
-// export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-// export const LOGIN_FAILED = 'LOGIN_FAILED';
-// export const FETCH_USER_DATA = 'FETCH_USER_DATA';
-// export const FETCH_USER_DATA_SUCCESS = 'FETCH_USER_DATA_SUCCESS';
-// export const FETCH_USER_DATA_FAILED = 'FETCH_USER_DATA_FAILED';
-// export const STORE_USER_DATA = 'STORE_USER_DATA';
-// export const STORE_USER_DATA_SUCCESS = 'STORE_USER_DATA_SUCCESS';
-// export const STORE_USER_DATA_FAILED = 'STORE_USER_DATA_FAILED';
-// // export const LOGOUT = 'LOGOUT';
-// export const UPDATE_USER_LOGIN = 'UPDATE_USER_LOGIN';
-// export const UPDATE_USER_LOGOUT = 'UPDATE_USER_LOGOUT';
-// export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
+// -- Sign up
+export const startSignupWithEmail = userActionCreator<ISignupWithEmailFormData>(
+  'INIT_SINGUP_WITH_EMAIL'
+);
+export const createUserWithEmail = userActionCreator<ISignupWithEmailFormData>(
+  'CREATE_USER_WITH_EMAIL'
+);
+
+export const createUserProfile = userActionCreator<IUserProfile>(
+  'CREATE_USER_PROFILE'
+);
+
+export const createUserSuccess = userActionCreator('CREATE_USER_SUCCESS');
+
+export const createUserFailed = userActionCreator('CREATE_USER_FAILED');
+// -- Login
+export const startLoginWithEmail = userActionCreator<IUserCredentials>(
+  'INIT_LOGIN_WITH_EMAIL'
+);
+
+export const getUserInfo = userActionCreator<IUserId>('INIT_LOGIN_WITH_EMAIL');
+
+export const loginUserSuccess = userActionCreator('LOGIN_USER_SUCCESS');
+export const loginUserFailed =
+  userActionCreator<ILoginFormErrors>('LOGIN_USER_FAILED');
