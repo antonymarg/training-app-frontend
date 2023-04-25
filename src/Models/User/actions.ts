@@ -1,18 +1,24 @@
 import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
-import { ILoginFormErrors } from '../../Routes/LoginPage/LoginForm.types';
 import { createAction } from '../../lib/actionCreator';
-import { ISignupWithEmailFormData, IUserProfile, IUserId } from './types';
+import {
+  ISignupWithEmailFormData,
+  IUserProfile,
+  IUserId,
+  ILoginFormErrors,
+  IUserError,
+} from './types';
 
 const userActionCreator = createAction('USER');
 
-// REDUX ACTIONS
+// REDUCER ACTIONS
 export const updateUserLogin = userActionCreator('UPDATE_USER_LOGIN');
 export const updateUserLogout = userActionCreator('UPDATE_USER_LOGOUT');
 export const updateUserProfile = userActionCreator<IUserProfile>(
   'UPDATE_USER_PROFILE'
 );
+export const updateUserError =
+  userActionCreator<IUserError>('UPDATE_USER_ERROR');
 
-// EPIC ACTIONS
 // -- Sign up
 export const startSignupWithEmail = userActionCreator<ISignupWithEmailFormData>(
   'INIT_SINGUP_WITH_EMAIL'

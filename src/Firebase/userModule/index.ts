@@ -8,7 +8,8 @@ import { IUserCredentials, IUserInfoOnSignUp } from './userModule.types';
 import { IUserProfile } from '../../Models/User/types';
 
 const getUser = async (userId: string) => {
-  return await getDoc(doc(db, 'users', userId));
+  let user = await getDoc(doc(db, 'users', userId));
+  return user.data() as IUserProfile;
 };
 
 const signUpUserWithEmailAndPassword = async (

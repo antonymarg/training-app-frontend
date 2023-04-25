@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import { Alert, TextField, Button, Typography } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { startLoginWithEmail } from '../../Models/User/actions';
+import { startLoginWithEmailThunk } from '../../Models/User/thunks';
 import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
-import { ILoginFormErrors } from './LoginForm.types';
-
+import { ILoginFormErrors } from '../../Models/User/types';
+import { getUser } from '../../Models/User/selectors';
+import { AppDispatch } from '../../Store';
 const defaultFormState = {
   email: '',
   password: '',
 };
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const user = useSelector(getUser);
 
   const [formData, setFormData] = useState<IUserCredentials>(defaultFormState);
   const [errors, setErrors] = useState<ILoginFormErrors>({});
@@ -23,25 +25,22 @@ const LoginPage = () => {
     setErrors({});
   }, []);
 
+  useEffect(() => {
+    if (user.isLoggedIn) navigate('/');
+  }, [user.isLoggedIn, navigate]);
+
+  useEffect(() => {
+    if (user.error?.loginError) setErrors(user.error.loginError);
+  }, [user.error?.loginError]);
+
   const onLoginClick = () => {
     setErrors({});
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
       return {
         isValid: false,
         errors: { emailError: 'Please enter a valid email' },
       };
-    dispatch(startLoginWithEmail(formData));
-    // .catch((error) => {
-    //   switch (error.code) {
-    //     case 'auth/invalid-email':
-    //       setErrors({ emailError: 'This email is invalid' });
-    //       break;
-    //     case 'auth/wrong-password':
-    //       setErrors({ passwordError: 'This password is wrong' });
-    //       break;
-    //     default:
-    //       setErrors({ genericError: 'A sudden error occurred' });
-    //   }}
+    dispatch(startLoginWithEmailThunk(formData));
   };
 
   return (

@@ -14,8 +14,10 @@ import {
   IUserRole,
 } from '../../Models/User/types';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { startSignupWithEmail } from '../../Models/User/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from '../../Models/User/selectors';
+import { startSignupWithEmailThunk } from '../../Models/User/thunks';
+import { AppDispatch } from '../../Store';
 
 const defaultFormState: ISignupWithEmailFormData = {
   name: '',
@@ -24,27 +26,10 @@ const defaultFormState: ISignupWithEmailFormData = {
   role: 'participant',
 };
 
-// catch (error: any) {
-//   console.log(error);
-//   switch (error.code) {
-//     case 'auth/invalid-email':
-//       createUserWithEmailFailed({ emailError: 'This email is invalid' });
-//       break;
-//     case 'auth/weak-password':
-//       createUserWithEmailFailed({
-//         passwordError: 'This password is weak',
-//       });
-//       break;
-//     default:
-//       createUserWithEmailFailed({
-//         genericError: 'A sudden error occurred',
-//       });
-//   }
-
 const validateForm = (
   formData: ISignupWithEmailFormData
 ): { isValid: boolean; errors: ISignUpFormErrors } => {
-  if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
+  if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
     return {
       isValid: false,
       errors: { emailError: 'Please enter a valid email' },
@@ -68,18 +53,27 @@ const SignupPage = () => {
   const [formData, setFormData] =
     useState<ISignupWithEmailFormData>(defaultFormState);
   const [errors, setErrors] = useState<ISignUpFormErrors>({});
+  const user = useSelector(getUser);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     setFormData(defaultFormState);
     setErrors({});
   }, []);
 
+  useEffect(() => {
+    if (user.hasUserSignedUp) navigate('/login');
+  }, [user.hasUserSignedUp, navigate]);
+
+  useEffect(() => {
+    if (user.error?.signupError) setErrors(user.error?.signupError);
+  }, [user.error?.signupError]);
+
   const onSignUpWithEmail = () => {
     let validation = validateForm(formData);
     if (!validation.isValid) return setErrors(validation.errors);
-    dispatch(startSignupWithEmail(formData));
+    dispatch(startSignupWithEmailThunk(formData));
   };
 
   return (
