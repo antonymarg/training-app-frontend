@@ -1,5 +1,5 @@
-import ParticipantPage from './ParticipantPage';
-import TrainerPage from './TrainerPage';
+import ParticipantPage from './Participants/ParticipantPage';
+import TrainerPage from './Trainers/TrainerPage';
 import { useSelector } from 'react-redux';
 import { getUserRole } from '../Models/User/selectors';
 import PublicPage from './Public/Home/HomePage';
