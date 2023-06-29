@@ -53,6 +53,7 @@ export const theme = createTheme({
     },
     button: {
       fontWeight: 700,
+      textTransform: 'none',
     },
   },
   shape: {

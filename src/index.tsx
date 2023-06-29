@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './Store';
 import { ThemeProvider } from '@mui/material';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { theme } from './theme';
 
 const root = ReactDOM.createRoot(
@@ -15,9 +16,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <Router>
-        <App />
-      </Router>
+      <StyledThemeProvider theme={theme}>
+        <Router>
+          <App />
+        </Router>
+      </StyledThemeProvider>
     </ThemeProvider>
   </Provider>
 );

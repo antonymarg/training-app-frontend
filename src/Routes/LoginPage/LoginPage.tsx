@@ -7,6 +7,7 @@ import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
 import { ILoginFormErrors } from '../../Models/User/types';
 import { getUser } from '../../Models/User/selectors';
 import { AppDispatch } from '../../Store';
+
 const defaultFormState = {
   email: '',
   password: '',
