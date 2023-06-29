@@ -8,6 +8,8 @@ import { store } from './Store';
 import { ThemeProvider } from '@mui/material';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { theme } from './theme';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor } from './Store/store';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -15,12 +17,14 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <StyledThemeProvider theme={theme}>
-        <Router>
-          <App />
-        </Router>
-      </StyledThemeProvider>
-    </ThemeProvider>
+    <PersistGate persistor={persistor} loading={null}>
+      <ThemeProvider theme={theme}>
+        <StyledThemeProvider theme={theme}>
+          <Router>
+            <App />
+          </Router>
+        </StyledThemeProvider>
+      </ThemeProvider>
+    </PersistGate>
   </Provider>
 );

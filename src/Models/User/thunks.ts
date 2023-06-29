@@ -1,19 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   createUserSuccess,
-  startLoginWithEmail,
   startSignupWithEmail,
   updateUserError,
-  updateUserLogin,
-  updateUserProfile,
 } from './actions';
 import { userModule } from '../../Firebase';
-import {
-  ISignUpFormErrors,
-  ISignupWithEmailFormData,
-  ILoginFormErrors,
-  ILoginWithEmailFormData,
-} from './types';
+import { ISignUpFormErrors, ISignupWithEmailFormData } from './types';
 
 export const startSignupWithEmailThunk = createAsyncThunk<
   any,
@@ -45,33 +37,5 @@ export const startSignupWithEmailThunk = createAsyncThunk<
         };
     }
     dispatch(updateUserError({ signupError }));
-  }
-});
-
-export const startLoginWithEmailThunk = createAsyncThunk<
-  any,
-  ILoginWithEmailFormData
->(startLoginWithEmail.type, async (payload, { dispatch }) => {
-  try {
-    let {
-      user: { uid },
-    } = await userModule.signInWithUserAndEmail(payload);
-    if (!uid) throw new Error();
-    let user = await userModule.getUser(uid);
-    dispatch(updateUserLogin());
-    dispatch(updateUserProfile(user));
-  } catch (error: any) {
-    let loginError: ILoginFormErrors = {};
-    switch (error.code) {
-      case 'auth/invalid-email':
-        loginError = { emailError: 'This email is invalid' };
-        break;
-      case 'auth/wrong-password':
-        loginError = { passwordError: 'This password is wrong' };
-        break;
-      default:
-        loginError = { genericError: 'A sudden error occurred' };
-    }
-    dispatch(updateUserError({ loginError }));
   }
 });
