@@ -38,7 +38,7 @@ export const createUserFailed = userActionCreator('CREATE_USER_FAILED');
 export const startLoginWithEmail = userActionCreator<IUserCredentials>(
   'INIT_LOGIN_WITH_EMAIL'
 );
-
+export const startLoginWithGoogle = userActionCreator('INIT_LOGIN_WITH_GOOGLE');
 export const getUserInfo = userActionCreator<IUserId>('INIT_LOGIN_WITH_EMAIL');
 
 export const loginUserSuccess = userActionCreator('LOGIN_USER_SUCCESS');
