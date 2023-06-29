@@ -5,6 +5,7 @@ import {
   Typography,
   Link,
   Dialog,
+  CircularProgress,
 } from '@mui/material';
 import { useLogin } from './useLogin';
 import {
@@ -23,6 +24,7 @@ export interface LoginModalProps {
 export const LoginModal = ({ onClose, open }: LoginModalProps) => {
   const {
     errors,
+    isLoading,
     onLoginClick,
     formData,
     setFormData,
@@ -65,13 +67,20 @@ export const LoginModal = ({ onClose, open }: LoginModalProps) => {
             style={{ alignSelf: 'center' }}
             onClick={onLoginClick}
           >
-            Login
+            {isLoading === 'credentials' ? (
+              <CircularProgress color="secondary" size="25" />
+            ) : (
+              'Login'
+            )}
           </Button>
         </EmailAndPassContainer>
         <StyledDivider>
           <Typography variant="overline">Or</Typography>
         </StyledDivider>
-        <GoogleButton onClick={onLoginWithGoogleClick} />
+        <GoogleButton
+          onClick={onLoginWithGoogleClick}
+          isLoading={isLoading === 'google'}
+        />
         <Typography textAlign="center">
           If you don't have an account, make one{' '}
           <Link href="/signup">here</Link>!

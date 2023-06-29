@@ -1,6 +1,12 @@
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 
-export function GoogleButton({ onClick }: { onClick: () => void }) {
+export function GoogleButton({
+  onClick,
+  isLoading,
+}: {
+  onClick: () => void;
+  isLoading: boolean;
+}) {
   return (
     <Button
       variant="contained"
@@ -9,14 +15,20 @@ export function GoogleButton({ onClick }: { onClick: () => void }) {
       style={{ alignSelf: 'center' }}
       onClick={onClick}
       startIcon={
-        <img
-          src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-          height="25px"
-          alt="Google logo"
-        />
+        !isLoading && (
+          <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            height="25px"
+            alt="Google logo"
+          />
+        )
       }
     >
-      Sign in with Google
+      {isLoading ? (
+        <CircularProgress color="secondary" size={25} />
+      ) : (
+        'Sign in with Google'
+      )}
     </Button>
   );
 }
