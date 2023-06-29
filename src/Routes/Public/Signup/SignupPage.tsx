@@ -12,12 +12,12 @@ import {
   ISignupWithEmailFormData,
   ISignUpFormErrors,
   IUserRole,
-} from '../../Models/User/types';
+} from '../../../Models/User/types';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../../Models/User/selectors';
-import { startSignupWithEmailThunk } from '../../Models/User/thunks';
-import { AppDispatch } from '../../Store';
+import { getUser } from '../../../Models/User/selectors';
+import { startSignupWithEmailThunk } from '../../../Models/User/thunks';
+import { AppDispatch } from '../../../Store';
 
 const defaultFormState: ISignupWithEmailFormData = {
   name: '',
