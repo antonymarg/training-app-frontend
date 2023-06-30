@@ -3,9 +3,11 @@ import { Button, CircularProgress } from '@mui/material';
 export function GoogleButton({
   onClick,
   isLoading,
+  text,
 }: {
   onClick: () => void;
   isLoading: boolean;
+  text: string;
 }) {
   return (
     <Button
@@ -24,11 +26,7 @@ export function GoogleButton({
         )
       }
     >
-      {isLoading ? (
-        <CircularProgress color="secondary" size={25} />
-      ) : (
-        'Sign in with Google'
-      )}
+      {isLoading ? <CircularProgress color="secondary" size={25} /> : text}
     </Button>
   );
 }
