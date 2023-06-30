@@ -10,7 +10,7 @@ function App() {
       <LayoutContainer>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/signup" element={<SignupPage />} />
+          <Route path="signup" element={<SignupPage />} />
           <Route path="*" element={<div>Page not found</div>} />
         </Routes>
       </LayoutContainer>
