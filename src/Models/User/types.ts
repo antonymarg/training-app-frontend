@@ -27,6 +27,8 @@ export interface ISignUpFormErrors {
   emailError?: string;
   passwordError?: string;
   confirmPasswordError?: string;
+  nameError?: string;
+  surnameError?: string;
   genericError?: string;
 }
 

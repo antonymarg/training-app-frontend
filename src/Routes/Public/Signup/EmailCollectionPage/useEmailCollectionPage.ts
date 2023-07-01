@@ -22,7 +22,6 @@ const mapErrorCodeToError = (error: {
   code?: string;
   message: string;
 }): ISignUpFormErrors => {
-  console.log(error);
   switch (error.code) {
     case 'auth/invalid-email':
       return { emailError: 'This email is invalid' };

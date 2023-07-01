@@ -23,7 +23,7 @@ const steps = [
   { label: 'Add more details', step: 'profile' },
 ];
 export function SignupPage() {
-  const [signupStep, setSignupStep] = useState<SignupSteps>('emailCollection');
+  const [signupStep, setSignupStep] = useState<SignupSteps>('personalData');
   const [svgUrl, setSvgUrl] = useState('');
   const activeStep = steps.findIndex((e) => e.step.includes(signupStep));
 
@@ -32,7 +32,7 @@ export function SignupPage() {
       case 'emailCollection':
         return <EmailCollectionPage setStep={setSignupStep} />;
       case 'personalData':
-        return <PersonalDataPage />;
+        return <PersonalDataPage setStep={setSignupStep} />;
       case 'participantProfile':
         return <ProfilePage />;
       case 'trainerProfile':
