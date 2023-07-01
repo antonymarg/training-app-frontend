@@ -3,10 +3,10 @@ import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
 export type IUserRole = 'trainer' | 'participant';
 
 export interface IUserProfile {
-  userId: string;
-  email: string;
-  name: string;
-  role: IUserRole;
+  userId?: string;
+  email?: string;
+  name?: string;
+  role?: IUserRole;
 }
 
 export interface IUserState {
@@ -26,7 +26,7 @@ export interface ISignupWithEmailFormData extends Omit<IUserProfile, 'userId'> {
 export interface ISignUpFormErrors {
   emailError?: string;
   passwordError?: string;
-  nameError?: string;
+  confirmPasswordError?: string;
   genericError?: string;
 }
 

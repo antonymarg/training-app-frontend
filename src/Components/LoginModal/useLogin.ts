@@ -58,6 +58,7 @@ export function useLogin({ open = false, onClose }: useLoginProps) {
   };
 
   const handleError = (error: { code?: string; message: string }) => {
+    setIsLoading(null);
     switch (error.code) {
       case 'auth/invalid-email':
         return { emailError: 'This email is invalid' };

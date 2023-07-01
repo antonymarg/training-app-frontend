@@ -6,8 +6,13 @@ import {
   StyledDivider,
 } from './EmailColelctionPage.style';
 import { useEmailCollection } from './useEmailCollectionPage';
+import { SignupSteps } from '../SignupPage';
 
-export function EmailCollectionPage() {
+export function EmailCollectionPage({
+  setStep,
+}: {
+  setStep: (step: SignupSteps) => void;
+}) {
   const {
     formData,
     setFormData,
@@ -15,7 +20,7 @@ export function EmailCollectionPage() {
     errors,
     onSignupWithCredentials,
     onSignupWithGoogle,
-  } = useEmailCollection();
+  } = useEmailCollection(setStep);
 
   return (
     <EmailCollectionContainer>
@@ -46,10 +51,10 @@ export function EmailCollectionPage() {
           label="Confirm password"
           value={formData.confirmPassword}
           onChange={(v) =>
-            setFormData({ ...formData, password: v.target.value })
+            setFormData({ ...formData, confirmPassword: v.target.value })
           }
-          error={Boolean(errors.passwordError)}
-          helperText={errors.passwordError}
+          error={Boolean(errors.confirmPasswordError)}
+          helperText={errors.confirmPasswordError}
         />
         <Button
           variant="contained"

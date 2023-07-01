@@ -16,8 +16,7 @@ export const updateUserLogout = userActionCreator('UPDATE_USER_LOGOUT');
 export const updateUserProfile = userActionCreator<IUserProfile>(
   'UPDATE_USER_PROFILE'
 );
-export const updateUserError =
-  userActionCreator<IUserError>('UPDATE_USER_ERROR');
+export const updateUserUid = userActionCreator<string>('UPDATE_USER_UID');
 
 // -- Sign up
 export const startSignupWithEmail = userActionCreator<ISignupWithEmailFormData>(
