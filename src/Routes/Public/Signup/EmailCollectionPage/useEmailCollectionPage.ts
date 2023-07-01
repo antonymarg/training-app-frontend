@@ -1,18 +1,16 @@
 import { useState } from 'react';
-import { ISignUpFormErrors } from '../../../../Models/User/types';
 import { SignupSteps } from '../SignupPage';
 import { userModule } from '../../../../Firebase';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../../Store';
-import { updateUserUid } from '../../../../Models/User/actions';
+import { updateUserProfile } from '../../../../Models/User/actions';
+import { IValidateForm } from '../../../../lib/types';
+import {
+  IEmailCollectionFormData,
+  IEmailCollectionFormErrors,
+} from './emailCollectionPage.types';
 
-export interface EmailCollectionFormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-const defaultFormState = {
+const defaultFormState: IEmailCollectionFormData = {
   email: '',
   password: '',
   confirmPassword: '',
@@ -21,7 +19,7 @@ const defaultFormState = {
 const mapErrorCodeToError = (error: {
   code?: string;
   message: string;
-}): ISignUpFormErrors => {
+}): IEmailCollectionFormErrors => {
   switch (error.code) {
     case 'auth/invalid-email':
       return { emailError: 'This email is invalid' };
@@ -37,15 +35,15 @@ const mapErrorCodeToError = (error: {
 export function useEmailCollection(setNextStep: (step: SignupSteps) => void) {
   const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] =
-    useState<EmailCollectionFormData>(defaultFormState);
-  const [errors, setErrors] = useState<ISignUpFormErrors>({});
+    useState<IEmailCollectionFormData>(defaultFormState);
+  const [errors, setErrors] = useState<IEmailCollectionFormErrors>({});
   const [isLoading, setIsLoading] = useState<'credentials' | 'google' | null>(
     null
   );
 
   const validateForm = (
-    formData: EmailCollectionFormData
-  ): { isValid: boolean; errors: ISignUpFormErrors } => {
+    formData: IEmailCollectionFormData
+  ): IValidateForm<IEmailCollectionFormErrors> => {
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
       return {
         isValid: false,
@@ -68,13 +66,13 @@ export function useEmailCollection(setNextStep: (step: SignupSteps) => void) {
     return { isValid: true, errors: {} };
   };
 
-  const handleErrors = (errors: ISignUpFormErrors) => {
+  const handleErrors = (errors: IEmailCollectionFormErrors) => {
     setIsLoading(null);
     setErrors(errors);
   };
 
-  const onSuccessfulSignup = async (uid: string) => {
-    dispatch(updateUserUid(uid));
+  const onSuccessfulSignup = async (userId: string, email: string) => {
+    dispatch(updateUserProfile({ userId, email }));
     setIsLoading(null);
     setNextStep('personalData');
   };
@@ -88,7 +86,7 @@ export function useEmailCollection(setNextStep: (step: SignupSteps) => void) {
         email: formData.email,
         password: formData.password,
       });
-      onSuccessfulSignup(user.uid);
+      onSuccessfulSignup(user.uid, formData.email);
     } catch (e: any) {
       return handleErrors(mapErrorCodeToError(e));
     }
@@ -105,7 +103,7 @@ export function useEmailCollection(setNextStep: (step: SignupSteps) => void) {
       if (user) {
         throw new Error('This user exists');
       }
-      onSuccessfulSignup(uid);
+      onSuccessfulSignup(uid, email);
     } catch (error: any) {
       handleErrors(error);
     }

@@ -3,11 +3,9 @@ import { initialState } from './initialState';
 import { IAction } from '../../lib/actionCreator';
 import { createSlice } from '@reduxjs/toolkit';
 import {
-  createUserSuccess,
   updateUserLogin,
   updateUserLogout,
   updateUserProfile,
-  updateUserUid,
 } from './actions';
 
 const userSlice = createSlice({
@@ -16,9 +14,6 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createUserSuccess, (state) => {
-        state.hasUserSignedUp = true;
-      })
       .addCase(updateUserLogin, (state) => {
         state.isLoggedIn = true;
         return state;
@@ -26,24 +21,14 @@ const userSlice = createSlice({
       .addCase(updateUserLogout, (state) => {
         return {
           ...state,
-          role: null,
-          profile: undefined,
+          profile: {},
           isLoggedIn: false,
         };
       })
       .addCase(updateUserProfile, (state, action: IAction<IUserProfile>) => {
         return {
           ...state,
-          profile: action.payload as IUserProfile,
-        };
-      })
-      .addCase(updateUserUid, (state, action: IAction<string>) => {
-        return {
-          ...state,
-          profile: {
-            ...state.profile,
-            userId: action.payload,
-          },
+          profile: action.payload,
         };
       });
   },

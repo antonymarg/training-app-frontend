@@ -25,16 +25,16 @@ export function PersonalDataPage({
         label="Name"
         value={formData.name}
         onChange={(v) => setFormData({ ...formData, name: v.target.value })}
-        error={Boolean(errors.emailError)}
-        helperText={errors.emailError}
+        error={Boolean(errors.nameError)}
+        helperText={errors.nameError}
       />
       <TextField
         id="surame"
         label="Surame"
         value={formData.surname}
         onChange={(v) => setFormData({ ...formData, surname: v.target.value })}
-        error={Boolean(errors.emailError)}
-        helperText={errors.emailError}
+        error={Boolean(errors.surnameError)}
+        helperText={errors.surnameError}
       />
       <InputLabel id="role-label">User role</InputLabel>
       <Select

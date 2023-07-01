@@ -1,22 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
-import { ILoginFormErrors } from '../../Models/User/types';
 import { AppDispatch } from '../../Store';
 import { useNavigate } from 'react-router-dom';
 import { userModule } from '../../Firebase';
 import { updateUserLogin, updateUserProfile } from '../../Models/User/actions';
-const defaultFormState = {
+import { IValidateForm } from '../../lib/types';
+import { IUseLoginProps, ILoginFormErrors } from './loginModal.types';
+
+const defaultFormState: IUserCredentials = {
   email: '',
   password: '',
 };
 
-interface useLoginProps {
-  open?: boolean;
-  onClose?: () => void;
-}
-
-export function useLogin({ open = false, onClose }: useLoginProps) {
+export function useLogin({ open = false, onClose }: IUseLoginProps) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -28,7 +25,7 @@ export function useLogin({ open = false, onClose }: useLoginProps) {
 
   const validateForm = (
     formData: IUserCredentials
-  ): { isValid: boolean; errors: ILoginFormErrors } => {
+  ): IValidateForm<ILoginFormErrors> => {
     if (formData.email === '')
       return {
         isValid: false,

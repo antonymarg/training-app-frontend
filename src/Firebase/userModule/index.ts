@@ -6,7 +6,7 @@ import {
 import { getDoc, setDoc, doc } from '@firebase/firestore';
 import { auth, db } from '../';
 import { IUserCredentials } from './userModule.types';
-import { IUserId, IUserProfile } from '../../Models/User/types';
+import { IUserProfile } from '../../Models/User/types';
 import { provider } from '../firebase';
 
 const getUser = async (userId: string) => {
@@ -24,7 +24,8 @@ const signUpUserWithEmailAndPassword = async (
   );
 };
 
-const createUserProfile = async (userInfo: IUserProfile & IUserId) => {
+const createUserProfile = async (userInfo: IUserProfile) => {
+  if (!userInfo.userId) throw new Error();
   return await setDoc(doc(db, 'users', userInfo.userId), userInfo);
 };
 
