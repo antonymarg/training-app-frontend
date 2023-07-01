@@ -65,7 +65,7 @@ export function EmailCollectionPage({
           {isLoading === 'credentials' ? (
             <CircularProgress color="secondary" size="25" />
           ) : (
-            'Login'
+            'Sign up'
           )}
         </Button>
       </FormContainer>
