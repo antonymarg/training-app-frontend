@@ -14,7 +14,7 @@ export function Menu() {
   return (
     <StyledMenu>
       {user.isLoggedIn ? (
-        <Typography color="secondary">Hello {user.profile?.name}</Typography>
+        <Typography color="secondary">Hello {user.profile.name}</Typography>
       ) : (
         <Button
           variant="contained"

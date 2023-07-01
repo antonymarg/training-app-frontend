@@ -7,9 +7,10 @@ import {
 import { useState, useEffect } from 'react';
 import { EmailCollectionPage } from './EmailCollectionPage/EmailCollectionPage';
 import { PersonalDataPage } from './PersonalDataPage/PersonalDataPage';
-import { ProfilePage } from './ProfilePage/ProfilePage';
 import { Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { getAsset } from '../../../Firebase/assets';
+import { ParticipantProfileSignupPage } from './ParticipantProfilePage/ParticipantProfileSignupPage';
+import { TrainerProfileSingupPage } from './TrainerProfilePage/TrainerProfileSingupPage';
 
 export type SignupSteps =
   | 'emailCollection'
@@ -20,12 +21,12 @@ export type SignupSteps =
 const steps = [
   { label: 'Sign up', step: 'emailCollection' },
   { label: 'Create your profile', step: 'personalData' },
-  { label: 'Add more details', step: 'profile' },
+  { label: 'Add more details', step: 'Profile' },
 ];
 export function SignupPage() {
-  const [signupStep, setSignupStep] = useState<SignupSteps>('personalData');
+  const [signupStep, setSignupStep] = useState<SignupSteps>('emailCollection');
   const [svgUrl, setSvgUrl] = useState('');
-  const activeStep = steps.findIndex((e) => e.step.includes(signupStep));
+  const activeStep = steps.findIndex((e) => signupStep.includes(e.step));
 
   const getSignupPage = () => {
     switch (signupStep) {
@@ -34,9 +35,9 @@ export function SignupPage() {
       case 'personalData':
         return <PersonalDataPage setStep={setSignupStep} />;
       case 'participantProfile':
-        return <ProfilePage />;
+        return <ParticipantProfileSignupPage />;
       case 'trainerProfile':
-        return <ProfilePage />;
+        return <TrainerProfileSingupPage />;
     }
   };
 

@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { SignupSteps } from '../SignupPage';
 import { userModule } from '../../../../Firebase';
-import { useSelector } from 'react-redux';
-import { getUser } from '../../../../Models/User/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserProfile } from '../../../../Models/User/selectors';
 import {
   IPersonalDataFormData,
   IPersonalDataFormErrors,
 } from './personalData.types';
 import { IValidateForm } from '../../../../lib/types';
+import { AppDispatch } from '../../../../Store';
+import { updateUserProfile } from '../../../../Models/User/actions';
+import { IUserProfile } from '../../../../Models/User/types';
 
 const defaultFormState: IPersonalDataFormData = {
   name: '',
@@ -26,7 +29,8 @@ const mapErrorCodeToError = (error: {
 };
 
 export function usePersonalDataPage(setNextStep: (step: SignupSteps) => void) {
-  const user = useSelector(getUser);
+  const dispatch = useDispatch<AppDispatch>();
+  const { userId, email } = useSelector(getUserProfile);
   const [formData, setFormData] =
     useState<IPersonalDataFormData>(defaultFormState);
   const [errors, setErrors] = useState<IPersonalDataFormErrors>({});
@@ -49,7 +53,7 @@ export function usePersonalDataPage(setNextStep: (step: SignupSteps) => void) {
           surnameError: `This is required.`,
         },
       };
-    if (!user.profile?.userId || !user.profile?.email)
+    if (!userId || !email)
       return {
         isValid: false,
         errors: {
@@ -69,12 +73,10 @@ export function usePersonalDataPage(setNextStep: (step: SignupSteps) => void) {
     let validation = validateForm(formData);
     if (!validation.isValid) return handleErrors(validation.errors);
     try {
-      let newUser = {
-        userId: user.profile?.userId as string,
-        email: user.profile?.email as string,
-        ...formData,
-      };
+      let newUser: IUserProfile = { userId, email, ...formData };
       await userModule.createUserProfile(newUser);
+      dispatch(updateUserProfile(newUser));
+      setIsLoading(false);
       if (formData.role === 'participant')
         return setNextStep('participantProfile');
       setNextStep('trainerProfile');
