@@ -11,11 +11,13 @@ export function Menu() {
   const handleClickOpenLoginModal = () => setLoginModalOpen(true);
   const handleClickCloseLoginModal = () => setLoginModalOpen(false);
 
+  const showStartButton = !window.location.href.includes('signup');
+
   return (
     <StyledMenu>
       {user.isLoggedIn ? (
         <Typography color="secondary">Hello {user.profile.name}</Typography>
-      ) : (
+      ) : showStartButton ? (
         <Button
           variant="contained"
           color="secondary"
@@ -24,7 +26,7 @@ export function Menu() {
         >
           Start
         </Button>
-      )}
+      ) : null}
       <LoginModal
         open={isLoginModalOpen}
         onClose={handleClickCloseLoginModal}

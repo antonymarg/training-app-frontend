@@ -11,11 +11,16 @@ import { IValidateForm } from '../../../../lib/types';
 import { AppDispatch } from '../../../../Store';
 import { updateUserProfile } from '../../../../Models/User/actions';
 import { IUserProfile } from '../../../../Models/User/types';
+import userImage from '../../../../Assets/img/user.png';
 
 const defaultFormState: IPersonalDataFormData = {
   name: '',
   surname: '',
+  img: userImage,
+  country: '',
   role: 'participant',
+  gender: '',
+  dateOfBirth: new Date().toISOString().split('T')[0],
 };
 
 const mapErrorCodeToError = (error: {
@@ -62,7 +67,6 @@ export function usePersonalDataPage(setNextStep: (step: SignupSteps) => void) {
       };
     return { isValid: true, errors: {} };
   };
-
   const handleErrors = (errors: IPersonalDataFormErrors) => {
     setIsLoading(false);
     setErrors(errors);
@@ -73,13 +77,16 @@ export function usePersonalDataPage(setNextStep: (step: SignupSteps) => void) {
     let validation = validateForm(formData);
     if (!validation.isValid) return handleErrors(validation.errors);
     try {
-      let newUser: IUserProfile = { userId, email, ...formData };
+      let newUser: IUserProfile = {
+        userId,
+        email,
+        ...formData,
+        dateOfBirth: new Date(formData.dateOfBirth),
+      };
       await userModule.createUserProfile(newUser);
       dispatch(updateUserProfile(newUser));
+      setNextStep('complete');
       setIsLoading(false);
-      if (formData.role === 'participant')
-        return setNextStep('participantProfile');
-      setNextStep('trainerProfile');
     } catch (e: any) {
       return handleErrors(mapErrorCodeToError(e));
     }

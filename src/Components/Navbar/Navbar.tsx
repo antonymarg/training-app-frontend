@@ -6,7 +6,7 @@ export function Navbar() {
   return (
     <StyledNav>
       <Link href="/">
-        <Typography variant="h6" color="secondary">
+        <Typography variant="h5" color="secondary">
           Training app
         </Typography>
       </Link>
