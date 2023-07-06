@@ -17,20 +17,24 @@ import {
   ProfilePicture,
   ButtonContainer,
 } from './createProfilePage.style';
-import { SignupSteps } from '../SignupPage/SignupPage';
 import { useCreateProfilePage } from './useCreateProfilePage';
 import { IUserRole } from '../../../../Models/User/types';
 import { countries } from 'countries-list';
 import { IGender } from '../../../../Models/User/types';
 import userImage from '../../../../Assets/img/user.png';
 
-export function CreateProfilePage({
-  setStep,
-}: {
-  setStep: (step: SignupSteps) => void;
-}) {
+const GENDER_LIST: IGender[] = [
+  'Male',
+  'Female',
+  'Non-binary',
+  'Gender fluid',
+  'Agender',
+  'Prefer not to say',
+];
+
+export function CreateProfilePage() {
   const { formData, setFormData, errors, isLoading, onContinue } =
-    useCreateProfilePage(setStep);
+    useCreateProfilePage();
   return (
     <>
       {errors.genericError && (
@@ -156,6 +160,7 @@ export function CreateProfilePage({
                 value={formData.gender}
                 label="Gender"
                 labelId="gender-label"
+                required
                 fullWidth
                 onChange={(v) =>
                   setFormData({
@@ -164,10 +169,9 @@ export function CreateProfilePage({
                   })
                 }
               >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Nonbinary">Non-binary</MenuItem>
-                <MenuItem value="Other">Other</MenuItem>
+                {GENDER_LIST.map((i) => (
+                  <MenuItem value={i}>{i}</MenuItem>
+                ))}
               </Select>
             </FormControl>
             <FormControl fullWidth>
