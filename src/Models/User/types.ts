@@ -8,9 +8,11 @@ export interface IUserProfile {
   name?: string;
   surname?: string;
   role?: IUserRole;
-  dateOfBirth?: Date;
+  dateOfBirth?: string | Date;
   gender?: IGender;
   bio?: string;
+  imgSrc?: string;
+  imgFirebasePath?: string;
 }
 
 export type IUserRole = 'trainer' | 'participant';

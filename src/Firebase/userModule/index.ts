@@ -8,6 +8,7 @@ import { auth, db } from '../';
 import { IUserCredentials } from './userModule.types';
 import { IUserProfile } from '../../Models/User/types';
 import { provider } from '../firebase';
+import { getAsset, uploadAsset } from '../assets';
 
 const getUser = async (userId: string) => {
   let user = await getDoc(doc(db, 'users', userId));
@@ -41,10 +42,21 @@ const signInWithGoogle = async () => {
   return await signInWithPopup(auth, provider);
 };
 
+const uploadProfilePicture = async (userId: string, img: File) => {
+  let extension = img.name.split('.')[1];
+  return await uploadAsset(`users/profilePictures/${userId}.${extension}`, img);
+};
+
+const getUserImage = async (imagePath: string) => {
+  return await getAsset(imagePath);
+};
+
 export const userModule = {
   getUser,
   signUpUserWithEmailAndPassword,
   createUserProfile,
   signInWithUserAndEmail,
   signInWithGoogle,
+  uploadProfilePicture,
+  getUserImage,
 };

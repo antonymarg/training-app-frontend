@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Button, Typography } from '@mui/material';
+import { Avatar, Button, Stack, Typography } from '@mui/material';
 import { StyledMenu } from './menu.style';
 import { LoginModal } from '../LoginModal/LoginModal';
 import { useSelector } from 'react-redux';
 import { getUser } from '../../Models/User/selectors';
+import User from '../../Assets/img/user.png';
 
 export function Menu() {
   const user = useSelector(getUser);
@@ -16,7 +17,10 @@ export function Menu() {
   return (
     <StyledMenu>
       {user.isLoggedIn ? (
-        <Typography color="secondary">Hello {user.profile.name}</Typography>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <Avatar src={user.profile.imgSrc || User} />
+          <Typography color="secondary">Hello {user.profile.name}</Typography>
+        </Stack>
       ) : showStartButton ? (
         <Button
           variant="contained"

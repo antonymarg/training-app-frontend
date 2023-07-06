@@ -8,11 +8,13 @@ export interface ICreateProfileFormData {
   gender: IGender | '';
   dateOfBirth: string;
   role: IUserRole;
-  img: string;
+  img?: File;
 }
 
 export interface ICreateProfileFormErrors {
   genericError?: string;
   nameError?: string;
   surnameError?: string;
+  countryError?: string;
+  dateOfBirthError?: string;
 }

@@ -5,7 +5,7 @@ export const SignupPageContainer = styled.div`
   grid-template-columns: 7fr 3fr;
   height: 100%;
   padding: 32px 0;
-  gap: 16px;
+  gap: 24px;
 `;
 
 export const HeaderWrapper = styled.div`

@@ -1,27 +1,23 @@
 import { useState } from 'react';
 import { SignupSteps } from '../SignupPage/SignupPage';
 import { userModule } from '../../../../Firebase';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../../Models/User/selectors';
 import {
   ICreateProfileFormData,
   ICreateProfileFormErrors,
 } from './createProfilePage.types';
 import { IValidateForm } from '../../../../lib/types';
-import { AppDispatch } from '../../../../Store';
-import { updateUserProfile } from '../../../../Models/User/actions';
 import { IUserProfile } from '../../../../Models/User/types';
-import userImage from '../../../../Assets/img/user.png';
 import { useNavigate } from 'react-router-dom';
 
 const defaultFormState: ICreateProfileFormData = {
   name: '',
   surname: '',
-  img: userImage,
   country: '',
   role: 'participant',
   gender: '',
-  dateOfBirth: new Date().toISOString().split('T')[0],
+  dateOfBirth: '',
 };
 
 const mapErrorCodeToError = (error: {
@@ -35,7 +31,6 @@ const mapErrorCodeToError = (error: {
 };
 
 export function useCreateProfilePage(setNextStep: (step: SignupSteps) => void) {
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { userId, email } = useSelector(getUserProfile);
   const [formData, setFormData] =
@@ -46,20 +41,12 @@ export function useCreateProfilePage(setNextStep: (step: SignupSteps) => void) {
   const validateForm = (
     formData: ICreateProfileFormData
   ): IValidateForm<ICreateProfileFormErrors> => {
-    if (!formData.name)
-      return {
-        isValid: false,
-        errors: {
-          nameError: `This is required.`,
-        },
-      };
-    if (!formData.surname)
-      return {
-        isValid: false,
-        errors: {
-          surnameError: `This is required.`,
-        },
-      };
+    const requiredFields: Array<keyof ICreateProfileFormData> = [
+      'name',
+      'surname',
+      'dateOfBirth',
+      'country',
+    ];
     if (!userId || !email)
       return {
         isValid: false,
@@ -67,6 +54,16 @@ export function useCreateProfilePage(setNextStep: (step: SignupSteps) => void) {
           genericError: `Something happened`,
         },
       };
+    for (let field of requiredFields) {
+      if (!formData[field]) {
+        return {
+          isValid: false,
+          errors: {
+            [field + 'Error']: 'Required',
+          },
+        };
+      }
+    }
     return { isValid: true, errors: {} };
   };
   const handleErrors = (errors: ICreateProfileFormErrors) => {
@@ -76,17 +73,20 @@ export function useCreateProfilePage(setNextStep: (step: SignupSteps) => void) {
 
   const onContinue = async () => {
     setIsLoading(true);
+    let { img, ...userProfile } = formData;
     let validation = validateForm(formData);
     if (!validation.isValid) return handleErrors(validation.errors);
     try {
       let newUser: IUserProfile = {
         userId,
         email,
-        ...formData,
-        dateOfBirth: new Date(formData.dateOfBirth),
+        ...userProfile,
       };
+      if (img)
+        newUser.imgFirebasePath = (
+          await userModule.uploadProfilePicture(userId as string, img)
+        ).metadata.fullPath;
       await userModule.createUserProfile(newUser);
-      dispatch(updateUserProfile(newUser));
       navigate('/signup/complete');
       setIsLoading(false);
     } catch (e: any) {

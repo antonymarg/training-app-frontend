@@ -11,7 +11,7 @@ import { Typography } from '@mui/material';
 import SignupIcon from '../../../../Assets/svg/SignupIcon.svg';
 import SignupProcessIcon from '../../../../Assets/svg/SignupProcessIcon.svg';
 
-export type SignupSteps = 'emailCollection' | 'createProfile' | 'complete';
+export type SignupSteps = 'emailCollection' | 'createProfile';
 
 export function SignupPage() {
   const [signupStep, setSignupStep] = useState<SignupSteps>('emailCollection');

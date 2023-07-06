@@ -48,6 +48,8 @@ export function useLogin({ open = false, onClose }: IUseLoginProps) {
 
   const onSuccessfulLogin = async (uid: string) => {
     let user = await userModule.getUser(uid);
+    if (user.imgFirebasePath)
+      user.imgSrc = await userModule.getUserImage(user.imgFirebasePath);
     dispatch(updateUserLogin());
     dispatch(updateUserProfile(user));
     if (onClose) onClose();
