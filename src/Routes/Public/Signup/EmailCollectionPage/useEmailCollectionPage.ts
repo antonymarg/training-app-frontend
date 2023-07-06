@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { SignupSteps } from '../SignupPage/SignupPage';
 import { userModule } from '../../../../Firebase';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../../Store';
@@ -32,7 +31,7 @@ const mapErrorCodeToError = (error: {
   }
 };
 
-export function useEmailCollection(setNextStep: (step: SignupSteps) => void) {
+export function useEmailCollection(onNextStep: () => void) {
   const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] =
     useState<IEmailCollectionFormData>(defaultFormState);
@@ -74,7 +73,7 @@ export function useEmailCollection(setNextStep: (step: SignupSteps) => void) {
   const onSuccessfulSignup = async (userId: string, email: string) => {
     dispatch(updateUserProfile({ userId, email }));
     setIsLoading(null);
-    setNextStep('createProfile');
+    onNextStep();
   };
 
   const onSignupWithCredentials = async () => {

@@ -11,18 +11,22 @@ import { Typography } from '@mui/material';
 import SignupIcon from '../../../../Assets/svg/SignupIcon.svg';
 import SignupProcessIcon from '../../../../Assets/svg/SignupProcessIcon.svg';
 
-export type SignupSteps = 'emailCollection' | 'createProfile';
+type SignupSteps = 'emailCollection' | 'createProfile';
 
 export function SignupPage() {
-  const [signupStep, setSignupStep] = useState<SignupSteps>('emailCollection');
+  const [signupStep, setSignupStep] = useState<SignupSteps>('createProfile');
   const [decoratorImg, setDecoratorImg] = useState(SignupIcon);
 
   const getSignupPage = () => {
     switch (signupStep) {
       case 'emailCollection':
-        return <EmailCollectionPage setStep={setSignupStep} />;
+        return (
+          <EmailCollectionPage
+            onNextStep={() => setSignupStep('createProfile')}
+          />
+        );
       case 'createProfile':
-        return <CreateProfilePage setStep={setSignupStep} />;
+        return <CreateProfilePage />;
     }
   };
 

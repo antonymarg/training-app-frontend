@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { SignupSteps } from '../SignupPage/SignupPage';
 import { userModule } from '../../../../Firebase';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../../Models/User/selectors';
@@ -16,8 +15,8 @@ const defaultFormState: ICreateProfileFormData = {
   surname: '',
   country: '',
   role: 'participant',
-  gender: '',
   dateOfBirth: '',
+  gender: '',
 };
 
 const mapErrorCodeToError = (error: {
@@ -30,7 +29,7 @@ const mapErrorCodeToError = (error: {
   }
 };
 
-export function useCreateProfilePage(setNextStep: (step: SignupSteps) => void) {
+export function useCreateProfilePage() {
   const navigate = useNavigate();
   const { userId, email } = useSelector(getUserProfile);
   const [formData, setFormData] =
@@ -46,6 +45,7 @@ export function useCreateProfilePage(setNextStep: (step: SignupSteps) => void) {
       'surname',
       'dateOfBirth',
       'country',
+      'gender',
     ];
     if (!userId || !email)
       return {
