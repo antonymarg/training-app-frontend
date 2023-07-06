@@ -16,4 +16,11 @@ export interface IUserProfile {
 }
 
 export type IUserRole = 'trainer' | 'participant';
-export type IGender = 'Male' | 'Female' | 'Non-binary' | 'Other' | '';
+export type IGender =
+  | 'Male'
+  | 'Female'
+  | 'Non-binary'
+  | 'Gender fluid'
+  | 'Agender'
+  | 'Prefer not to say'
+  | '';

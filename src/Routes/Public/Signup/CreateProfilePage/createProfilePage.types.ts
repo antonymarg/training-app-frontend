@@ -5,7 +5,7 @@ export interface ICreateProfileFormData {
   surname: string;
   bio?: string;
   country: string;
-  gender: IGender | '';
+  gender: IGender;
   dateOfBirth: string;
   role: IUserRole;
   img?: File;
@@ -17,4 +17,5 @@ export interface ICreateProfileFormErrors {
   surnameError?: string;
   countryError?: string;
   dateOfBirthError?: string;
+  genderError?: string;
 }

@@ -6,12 +6,11 @@ import {
   StyledDivider,
 } from './EmailColelctionPage.style';
 import { useEmailCollection } from './useEmailCollectionPage';
-import { SignupSteps } from '../SignupPage/SignupPage';
 
 export function EmailCollectionPage({
-  setStep,
+  onNextStep,
 }: {
-  setStep: (step: SignupSteps) => void;
+  onNextStep: () => void;
 }) {
   const {
     formData,
@@ -20,7 +19,7 @@ export function EmailCollectionPage({
     errors,
     onSignupWithCredentials,
     onSignupWithGoogle,
-  } = useEmailCollection(setStep);
+  } = useEmailCollection(onNextStep);
 
   return (
     <EmailCollectionContainer>
