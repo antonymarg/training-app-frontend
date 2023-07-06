@@ -1,6 +1,6 @@
 import { IUserRole } from '../../../../Models/User/types';
 import { IGender } from '../../../../Models/User/types';
-export interface IPersonalDataFormData {
+export interface ICreateProfileFormData {
   name: string;
   surname: string;
   bio?: string;
@@ -11,7 +11,7 @@ export interface IPersonalDataFormData {
   img: string;
 }
 
-export interface IPersonalDataFormErrors {
+export interface ICreateProfileFormErrors {
   genericError?: string;
   nameError?: string;
   surnameError?: string;

@@ -1,10 +1,10 @@
-import { CompletePageContainer } from './CompletePage.style';
+import { CompletePageContainer } from './SignupCompletePage.style';
 import SignupCompletedIcon from '../../../../Assets/svg/SignupCompletedIcon.svg';
 import { Typography, Button } from '@mui/material';
 import { useState } from 'react';
 import { LoginModal } from '../../../../Components/LoginModal/LoginModal';
 
-export function CompletePage() {
+export function SignupCompletePage() {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const handleClickOpenLoginModal = () => setLoginModalOpen(true);
   const handleClickCloseLoginModal = () => setLoginModalOpen(false);

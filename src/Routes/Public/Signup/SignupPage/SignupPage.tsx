@@ -5,14 +5,13 @@ import {
   HeaderWrapper,
 } from './SignupPage.style';
 import { useState, useEffect } from 'react';
-import { EmailCollectionPage } from './EmailCollectionPage/EmailCollectionPage';
-import { PersonalDataPage } from './PersonalDataPage/PersonalDataPage';
+import { EmailCollectionPage } from '../EmailCollectionPage/EmailCollectionPage';
+import { CreateProfilePage } from '../CreateProfilePage/CreateProfilePage';
 import { Typography } from '@mui/material';
-import SignupIcon from '../../../Assets/svg/SignupIcon.svg';
-import SignupProcessIcon from '../../../Assets/svg/SignupProcessIcon.svg';
-import { CompletePage } from './CompletePage/CompletePage';
+import SignupIcon from '../../../../Assets/svg/SignupIcon.svg';
+import SignupProcessIcon from '../../../../Assets/svg/SignupProcessIcon.svg';
 
-export type SignupSteps = 'emailCollection' | 'personalData' | 'complete';
+export type SignupSteps = 'emailCollection' | 'createProfile' | 'complete';
 
 export function SignupPage() {
   const [signupStep, setSignupStep] = useState<SignupSteps>('emailCollection');
@@ -22,8 +21,8 @@ export function SignupPage() {
     switch (signupStep) {
       case 'emailCollection':
         return <EmailCollectionPage setStep={setSignupStep} />;
-      case 'personalData':
-        return <PersonalDataPage setStep={setSignupStep} />;
+      case 'createProfile':
+        return <CreateProfilePage setStep={setSignupStep} />;
     }
   };
 
@@ -32,13 +31,11 @@ export function SignupPage() {
       case 'emailCollection':
         setDecoratorImg(SignupIcon);
         break;
-      case 'personalData':
+      case 'createProfile':
         setDecoratorImg(SignupProcessIcon);
         break;
     }
   }, [signupStep]);
-
-  if (signupStep === 'complete') return <CompletePage />;
 
   return (
     <SignupPageContainer>

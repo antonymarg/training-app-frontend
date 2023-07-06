@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PersonalDataContainer = styled.div`
+export const CreateProfileContainer = styled.div`
   display: grid;
   grid-template-columns: 30fr 70fr;
   justify-self: center;

@@ -6,7 +6,7 @@ import {
   StyledDivider,
 } from './EmailColelctionPage.style';
 import { useEmailCollection } from './useEmailCollectionPage';
-import { SignupSteps } from '../SignupPage';
+import { SignupSteps } from '../SignupPage/SignupPage';
 
 export function EmailCollectionPage({
   setStep,

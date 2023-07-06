@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SignupSteps } from '../SignupPage';
+import { SignupSteps } from '../SignupPage/SignupPage';
 import { userModule } from '../../../../Firebase';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../../Store';
@@ -74,7 +74,7 @@ export function useEmailCollection(setNextStep: (step: SignupSteps) => void) {
   const onSuccessfulSignup = async (userId: string, email: string) => {
     dispatch(updateUserProfile({ userId, email }));
     setIsLoading(null);
-    setNextStep('personalData');
+    setNextStep('createProfile');
   };
 
   const onSignupWithCredentials = async () => {

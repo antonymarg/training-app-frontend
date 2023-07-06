@@ -1,19 +1,20 @@
 import { useState } from 'react';
-import { SignupSteps } from '../SignupPage';
+import { SignupSteps } from '../SignupPage/SignupPage';
 import { userModule } from '../../../../Firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserProfile } from '../../../../Models/User/selectors';
 import {
-  IPersonalDataFormData,
-  IPersonalDataFormErrors,
-} from './personalData.types';
+  ICreateProfileFormData,
+  ICreateProfileFormErrors,
+} from './createProfilePage.types';
 import { IValidateForm } from '../../../../lib/types';
 import { AppDispatch } from '../../../../Store';
 import { updateUserProfile } from '../../../../Models/User/actions';
 import { IUserProfile } from '../../../../Models/User/types';
 import userImage from '../../../../Assets/img/user.png';
+import { useNavigate } from 'react-router-dom';
 
-const defaultFormState: IPersonalDataFormData = {
+const defaultFormState: ICreateProfileFormData = {
   name: '',
   surname: '',
   img: userImage,
@@ -26,24 +27,25 @@ const defaultFormState: IPersonalDataFormData = {
 const mapErrorCodeToError = (error: {
   code?: string;
   message: string;
-}): IPersonalDataFormErrors => {
+}): ICreateProfileFormErrors => {
   switch (error.code) {
     default:
       return { genericError: 'A sudden error occurred' };
   }
 };
 
-export function usePersonalDataPage(setNextStep: (step: SignupSteps) => void) {
+export function useCreateProfilePage(setNextStep: (step: SignupSteps) => void) {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { userId, email } = useSelector(getUserProfile);
   const [formData, setFormData] =
-    useState<IPersonalDataFormData>(defaultFormState);
-  const [errors, setErrors] = useState<IPersonalDataFormErrors>({});
+    useState<ICreateProfileFormData>(defaultFormState);
+  const [errors, setErrors] = useState<ICreateProfileFormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
 
   const validateForm = (
-    formData: IPersonalDataFormData
-  ): IValidateForm<IPersonalDataFormErrors> => {
+    formData: ICreateProfileFormData
+  ): IValidateForm<ICreateProfileFormErrors> => {
     if (!formData.name)
       return {
         isValid: false,
@@ -67,7 +69,7 @@ export function usePersonalDataPage(setNextStep: (step: SignupSteps) => void) {
       };
     return { isValid: true, errors: {} };
   };
-  const handleErrors = (errors: IPersonalDataFormErrors) => {
+  const handleErrors = (errors: ICreateProfileFormErrors) => {
     setIsLoading(false);
     setErrors(errors);
   };
@@ -85,7 +87,7 @@ export function usePersonalDataPage(setNextStep: (step: SignupSteps) => void) {
       };
       await userModule.createUserProfile(newUser);
       dispatch(updateUserProfile(newUser));
-      setNextStep('complete');
+      navigate('/signup/complete');
       setIsLoading(false);
     } catch (e: any) {
       return handleErrors(mapErrorCodeToError(e));

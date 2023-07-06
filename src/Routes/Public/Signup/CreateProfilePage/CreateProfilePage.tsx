@@ -10,26 +10,26 @@ import {
   Autocomplete,
 } from '@mui/material';
 import {
-  PersonalDataContainer,
+  CreateProfileContainer,
   ProfilePicContainer,
   MainFormContainer,
   ProfilePicture,
-} from './personalDataPage.style';
-import { SignupSteps } from '../SignupPage';
-import { usePersonalDataPage } from './usePersonalDataPage';
+} from './createProfilePage.style';
+import { SignupSteps } from '../SignupPage/SignupPage';
+import { useCreateProfilePage } from './useCreateProfilePage';
 import { IUserRole } from '../../../../Models/User/types';
 import { countries } from 'countries-list';
 import { IGender } from '../../../../Models/User/types';
 
-export function PersonalDataPage({
+export function CreateProfilePage({
   setStep,
 }: {
   setStep: (step: SignupSteps) => void;
 }) {
   const { formData, setFormData, errors, isLoading, onContinue } =
-    usePersonalDataPage(setStep);
+    useCreateProfilePage(setStep);
   return (
-    <PersonalDataContainer>
+    <CreateProfileContainer>
       <ProfilePicContainer>
         <ProfilePicture alt="profile" src={formData.img} style={{}} />
         <input
@@ -164,6 +164,6 @@ export function PersonalDataPage({
           )}
         </Button>
       </MainFormContainer>
-    </PersonalDataContainer>
+    </CreateProfileContainer>
   );
 }
