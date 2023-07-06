@@ -5,9 +5,9 @@ import {
   Header,
   MainText,
   PhotoAndHeaderContainer,
-} from './publicPageContainer.style';
+} from './HomePage.style';
 
-const PublicPage = () => {
+const HomePage = () => {
   return (
     <BodyContainer>
       <PhotoAndHeaderContainer>
@@ -33,4 +33,4 @@ const PublicPage = () => {
   );
 };
 
-export default PublicPage;
+export default HomePage;

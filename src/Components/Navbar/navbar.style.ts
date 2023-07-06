@@ -5,5 +5,6 @@ export const StyledNav = styled.nav`
   padding: 10px 10%;
   display: flex;
   flex-direction: row;
-  align-items: baseline;
+  min-height: 60px;
+  align-items: center;
 `;

@@ -80,6 +80,7 @@ export const LoginModal = ({ onClose, open }: LoginModalProps) => {
         <GoogleButton
           onClick={onLoginWithGoogleClick}
           isLoading={isLoading === 'google'}
+          text="Sign in with Google"
         />
         <Typography textAlign="center">
           If you don't have an account, make one{' '}

@@ -45,18 +45,18 @@ export const theme = createTheme({
     },
     h5: {
       fontFamily: 'Poppins',
-      fontWeight: 900,
+      fontWeight: 400,
     },
     h6: {
       fontFamily: 'Poppins',
-      fontWeight: 700,
+      fontWeight: 400,
     },
     button: {
-      fontWeight: 700,
+      fontWeight: 600,
       textTransform: 'none',
     },
   },
   shape: {
-    borderRadius: 10,
+    borderRadius: 20,
   },
 });

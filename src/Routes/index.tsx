@@ -1,7 +1,13 @@
 import HomePage from './HomePage';
-import TrainerPage from './TrainerPage';
-import ParticipantPage from './ParticipantPage';
-import SignupPage from './SignupPage/SignupPage';
-import PublicPage from './PublicPage/PublicPage';
+import TrainerPage from './Trainers/TrainerPage';
+import ParticipantPage from './Participants/ParticipantPage';
+import { SignupPage } from './Public/Signup/SignupPage/SignupPage';
+import { SignupCompletePage } from './Public/Signup/SignupCompletePage/SignupCompletePage';
 
-export { HomePage, TrainerPage, ParticipantPage, SignupPage, PublicPage };
+export {
+  HomePage,
+  TrainerPage,
+  ParticipantPage,
+  SignupPage,
+  SignupCompletePage,
+};

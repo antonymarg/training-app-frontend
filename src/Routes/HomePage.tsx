@@ -1,14 +1,14 @@
-import ParticipantPage from './ParticipantPage';
-import TrainerPage from './TrainerPage';
+import ParticipantPage from './Participants/ParticipantPage';
+import TrainerPage from './Trainers/TrainerPage';
 import { useSelector } from 'react-redux';
-import { getUserRole } from '../Models/User/selectors';
-import PublicPage from './PublicPage/PublicPage';
+import { getUser } from '../Models/User/selectors';
+import PublicPage from './Public/Home/HomePage';
 
 const HomePage = () => {
-  const userType = useSelector(getUserRole);
-  if (userType === 'participant') return <ParticipantPage />;
-  if (userType === 'trainer') return <TrainerPage />;
-  return <PublicPage />;
+  const user = useSelector(getUser);
+  if (!user.isLoggedIn) return <PublicPage />;
+  if (user.profile.role === 'participant') return <ParticipantPage />;
+  return <TrainerPage />;
 };
 
 export default HomePage;

@@ -1,15 +1,15 @@
 import { useDispatch } from 'react-redux';
-import { updateUserLogout } from '../Models/User/actions';
+import { updateUserLogout } from '../../Models/User/actions';
 
-const ParticipantPage = () => {
+const TrainerPage = () => {
   const dispatch = useDispatch();
   const handleLogout = () => dispatch(updateUserLogout());
   return (
     <div className="App">
-      <div className="container">Participant</div>
+      <div className="container">Trainer</div>
       <button onClick={handleLogout}>logout</button>
     </div>
   );
 };
 
-export default ParticipantPage;
+export default TrainerPage;
