@@ -62,7 +62,7 @@ export function EmailCollectionPage({
           onClick={onSignupWithCredentials}
         >
           {isLoading === 'credentials' ? (
-            <CircularProgress color="secondary" size="25" />
+            <CircularProgress color="secondary" size={25} />
           ) : (
             'Sign up'
           )}
