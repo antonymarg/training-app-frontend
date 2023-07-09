@@ -7,6 +7,10 @@ export const LoginPageContainer = styled.div`
   row-gap: 16px;
   padding: 16px;
   min-width: 400px;
+
+  @media only screen and (max-width: 768px) {
+    min-width: unset;
+  }
 `;
 
 export const EmailAndPassContainer = styled.div`

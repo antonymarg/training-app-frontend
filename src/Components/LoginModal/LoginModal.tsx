@@ -68,7 +68,7 @@ export const LoginModal = ({ onClose, open }: LoginModalProps) => {
             onClick={onLoginClick}
           >
             {isLoading === 'credentials' ? (
-              <CircularProgress color="secondary" size="25" />
+              <CircularProgress color="secondary" size={25} />
             ) : (
               'Login'
             )}
