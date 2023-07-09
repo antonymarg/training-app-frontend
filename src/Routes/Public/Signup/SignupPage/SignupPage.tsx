@@ -14,7 +14,7 @@ import SignupProcessIcon from '../../../../Assets/svg/SignupProcessIcon.svg';
 type SignupSteps = 'emailCollection' | 'createProfile';
 
 export function SignupPage() {
-  const [signupStep, setSignupStep] = useState<SignupSteps>('createProfile');
+  const [signupStep, setSignupStep] = useState<SignupSteps>('emailCollection');
   const [decoratorImg, setDecoratorImg] = useState(SignupIcon);
 
   const getSignupPage = () => {

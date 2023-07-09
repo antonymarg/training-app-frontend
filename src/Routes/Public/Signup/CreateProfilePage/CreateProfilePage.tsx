@@ -53,7 +53,6 @@ export function CreateProfilePage() {
           <input
             accept="image/*"
             id="upload-photo"
-            multiple
             type="file"
             style={{ display: 'none' }}
             onChange={(e) =>
