@@ -10,6 +10,15 @@ export const CreateProfileContainer = styled.div`
   grid-template-areas:
     'profile_picture form'
     '. button_container';
+
+  @media only screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'profile_picture'
+      'form'
+      'button_container';
+    row-gap: 16px;
+  }
 `;
 
 export const ProfilePicContainer = styled.div`
@@ -33,6 +42,10 @@ export const ProfilePicture = styled.img`
   width: 100%;
   max-width: 250px;
   aspect-ratio: 1 / 1;
+
+  @media only screen and (max-width: 768px) {
+    width: 50%;
+  }
 `;
 
 export const ButtonContainer = styled.div`
