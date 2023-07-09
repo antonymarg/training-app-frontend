@@ -23,7 +23,7 @@ export const PhotoAndHeaderContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
 
   @media only screen and (max-width: 768px) {
-    margin: 0px -16px;
+    margin: -8px -16px;
   }
 `;
 

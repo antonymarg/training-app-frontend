@@ -10,6 +10,6 @@ export const LayoutContainer = styled.div`
   padding: 0px 10%;
 
   @media only screen and (max-width: 768px) {
-    padding: 0px 16px;
+    padding: 8px 16px;
   }
 `;
