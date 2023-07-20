@@ -1,4 +1,5 @@
 import { userModule } from './userModule/';
+import { trainingModule } from './trainingModule';
 import firebase, { auth, db } from './firebase';
 
-export { userModule, firebase, db, auth };
+export { userModule, trainingModule, firebase, db, auth };

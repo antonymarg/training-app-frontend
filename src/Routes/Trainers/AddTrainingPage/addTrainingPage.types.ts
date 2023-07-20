@@ -1,16 +1,16 @@
-import { IAutocompleteOptions } from '../../../Components/AutocompleteUser/AutocompleteUser';
-import { eTrainingDuration, eTrainingTopics } from '../../../lib/enums';
+import { IUserAutocompleteOptions } from '../../../Components/AutocompleteUser/AutocompleteUser';
+import { eTrainingTopics } from '../../../lib/enums';
 
 export interface IAddTrainingForm {
   title: string;
   description?: string;
-  trainers: IAutocompleteOptions[];
+  trainers: IUserAutocompleteOptions[];
   topic: eTrainingTopics | '';
-  dateOfDelivery: string;
-  duration: eTrainingDuration | '';
-  typeOfTraining: 'live' | 'online' | '';
+  startDate?: string;
+  endDate?: string;
+  type: 'live' | 'online' | '';
   location?: string;
-  participants: IAutocompleteOptions[];
+  participants: IUserAutocompleteOptions[];
 }
 
 export interface IAddTrainingFormErrors {
@@ -18,7 +18,8 @@ export interface IAddTrainingFormErrors {
   titleError?: string;
   cotrainerError?: string;
   topicError?: string;
-  dateOfDeliveryError?: string;
+  startDateError?: string;
+  endDateError?: string;
   durationError?: string;
   typeOfTrainingError?: string;
   participants?: string;

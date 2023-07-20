@@ -18,22 +18,13 @@ import {
   AddTrainingPageContainer,
   ButtonContainer,
 } from './addTrainingPage.style';
-import {
-  AutocompleteUser,
-  IAutocompleteOptions,
-} from '../../../Components/AutocompleteUser/AutocompleteUser';
+import { AutocompleteUserMutliple } from '../../../Components/AutocompleteUser/AutocompleteUser';
 import { useAddTrainingPage } from './useAddTrainingPage';
-import {
-  eTrainingDuration,
-  eTrainingTopics,
-  eTrainingTypes,
-} from '../../../lib/enums';
+import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
+import { DateTimePicker } from '@mui/x-date-pickers';
 
 const TOPIC_LIST = Object.keys(eTrainingTopics) as Array<
   keyof typeof eTrainingTopics
->;
-const DURATION_LIST = Object.keys(eTrainingDuration) as Array<
-  keyof typeof eTrainingDuration
 >;
 
 export function AddTrainingPage() {
@@ -53,13 +44,10 @@ export function AddTrainingPage() {
           setValue={(v) => handleInputChange({ description: v })}
         />
         <Stack direction="row" spacing={1}>
-          <AutocompleteUser<IAutocompleteOptions[]>
-            onPick={(val: IAutocompleteOptions[]) =>
-              handleInputChange({ trainers: val })
-            }
-            value={formData.trainers as IAutocompleteOptions[]}
-            isMultiple={true}
-            label="Cotrainer"
+          <AutocompleteUserMutliple
+            onPick={(val) => handleInputChange({ trainers: val })}
+            value={formData.trainers}
+            label="Trainers"
             userRole="trainer"
           />
           <TopicInput
@@ -70,40 +58,40 @@ export function AddTrainingPage() {
         </Stack>
         <Stack direction="row" spacing={1}>
           <DateOfDeliveryInput
-            value={formData.dateOfDelivery}
-            error={errors.dateOfDeliveryError}
-            setValue={(v) => handleInputChange({ dateOfDelivery: v })}
+            value={formData.startDate ?? ''}
+            error={errors.startDateError}
+            setValue={(v) => handleInputChange({ startDate: v })}
+            label="Start date"
+            id="startDate"
           />
-          <DurationInput
-            value={formData.duration}
-            error={errors.durationError}
-            setValue={(v) => handleInputChange({ duration: v })}
+          <DateOfDeliveryInput
+            value={formData.endDate ?? ''}
+            error={errors.endDateError}
+            setValue={(v) => handleInputChange({ endDate: v })}
+            label="End date"
+            id="endDate"
           />
         </Stack>
         <Stack direction="row" spacing={1}>
           <TypeOfTrainingInput
-            value={formData.typeOfTraining as eTrainingTypes}
+            value={formData.type as eTrainingTypes}
             error={errors.typeOfTrainingError}
-            setValue={(v) =>
-              handleInputChange({ ...formData, typeOfTraining: v })
-            }
+            setValue={(v) => handleInputChange({ ...formData, type: v })}
           />
-          {formData.typeOfTraining === 'live' && (
+          {formData.type === 'live' && (
             <LocationInput
-              value={formData.location}
+              value={formData.location ?? ''}
               setValue={(v) => handleInputChange({ location: v })}
             />
           )}
         </Stack>
-        <AutocompleteUser<IAutocompleteOptions[]>
+        <AutocompleteUserMutliple
           onPick={(val) => handleInputChange({ participants: val })}
           value={formData.participants}
           label="Participants"
           userRole="participant"
-          isMultiple
         />
       </Stack>
-
       <ButtonContainer>
         <Button
           variant="contained"
@@ -126,6 +114,8 @@ interface IFieldInputs<V> {
   value: V;
   error?: string;
   setValue: (v: V) => void;
+  label?: string;
+  id?: string;
 }
 const TitleInput = ({ value, error, setValue }: IFieldInputs<string>) => (
   <TextField
@@ -189,48 +179,27 @@ const DateOfDeliveryInput = ({
   value,
   error,
   setValue,
+  label,
+  id,
 }: IFieldInputs<string>) => (
-  <TextField
-    id="deliveryDate"
-    type="date"
-    variant="outlined"
-    color="primary"
-    label="Date of delivery"
-    required
-    fullWidth
+  <DateTimePicker
+    label={label}
     value={value}
-    InputLabelProps={{ shrink: true }}
-    onChange={(v) => setValue(v.target.value)}
-    error={Boolean(error)}
-    helperText={error}
+    onChange={(v) => setValue(v as string)}
+    inputFormat="DD/MM/YY HH:mm"
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        id={id}
+        variant="outlined"
+        color="primary"
+        fullWidth
+        InputLabelProps={{ shrink: true }}
+        error={Boolean(error)}
+        helperText={error}
+      />
+    )}
   />
-);
-
-const DurationInput = ({
-  value,
-  error,
-  setValue,
-}: IFieldInputs<eTrainingDuration | ''>) => (
-  <FormControl fullWidth>
-    <InputLabel id="duration-label">Duration</InputLabel>
-    <Select
-      id="duration"
-      value={value}
-      label="Duration"
-      labelId="duration-label"
-      required
-      fullWidth
-      onChange={(v) => setValue(v.target.value as eTrainingDuration)}
-      error={Boolean(error)}
-    >
-      {DURATION_LIST.map((i) => (
-        <MenuItem key={i} value={i}>
-          {eTrainingDuration[i]}
-        </MenuItem>
-      ))}
-    </Select>
-    {error && <FormHelperText error={Boolean(error)}>{error}</FormHelperText>}
-  </FormControl>
 );
 
 const TypeOfTrainingInput = ({
@@ -262,10 +231,7 @@ const TypeOfTrainingInput = ({
   </FormControl>
 );
 
-const LocationInput = ({
-  value,
-  setValue,
-}: IFieldInputs<string | undefined>) => (
+const LocationInput = ({ value, setValue }: IFieldInputs<string>) => (
   <TextField
     id="location"
     variant="outlined"

@@ -4,32 +4,31 @@ import { useEffect, useMemo, useState } from 'react';
 import { userModule } from '../../Firebase';
 import { IUserRole } from '../../Models/User/types';
 
-interface IAutocompleteUserProps<T> {
-  onPick: (val: T) => void;
-  value: T;
+interface IAutocompleteUserProps {
+  onPick: (val: IUserAutocompleteOptions[]) => void;
+  value: IUserAutocompleteOptions[];
   label: string;
   required?: boolean;
   error?: string;
-  isMultiple?: boolean;
   userRole?: IUserRole;
 }
 
-export interface IAutocompleteOptions {
+export interface IUserAutocompleteOptions {
   label: string;
   value: string;
+  id: string;
 }
 
-export function AutocompleteUser<OptionsType>({
+export function AutocompleteUserMutliple({
   onPick,
   value,
   label,
   required,
   error,
-  isMultiple,
   userRole,
-}: IAutocompleteUserProps<OptionsType>) {
+}: IAutocompleteUserProps) {
   const [inputValue, setInputValue] = React.useState('');
-  const [options, setOptions] = useState<IAutocompleteOptions[]>([]);
+  const [options, setOptions] = useState<IUserAutocompleteOptions[]>([]);
   const [loading, setLoading] = useState(false);
 
   const loadUsers = useMemo(
@@ -44,6 +43,7 @@ export function AutocompleteUser<OptionsType>({
         ).map((opt) => ({
           label: `${opt.name} ${opt.surname}`,
           value: opt.email as string,
+          id: opt.userId as string,
         }));
         setOptions(fetchedOptions);
         setLoading(false);
@@ -69,8 +69,9 @@ export function AutocompleteUser<OptionsType>({
       filterOptions={(x) => x}
       options={options}
       loading={loading}
-      multiple={isMultiple}
+      multiple
       noOptionsText="No users found"
+      onChange={(_, v) => onPick(v)}
       renderInput={(params) => (
         <TextField
           {...params}
