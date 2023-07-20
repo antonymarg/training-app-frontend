@@ -60,18 +60,7 @@ export function useAddTrainingPage() {
     setIsLoading(true);
     let validation = validateForm(formData);
     if (!validation.isValid) return handleErrors(validation.errors);
-    console.log({
-      creator: userId as string,
-      title: formData.title as string,
-      trainers: formData.trainers.map((v) => v.id),
-      participants: formData.participants.map((v) => v.id),
-      description: formData.description,
-      startDate: formData.startDate,
-      endDate: formData.endDate,
-      topic: formData.topic as eTrainingTopics,
-      type: formData.type as eTrainingTypes,
-      location: formData.location,
-    });
+
     await trainingModule.createTraining({
       creator: userId as string,
       title: formData.title as string,

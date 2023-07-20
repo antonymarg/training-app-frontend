@@ -22,6 +22,7 @@ import { AutocompleteUserMutliple } from '../../../Components/AutocompleteUser/A
 import { useAddTrainingPage } from './useAddTrainingPage';
 import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
 import { DateTimePicker } from '@mui/x-date-pickers';
+import moment from 'moment';
 
 const TOPIC_LIST = Object.keys(eTrainingTopics) as Array<
   keyof typeof eTrainingTopics
@@ -187,6 +188,7 @@ const DateOfDeliveryInput = ({
     value={value}
     onChange={(v) => setValue(v as string)}
     inputFormat="DD/MM/YY HH:mm"
+    minDate={moment().format()}
     renderInput={(params) => (
       <TextField
         {...params}

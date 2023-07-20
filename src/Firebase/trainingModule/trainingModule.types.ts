@@ -1,6 +1,6 @@
 import { eTrainingTopics, eTrainingTypes } from '../../lib/enums';
 
-export interface ITraining {
+export interface ITrainingOnCreate {
   title: string;
   description?: string;
   creator: string;
@@ -11,4 +11,8 @@ export interface ITraining {
   topic: eTrainingTopics;
   type: eTrainingTypes;
   location?: string;
+}
+
+export interface ITraining extends ITrainingOnCreate {
+  id: string;
 }
