@@ -7,7 +7,7 @@ import { IValidateForm } from '../../../lib/types';
 
 const defaultFormState: IAddTrainingForm = {
   title: '',
-  cotrainer: null,
+  trainers: [],
   dateOfDelivery: '',
   topic: '',
   duration: '',

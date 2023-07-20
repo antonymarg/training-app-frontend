@@ -48,12 +48,17 @@ export function AddTrainingPage() {
           error={errors.titleError}
           setValue={(v) => handleInputChange({ title: v })}
         />
+        <DescriptionInput
+          value={formData.description}
+          setValue={(v) => handleInputChange({ description: v })}
+        />
         <Stack direction="row" spacing={1}>
-          <AutocompleteUser<IAutocompleteOptions>
-            onPick={(val: IAutocompleteOptions) =>
-              handleInputChange({ cotrainer: val })
+          <AutocompleteUser<IAutocompleteOptions[]>
+            onPick={(val: IAutocompleteOptions[]) =>
+              handleInputChange({ trainers: val })
             }
-            value={formData.cotrainer as IAutocompleteOptions}
+            value={formData.trainers as IAutocompleteOptions[]}
+            isMultiple={true}
             label="Cotrainer"
             userRole="trainer"
           />
@@ -128,6 +133,24 @@ const TitleInput = ({ value, error, setValue }: IFieldInputs<string>) => (
     label="Title"
     value={value}
     required
+    fullWidth
+    onChange={(v) => setValue(v.target.value)}
+    error={Boolean(error)}
+    helperText={error}
+  />
+);
+
+const DescriptionInput = ({
+  value,
+  error,
+  setValue,
+}: IFieldInputs<string | undefined>) => (
+  <TextField
+    id="description"
+    label="Description"
+    value={value}
+    multiline
+    minRows={2}
     fullWidth
     onChange={(v) => setValue(v.target.value)}
     error={Boolean(error)}

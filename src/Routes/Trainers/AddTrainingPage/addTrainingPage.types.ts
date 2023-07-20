@@ -3,7 +3,8 @@ import { eTrainingDuration, eTrainingTopics } from '../../../lib/enums';
 
 export interface IAddTrainingForm {
   title: string;
-  cotrainer: IAutocompleteOptions | null;
+  description?: string;
+  trainers: IAutocompleteOptions[];
   topic: eTrainingTopics | '';
   dateOfDelivery: string;
   duration: eTrainingDuration | '';
