@@ -48,7 +48,7 @@ export function AutocompleteUserMutliple({
         setOptions(fetchedOptions);
         setLoading(false);
       }, 500),
-    []
+    [userRole]
   );
 
   useEffect(() => {

@@ -33,7 +33,7 @@ export function Trainings() {
       );
       setTrainings(res);
     })();
-  }, []);
+  }, [userId, role]);
 
   return (
     <TableContainer component={Paper}>

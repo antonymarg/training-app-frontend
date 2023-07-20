@@ -71,7 +71,7 @@ export function useAddTrainingPage() {
       endDate: moment(formData.endDate).format(),
       topic: formData.topic as eTrainingTopics,
       type: formData.type as eTrainingTypes,
-      location: formData.location,
+      ...(formData.type === 'live' && { location: formData.location }),
     });
     setIsLoading(false);
     navigate('/');
