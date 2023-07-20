@@ -47,7 +47,7 @@ export function useLogin({ open = false, onClose }: IUseLoginProps) {
   };
 
   const onSuccessfulLogin = async (uid: string) => {
-    let user = await userModule.getUser(uid);
+    let user = await userModule.getUserById(uid);
     if (user.imgFirebasePath)
       user.imgSrc = await userModule.getUserImage(user.imgFirebasePath);
     dispatch(updateUserLogin());
@@ -100,7 +100,7 @@ export function useLogin({ open = false, onClose }: IUseLoginProps) {
         user: { email, uid },
       } = await userModule.signInWithGoogle();
       if (!uid || !email) throw new Error();
-      let user = await userModule.getUser(uid);
+      let user = await userModule.getUserById(uid);
       if (!user) {
         throw new Error("This user doesn't exist. Please create a new account");
       }

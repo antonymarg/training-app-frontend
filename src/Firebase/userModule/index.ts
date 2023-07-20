@@ -3,16 +3,40 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from '@firebase/auth';
-import { getDoc, setDoc, doc } from '@firebase/firestore';
+import {
+  getDoc,
+  setDoc,
+  doc,
+  query,
+  getDocs,
+  collection,
+  where,
+  limit,
+} from '@firebase/firestore';
 import { auth, db } from '../';
 import { IUserCredentials } from './userModule.types';
 import { IUserProfile } from '../../Models/User/types';
 import { provider } from '../firebase';
 import { getAsset, uploadAsset } from '../assets';
 
-const getUser = async (userId: string) => {
+const getUserById = async (userId: string) => {
   let user = await getDoc(doc(db, 'users', userId));
   return user.data() as IUserProfile;
+};
+
+const getUsersByEmail = async (fields?: any) => {
+  const users: IUserProfile[] = [];
+  let whereList = [];
+  if (fields.emailStartsWith)
+    whereList.push(
+      where('email', '>=', fields.emailStartsWith),
+      where('email', '<=', fields.emailStartsWith + '\uf8ff')
+    );
+  if (fields.role) whereList.push(where('role', '==', fields.role));
+  let searchQuery = query(collection(db, 'users'), ...whereList, limit(10));
+  const queryResults = await getDocs(searchQuery);
+  queryResults.forEach((user) => users.push(user.data()));
+  return users;
 };
 
 const signUpUserWithEmailAndPassword = async (
@@ -52,7 +76,8 @@ const getUserImage = async (imagePath: string) => {
 };
 
 export const userModule = {
-  getUser,
+  getUserById,
+  getUsersByEmail,
   signUpUserWithEmailAndPassword,
   createUserProfile,
   signInWithUserAndEmail,

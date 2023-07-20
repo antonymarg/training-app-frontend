@@ -1,5 +1,5 @@
 import HomePage from './HomePage';
-import TrainerPage from './Trainers/TrainerPage';
+import TrainerPage from './Trainers/Home/TrainerHomePage';
 import ParticipantPage from './Participants/ParticipantPage';
 import { SignupPage } from './Public/Signup/SignupPage/SignupPage';
 import { SignupCompletePage } from './Public/Signup/SignupCompletePage/SignupCompletePage';
