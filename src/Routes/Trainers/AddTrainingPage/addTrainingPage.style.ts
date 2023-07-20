@@ -4,9 +4,15 @@ export const AddTrainingPageContainer = styled.div`
   display: grid;
   gap: 16px;
   padding: 16px 10%;
-`;
-
-export const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
+  grid-template-areas:
+    'header header header'
+    'form form form'
+    '. . button';
+  @media only screen and (max-width: 768px) {
+    padding: 0;
+    grid-template-areas:
+      'header header header'
+      'form form form'
+      'button button button';
+  }
 `;

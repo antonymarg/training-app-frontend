@@ -14,14 +14,14 @@ import {
   Typography,
   FormHelperText,
 } from '@mui/material';
-import {
-  AddTrainingPageContainer,
-  ButtonContainer,
-} from './addTrainingPage.style';
+import { AddTrainingPageContainer } from './addTrainingPage.style';
 import { AutocompleteUserMutliple } from '../../../Components/AutocompleteUser/AutocompleteUser';
 import { useAddTrainingPage } from './useAddTrainingPage';
 import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
-import { DateTimePicker } from '@mui/x-date-pickers';
+import {
+  DesktopDateTimePicker,
+  MobileDateTimePicker,
+} from '@mui/x-date-pickers';
 import moment from 'moment';
 
 const TOPIC_LIST = Object.keys(eTrainingTopics) as Array<
@@ -31,10 +31,14 @@ const TOPIC_LIST = Object.keys(eTrainingTopics) as Array<
 export function AddTrainingPage() {
   const { formData, handleInputChange, errors, onContinue, isLoading } =
     useAddTrainingPage();
+  const isMobile = window.innerWidth < 768;
+
   return (
     <AddTrainingPageContainer>
-      <Typography variant="h4">Create new training</Typography>
-      <Stack direction="column" spacing={1}>
+      <Typography style={{ gridArea: 'header' }} variant="h4">
+        Create new training
+      </Typography>
+      <Stack style={{ gridArea: 'form' }} direction="column" spacing={1}>
         <TitleInput
           value={formData.title}
           error={errors.titleError}
@@ -44,7 +48,7 @@ export function AddTrainingPage() {
           value={formData.description}
           setValue={(v) => handleInputChange({ description: v })}
         />
-        <Stack direction="row" spacing={1}>
+        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
           <AutocompleteUserMutliple
             onPick={(val) => handleInputChange({ trainers: val })}
             value={formData.trainers}
@@ -57,7 +61,7 @@ export function AddTrainingPage() {
             setValue={(v) => handleInputChange({ topic: v })}
           />
         </Stack>
-        <Stack direction="row" spacing={1}>
+        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
           <DateOfDeliveryInput
             value={formData.startDate ?? ''}
             error={errors.startDateError}
@@ -73,7 +77,7 @@ export function AddTrainingPage() {
             id="endDate"
           />
         </Stack>
-        <Stack direction="row" spacing={1}>
+        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
           <TypeOfTrainingInput
             value={formData.type as eTrainingTypes}
             error={errors.typeOfTrainingError}
@@ -93,20 +97,18 @@ export function AddTrainingPage() {
           userRole="participant"
         />
       </Stack>
-      <ButtonContainer>
-        <Button
-          variant="contained"
-          size="large"
-          onClick={onContinue}
-          style={{ gridArea: 'button' }}
-        >
-          {isLoading ? (
-            <CircularProgress color="secondary" size="25" />
-          ) : (
-            'Create'
-          )}
-        </Button>
-      </ButtonContainer>
+      <Button
+        variant="contained"
+        size="large"
+        onClick={onContinue}
+        style={{ gridArea: 'button' }}
+      >
+        {isLoading ? (
+          <CircularProgress color="secondary" size="25" />
+        ) : (
+          'Create'
+        )}
+      </Button>
     </AddTrainingPageContainer>
   );
 }
@@ -182,27 +184,51 @@ const DateOfDeliveryInput = ({
   setValue,
   label,
   id,
-}: IFieldInputs<string>) => (
-  <DateTimePicker
-    label={label}
-    value={value}
-    onChange={(v) => setValue(v as string)}
-    inputFormat="DD/MM/YY HH:mm"
-    minDate={moment().format()}
-    renderInput={(params) => (
-      <TextField
-        {...params}
-        id={id}
-        variant="outlined"
-        color="primary"
-        fullWidth
-        InputLabelProps={{ shrink: true }}
-        error={Boolean(error)}
-        helperText={error}
-      />
-    )}
-  />
-);
+}: IFieldInputs<string>) => {
+  const isMobile = window.innerWidth < 768;
+
+  return isMobile ? (
+    <MobileDateTimePicker
+      label={label}
+      value={value}
+      onChange={(v) => setValue(v as string)}
+      inputFormat="DD/MM/YY HH:mm"
+      minDate={moment().format()}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          id={id}
+          variant="outlined"
+          color="primary"
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          error={Boolean(error)}
+          helperText={error}
+        />
+      )}
+    />
+  ) : (
+    <DesktopDateTimePicker
+      label={label}
+      value={value}
+      onChange={(v) => setValue(v as string)}
+      inputFormat="DD/MM/YY HH:mm"
+      minDate={moment().format()}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          id={id}
+          variant="outlined"
+          color="primary"
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          error={Boolean(error)}
+          helperText={error}
+        />
+      )}
+    />
+  );
+};
 
 const TypeOfTrainingInput = ({
   value,
