@@ -98,7 +98,7 @@ export function useEmailCollection(onNextStep: () => void) {
         user: { email, uid },
       } = await userModule.signInWithGoogle();
       if (!uid || !email) throw new Error();
-      let user = await userModule.getUser(uid);
+      let user = await userModule.getUserById(uid);
       if (user) {
         throw new Error('This user exists');
       }

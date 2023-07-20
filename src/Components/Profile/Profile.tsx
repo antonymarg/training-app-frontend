@@ -1,15 +1,16 @@
 import { useDispatch } from 'react-redux';
 import { updateUserLogout } from '../../Models/User/actions';
+import { Button } from '@mui/material';
 
-const TrainerPage = () => {
+export function Profile() {
   const dispatch = useDispatch();
   const handleLogout = () => dispatch(updateUserLogout());
+
   return (
-    <div className="App">
-      <div className="container">Trainer</div>
-      <button onClick={handleLogout}>logout</button>
+    <div>
+      <Button variant="contained" onClick={handleLogout} color="primary">
+        Log out
+      </Button>
     </div>
   );
-};
-
-export default TrainerPage;
+}
