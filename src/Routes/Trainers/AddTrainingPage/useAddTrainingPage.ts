@@ -7,7 +7,11 @@ import { IValidateForm } from '../../../lib/types';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
 import { trainingModule } from '../../../Firebase';
-import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
+import {
+  eTrainingConfirmStatus,
+  eTrainingTopics,
+  eTrainingTypes,
+} from '../../../lib/enums';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
@@ -64,8 +68,14 @@ export function useAddTrainingPage() {
     await trainingModule.createTraining({
       creator: userId as string,
       title: formData.title as string,
-      trainers: formData.trainers.map((v) => v.id),
-      participants: formData.participants.map((v) => v.id),
+      trainers: formData.trainers.map((v) => ({
+        userId: v.id,
+        status: eTrainingConfirmStatus.Pending,
+      })),
+      participants: formData.participants.map((v) => ({
+        userId: v.id,
+        status: eTrainingConfirmStatus.Pending,
+      })),
       description: formData.description,
       startDate: moment(formData.startDate).format(),
       endDate: moment(formData.endDate).format(),

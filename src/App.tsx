@@ -5,6 +5,7 @@ import { AppContainer, LayoutContainer } from './App.style';
 import { AddTrainingPage } from './Routes/Trainers/AddTrainingPage/AddTrainingPage';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { ViewTrainingPage } from './Routes/Trainers/ViewTrainingPage/ViewTrainingPage';
 
 function App() {
   return (
@@ -17,6 +18,10 @@ function App() {
             <Route path="signup" element={<SignupPage />} />
             <Route path="signup/complete" element={<SignupCompletePage />} />
             <Route path="create" element={<AddTrainingPage />} />
+            <Route
+              path="trainings/:trainingId"
+              element={<ViewTrainingPage />}
+            />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </LayoutContainer>
