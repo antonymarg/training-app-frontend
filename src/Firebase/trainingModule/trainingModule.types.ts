@@ -1,11 +1,16 @@
-import { eTrainingTopics, eTrainingTypes } from '../../lib/enums';
+import { IUserProfile } from '../../Models/User/types';
+import {
+  eTrainingConfirmStatus,
+  eTrainingTopics,
+  eTrainingTypes,
+} from '../../lib/enums';
 
 export interface ITrainingOnCreate {
   title: string;
   description?: string;
   creator: string;
-  trainers: string[];
-  participants: string[];
+  trainers: ITrainingUser[];
+  participants: ITrainingUser[];
   startDate: string;
   endDate: string;
   topic: eTrainingTopics;
@@ -15,4 +20,10 @@ export interface ITrainingOnCreate {
 
 export interface ITraining extends ITrainingOnCreate {
   id: string;
+}
+
+export interface ITrainingUser {
+  userId: string;
+  profile?: IUserProfile;
+  status: eTrainingConfirmStatus;
 }

@@ -20,20 +20,25 @@ import { ITraining } from '../../Firebase/trainingModule/trainingModule.types';
 import moment from 'moment';
 import { eTrainingTypes } from '../../lib/enums';
 import { IUserRole } from '../../Models/User/types';
+import { FullBodyLoader } from '../FullBodyLoader/FullBodyLoader';
 
 export function Trainings() {
   const [trainings, setTrainings] = useState<ITraining[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { userId, role } = useSelector(getUserProfile);
   useEffect(() => {
     (async function () {
+      setIsLoading(true);
       let res = await trainingModule.getMyTrainings(
         userId as string,
         role as IUserRole
       );
       setTrainings(res);
+      setIsLoading(false);
     })();
   }, [userId, role]);
+  if (isLoading) return <FullBodyLoader />;
 
   return (
     <TableContainer component={Paper}>
