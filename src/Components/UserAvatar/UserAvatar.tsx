@@ -61,7 +61,7 @@ export function UserAvatar({
 }: IUserAvatarProps) {
   const navigate = useNavigate();
   return (
-    <StyledPaper elevation={1} onClick={() => navigate(`/users/${userId}`)}>
+    <StyledPaper elevation={1} onClick={() => navigate(`/user/${userId}`)}>
       <StyledBadge
         overlap="circular"
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}

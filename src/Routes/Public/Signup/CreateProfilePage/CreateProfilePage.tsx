@@ -32,9 +32,15 @@ const GENDER_LIST: IGender[] = [
   'Prefer not to say',
 ];
 
-export function CreateProfilePage() {
+export function CreateProfilePage({
+  userId,
+  email,
+}: {
+  userId: string;
+  email: string;
+}) {
   const { formData, setFormData, errors, isLoading, onContinue } =
-    useCreateProfilePage();
+    useCreateProfilePage({ userId, email });
   return (
     <>
       {errors.genericError && (

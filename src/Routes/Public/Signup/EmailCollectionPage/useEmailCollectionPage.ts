@@ -1,8 +1,5 @@
 import { useState } from 'react';
 import { userModule } from '../../../../Firebase';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../../../Store';
-import { updateUserProfile } from '../../../../Models/User/actions';
 import { IValidateForm } from '../../../../lib/types';
 import {
   IEmailCollectionFormData,
@@ -31,8 +28,9 @@ const mapErrorCodeToError = (error: {
   }
 };
 
-export function useEmailCollection(onNextStep: () => void) {
-  const dispatch = useDispatch<AppDispatch>();
+export function useEmailCollection(
+  onNextStep: (userInfo: { userId: string; email: string }) => void
+) {
   const [formData, setFormData] =
     useState<IEmailCollectionFormData>(defaultFormState);
   const [errors, setErrors] = useState<IEmailCollectionFormErrors>({});
@@ -71,9 +69,8 @@ export function useEmailCollection(onNextStep: () => void) {
   };
 
   const onSuccessfulSignup = async (userId: string, email: string) => {
-    dispatch(updateUserProfile({ userId, email }));
     setIsLoading(null);
-    onNextStep();
+    onNextStep({ userId, email });
   };
 
   const onSignupWithCredentials = async () => {

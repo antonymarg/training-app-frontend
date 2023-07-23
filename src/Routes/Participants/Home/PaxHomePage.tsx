@@ -1,23 +1,24 @@
 import {
-  TrainerHomePageContainer,
+  PaxHomePageContainer,
   TrainingsContainer,
   ProfileContainer,
-} from './trainerHomePage.style';
+} from './PaxHomePage.style';
 import { TrainingsTable } from '../../../Components/TrainingsTable/TrainingsTable';
 import { Profile } from '../../../Components/Profile/Profile';
 import { eTrainingConfirmStatus } from '../../../lib/enums';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
 
-const TrainerHomePage = () => {
+const PaxHomePage = () => {
   const userProfile = useSelector(getUserProfile);
+
   return (
-    <TrainerHomePageContainer>
+    <PaxHomePageContainer>
       <TrainingsContainer>
         <TrainingsTable
           label="My upcoming trainings"
           userId={userProfile?.userId as string}
-          role="trainer"
+          role="participant"
           timePeriod="presentAndFuture"
           trainingStatus={[
             eTrainingConfirmStatus.Accepted,
@@ -30,8 +31,8 @@ const TrainerHomePage = () => {
       <ProfileContainer>
         <Profile />
       </ProfileContainer>
-    </TrainerHomePageContainer>
+    </PaxHomePageContainer>
   );
 };
 
-export default TrainerHomePage;
+export default PaxHomePage;

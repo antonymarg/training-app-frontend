@@ -1,13 +1,13 @@
 export interface IUserState {
-  profile: IUserProfile;
+  profile?: IUserProfile;
   isLoggedIn: boolean;
 }
 export interface IUserProfile {
-  userId?: string;
-  email?: string;
-  name?: string;
-  surname?: string;
-  role?: IUserRole;
+  userId: string;
+  email: string;
+  name: string;
+  surname: string;
+  role: IUserRole;
   dateOfBirth?: string | Date;
   gender?: IGender;
   bio?: string;

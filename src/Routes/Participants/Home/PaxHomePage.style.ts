@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const TrainerHomePageContainer = styled.div`
+export const PaxHomePageContainer = styled.div`
   display: grid;
   padding: 16px 0px;
   grid-template-columns: repeat(6, 1fr);

@@ -10,7 +10,7 @@ import { useEmailCollection } from './useEmailCollectionPage';
 export function EmailCollectionPage({
   onNextStep,
 }: {
-  onNextStep: () => void;
+  onNextStep: (userInfo: { userId: string; email: string }) => void;
 }) {
   const {
     formData,

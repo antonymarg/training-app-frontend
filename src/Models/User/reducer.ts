@@ -21,8 +21,8 @@ const userSlice = createSlice({
       .addCase(updateUserLogout, (state) => {
         return {
           ...state,
-          profile: {},
           isLoggedIn: false,
+          profile: undefined,
         };
       })
       .addCase(updateUserProfile, (state, action: IAction<IUserProfile>) => {
