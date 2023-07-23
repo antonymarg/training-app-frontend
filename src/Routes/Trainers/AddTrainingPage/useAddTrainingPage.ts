@@ -28,7 +28,8 @@ export function useAddTrainingPage() {
   let [errors, setErrors] = useState<IAddTrainingFormErrors>({});
   let [isLoading, setIsLoading] = useState(false);
   let navigate = useNavigate();
-  let { userId } = useSelector(getUserProfile);
+  let userProfile = useSelector(getUserProfile);
+  let userId = userProfile?.userId;
 
   const validateForm = (
     formData: IAddTrainingForm

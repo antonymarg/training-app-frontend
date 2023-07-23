@@ -18,8 +18,8 @@ export function Menu() {
     <StyledMenu>
       {user.isLoggedIn ? (
         <Stack direction="row" spacing={2} alignItems="center">
-          <Avatar src={user.profile.imgSrc || User} />
-          <Typography color="secondary">Hello {user.profile.name}</Typography>
+          <Avatar src={user.profile?.imgSrc || User} />
+          <Typography color="secondary">Hello {user.profile?.name}</Typography>
         </Stack>
       ) : showStartButton ? (
         <Button

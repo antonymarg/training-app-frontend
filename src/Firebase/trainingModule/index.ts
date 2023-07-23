@@ -7,7 +7,8 @@ import {
   query,
   getDoc,
   doc,
-  or,
+  Timestamp,
+  QueryFieldFilterConstraint,
 } from '@firebase/firestore';
 import { db } from '../firebase';
 import {
@@ -18,9 +19,22 @@ import {
 import { IUserRole } from '../../Models/User/types';
 import { eTrainingConfirmStatus } from '../../lib/enums';
 import { userModule } from '../userModule';
+import moment from 'moment';
+
 const createTraining = async (training: ITrainingOnCreate) => {
-  return await addDoc(collection(db, 'trainings'), training);
+  let trainingToFirebase = {
+    ...training,
+    createdAt: Timestamp.now(),
+    startDate: Timestamp.fromDate(new Date(training.startDate)),
+    endDate: Timestamp.fromDate(new Date(training.endDate)),
+  };
+  return await addDoc(collection(db, 'trainings'), trainingToFirebase);
 };
+
+interface ITrainingSearchCriteria {
+  timePeriod: 'past' | 'presentAndFuture' | 'all';
+  trainingStatus: eTrainingConfirmStatus[];
+}
 
 const getTrainingById = async (trainingId: string, getFullFields = false) => {
   let training = await getDoc(doc(db, 'trainings', trainingId));
@@ -31,11 +45,19 @@ const getTrainingById = async (trainingId: string, getFullFields = false) => {
 
   for (let trainer of (training.data() as ITraining).trainers) {
     let trainerProfile = await userModule.getUserById(trainer.userId);
+    if (trainerProfile.imgFirebasePath)
+      trainerProfile.imgSrc = await userModule.getUserImage(
+        trainerProfile.imgFirebasePath
+      );
     trainers.push({ ...trainer, profile: trainerProfile });
   }
 
   for (let pax of (training.data() as ITraining).participants) {
     let paxProfile = await userModule.getUserById(pax.userId);
+    if (paxProfile.imgFirebasePath)
+      paxProfile.imgSrc = await userModule.getUserImage(
+        paxProfile.imgFirebasePath
+      );
     participants.push({ ...pax, profile: paxProfile });
   }
 
@@ -45,34 +67,47 @@ const getTrainingById = async (trainingId: string, getFullFields = false) => {
     participants,
   } as ITraining;
 };
-const getMyTrainings = async (userId: string, role: IUserRole) => {
+
+const getTrainings = async (
+  userId: string,
+  role: IUserRole,
+  criteria: ITrainingSearchCriteria
+) => {
   const trainings: ITraining[] = [];
-  let searchQuery = query(
-    collection(db, 'trainings'),
-    or(
-      where(`${role}s`, 'array-contains', {
-        userId,
-        status: eTrainingConfirmStatus.Pending,
-      }),
-      where(`${role}s`, 'array-contains', {
-        userId,
-        status: eTrainingConfirmStatus.Confirmed,
-      }),
-      where(`${role}s`, 'array-contains', {
-        userId,
-        status: eTrainingConfirmStatus.Accepted,
-      })
-    ),
-    limit(10)
-  );
+  let whereList: QueryFieldFilterConstraint[] = [];
+
+  if (criteria.trainingStatus) {
+    whereList.push(
+      where(
+        `${role}s`,
+        'array-contains-any',
+        criteria.trainingStatus.map((stat) => ({
+          userId,
+          status: stat,
+        }))
+      )
+    );
+  }
+
+  if (criteria.timePeriod === 'past') {
+    whereList.push(where(`startDate`, '<=', new Date()));
+  }
+
+  if (criteria.timePeriod === 'presentAndFuture') {
+    whereList.push(where(`startDate`, '>=', new Date()));
+  }
+
+  let searchQuery = query(collection(db, 'trainings'), ...whereList, limit(10));
   const queryResults = await getDocs(searchQuery);
-  queryResults.forEach((tr) =>
-    trainings.push({ id: tr.id, ...tr.data() } as ITraining)
-  );
+  queryResults.forEach((tr) => {
+    let training = tr.data();
+    training.startDate = moment(training.startDate.toDate()).format();
+    trainings.push({ id: tr.id, ...training } as ITraining);
+  });
   return trainings;
 };
 export const trainingModule = {
   createTraining,
-  getMyTrainings,
+  getTrainings,
   getTrainingById,
 };

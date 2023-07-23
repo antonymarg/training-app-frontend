@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { userModule } from '../../../../Firebase';
-import { useSelector } from 'react-redux';
-import { getUserProfile } from '../../../../Models/User/selectors';
 import {
   ICreateProfileFormData,
   ICreateProfileFormErrors,
@@ -29,9 +27,14 @@ const mapErrorCodeToError = (error: {
   }
 };
 
-export function useCreateProfilePage() {
+export function useCreateProfilePage({
+  userId,
+  email,
+}: {
+  userId: string;
+  email: string;
+}) {
   const navigate = useNavigate();
-  const { userId, email } = useSelector(getUserProfile);
   const [formData, setFormData] =
     useState<ICreateProfileFormData>(defaultFormState);
   const [errors, setErrors] = useState<ICreateProfileFormErrors>({});

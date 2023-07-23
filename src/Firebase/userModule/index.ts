@@ -19,9 +19,13 @@ import { IUserProfile } from '../../Models/User/types';
 import { provider } from '../firebase';
 import { getAsset, uploadAsset } from '../assets';
 
-const getUserById = async (userId: string) => {
-  let user = await getDoc(doc(db, 'users', userId));
-  return user.data() as IUserProfile;
+const getUserById = async (userId: string, getExtendedProfile = false) => {
+  let user: IUserProfile | null =
+    ((await getDoc(doc(db, 'users', userId))).data() as IUserProfile) ?? null;
+  if (!getExtendedProfile) return user;
+  if (user.imgFirebasePath)
+    user.imgSrc = await userModule.getUserImage(user.imgFirebasePath);
+  return user;
 };
 
 const getUsersByEmail = async (fields?: any) => {
@@ -35,7 +39,7 @@ const getUsersByEmail = async (fields?: any) => {
   if (fields.role) whereList.push(where('role', '==', fields.role));
   let searchQuery = query(collection(db, 'users'), ...whereList, limit(10));
   const queryResults = await getDocs(searchQuery);
-  queryResults.forEach((user) => users.push(user.data()));
+  queryResults.forEach((user) => users.push(user.data() as IUserProfile));
   return users;
 };
 

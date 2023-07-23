@@ -12,9 +12,13 @@ import SignupIcon from '../../../../Assets/svg/SignupIcon.svg';
 import SignupProcessIcon from '../../../../Assets/svg/SignupProcessIcon.svg';
 
 type SignupSteps = 'emailCollection' | 'createProfile';
-
+interface IUserInfo {
+  userId: string;
+  email: string;
+}
 export function SignupPage() {
   const [signupStep, setSignupStep] = useState<SignupSteps>('emailCollection');
+  const [userInfo, setUserInfo] = useState<IUserInfo>();
   const [decoratorImg, setDecoratorImg] = useState(SignupIcon);
 
   const getSignupPage = () => {
@@ -22,11 +26,19 @@ export function SignupPage() {
       case 'emailCollection':
         return (
           <EmailCollectionPage
-            onNextStep={() => setSignupStep('createProfile')}
+            onNextStep={(userInfo: IUserInfo) => {
+              setUserInfo(userInfo);
+              setSignupStep('createProfile');
+            }}
           />
         );
       case 'createProfile':
-        return <CreateProfilePage />;
+        return (
+          <CreateProfilePage
+            userId={userInfo?.userId ?? ''}
+            email={userInfo?.email ?? ''}
+          />
+        );
     }
   };
 

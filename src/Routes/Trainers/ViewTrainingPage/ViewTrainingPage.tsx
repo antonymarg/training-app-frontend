@@ -21,9 +21,6 @@ import moment from 'moment';
 import { eTrainingTypes } from '../../../lib/enums';
 import { grey } from '@mui/material/colors';
 import { UserAvatar } from '../../../Components/UserAvatar/UserAvatar';
-import { useSelector } from 'react-redux';
-import { getUserProfile } from '../../../Models/User/selectors';
-
 const calcTrainingTimeText = (start: string, end: string) => {
   let startDate = moment(start);
   let endDate = moment(end);
@@ -40,7 +37,6 @@ export function ViewTrainingPage() {
   const { trainingId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [training, setTraining] = useState<ITraining>();
-  const profile = useSelector(getUserProfile);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,7 +50,6 @@ export function ViewTrainingPage() {
   }, [trainingId]);
 
   if (isLoading || !training) return <FullBodyLoader />;
-
   return (
     <ViewTrainingPageContainer>
       <NavigatorContainer>
@@ -72,7 +67,10 @@ export function ViewTrainingPage() {
           <Stack direction="row" spacing={1} alignItems="center">
             <CalendarMonthIcon color="disabled" fontSize="small" />
             <Typography variant="subtitle2" color={grey[700]}>
-              {calcTrainingTimeText(training.startDate, training.endDate)}
+              {calcTrainingTimeText(
+                training.startDate as string,
+                training.endDate as string
+              )}
             </Typography>
           </Stack>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -106,7 +104,7 @@ export function ViewTrainingPage() {
                 userId={trainer.userId as string}
                 status={trainer.status}
                 fullName={`${trainer.profile?.name} ${trainer.profile?.surname}`}
-                picture={profile.imgSrc}
+                picture={trainer.profile?.imgSrc}
               />
             </Grid>
           ))}
@@ -128,7 +126,7 @@ export function ViewTrainingPage() {
                 userId={participant.userId as string}
                 status={participant.status}
                 fullName={`${participant.profile?.name} ${participant.profile?.surname}`}
-                picture={profile.imgSrc}
+                picture={participant.profile?.imgSrc}
               />
             </Grid>
           ))}
