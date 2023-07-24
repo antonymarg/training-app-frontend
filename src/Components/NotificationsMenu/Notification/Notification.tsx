@@ -15,7 +15,6 @@ export interface INotificationProps {
 export function Notification({
   text,
   title,
-  type,
   handleClick,
   withDivider,
   seen,
