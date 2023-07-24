@@ -5,6 +5,7 @@ import { LoginModal } from '../LoginModal/LoginModal';
 import { useSelector } from 'react-redux';
 import { getUser } from '../../Models/User/selectors';
 import User from '../../Assets/img/user.png';
+import { NotificationsMenu } from '../NotificationsMenu/NotificationMenu';
 
 export function Menu() {
   const user = useSelector(getUser);
@@ -20,6 +21,7 @@ export function Menu() {
         <Stack direction="row" spacing={2} alignItems="center">
           <Avatar src={user.profile?.imgSrc || User} />
           <Typography color="secondary">Hello {user.profile?.name}</Typography>
+          <NotificationsMenu />
         </Stack>
       ) : showStartButton ? (
         <Button
@@ -31,6 +33,7 @@ export function Menu() {
           Start
         </Button>
       ) : null}
+
       <LoginModal
         open={isLoginModalOpen}
         onClose={handleClickCloseLoginModal}
