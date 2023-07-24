@@ -6,7 +6,7 @@ import {
 import { IValidateForm } from '../../../lib/types';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
-import { trainingModule } from '../../../Firebase';
+import { notificationsModule, trainingModule } from '../../../Firebase';
 import {
   eTrainingConfirmStatus,
   eTrainingTopics,
@@ -84,6 +84,22 @@ export function useAddTrainingPage() {
       type: formData.type as eTrainingTypes,
       ...(formData.type === 'live' && { location: formData.location }),
     });
+    formData.trainers.forEach((trainer) =>
+      notificationsModule.sendNotification(trainer.id, {
+        title: 'New training!',
+        mainText: `Welcome to ${formData.title}!`,
+        type: 'invitation',
+        seen: false,
+      })
+    );
+    formData.participants.forEach((participant) =>
+      notificationsModule.sendNotification(participant.id, {
+        title: 'New training for pax!',
+        mainText: `Welcome to ${formData.title}!`,
+        type: 'invitation',
+        seen: false,
+      })
+    );
     setIsLoading(false);
     navigate('/');
   };

@@ -1,9 +1,17 @@
-import { IconButton, Badge, Menu } from '@mui/material';
-import { INotificationProps, Notification } from './Notification/Notification';
+import { IconButton, Badge, Menu, Typography } from '@mui/material';
+import { Notification } from './Notification/Notification';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
+import styled from 'styled-components';
+import { useNotifications } from './useNotifications';
+
+const NotificationsHeaderDiv = styled.div`
+  padding: 8px 16px;
+  min-width: 400px;
+`;
 
 export function NotificationsMenu() {
+  const { notifications, onNotificationClick } = useNotifications();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -13,24 +21,13 @@ export function NotificationsMenu() {
   };
   const open = Boolean(anchorEl);
 
-  const notifications: INotificationProps[] = [
-    {
-      type: 'notification',
-      title: 'First notification',
-      text: 'This is your first notification',
-      withDivider: true,
-    },
-    {
-      type: 'invitation',
-      title: 'Second notification',
-      text: 'This is your second notification',
-      withDivider: false,
-    },
-  ];
   return (
     <>
       <IconButton onClick={handleClick}>
-        <Badge badgeContent={notifications.length} color="secondary">
+        <Badge
+          badgeContent={notifications.filter((notif) => !notif.seen).length}
+          color="secondary"
+        >
           <NotificationsIcon color="secondary" />
         </Badge>
       </IconButton>
@@ -42,8 +39,23 @@ export function NotificationsMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        {notifications.map((notif) => (
-          <Notification {...notif} />
+        <NotificationsHeaderDiv>
+          <Typography fontSize={24} fontWeight="bold">
+            Notifications
+          </Typography>
+          {notifications.length === 0 && (
+            <Typography>No notifications</Typography>
+          )}
+        </NotificationsHeaderDiv>
+        {notifications.map((notif, index) => (
+          <Notification
+            title={notif.title}
+            text={notif.mainText}
+            type={notif.type}
+            seen={notif.seen}
+            withDivider={Boolean(index < notifications.length - 1)}
+            handleClick={() => onNotificationClick(notif)}
+          />
         ))}
       </Menu>
     </>
