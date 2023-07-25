@@ -1,8 +1,8 @@
-import { onValue, ref, push, child, set, update } from 'firebase/database';
+import { onValue, ref, push, child, set, update, get } from 'firebase/database';
 import { realtimeDb } from '../firebase';
 import {
   INotification,
-  INotificationOnCreate,
+  INotificationBodyOnCreate,
 } from '../../Models/Notifications/types';
 
 const createNotifsListener = (
@@ -15,15 +15,23 @@ const createNotifsListener = (
     const notification = snap.val();
     const notificationId = Object.keys(notification)[0];
     callback({
-      id: notificationId,
-      ...notification[notificationId],
+      [notificationId]: {
+        ...notification[notificationId],
+        notificationId,
+      },
     });
   });
 };
 
+const getNotifications = async (userId: string) => {
+  const snapshot = await get(child(ref(realtimeDb), `notifs/${userId}`));
+  if (snapshot.exists()) return snapshot.val() as INotification;
+  return null;
+};
+
 const sendNotification = (
   userId: string,
-  notification: INotificationOnCreate
+  notification: INotificationBodyOnCreate
 ) => {
   const newNotifKey = push(child(ref(realtimeDb), 'notifs/' + userId)).key;
   const notifRef = ref(realtimeDb, `notifs/${userId}/${newNotifKey}`);
@@ -39,4 +47,5 @@ export const notificationsModule = {
   createNotifsListener,
   sendNotification,
   markNotificationAsSeen,
+  getNotifications,
 };

@@ -19,11 +19,7 @@ const TrainerHomePage = () => {
           userId={userProfile?.userId as string}
           role="trainer"
           timePeriod="presentAndFuture"
-          trainingStatus={[
-            eTrainingConfirmStatus.Accepted,
-            eTrainingConfirmStatus.Confirmed,
-            eTrainingConfirmStatus.Pending,
-          ]}
+          trainingStatus={eTrainingConfirmStatus.Pending}
           allowAddTrainingButton={true}
         />
       </TrainingsContainer>

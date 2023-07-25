@@ -14,6 +14,8 @@ import {
 } from '../../../lib/enums';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import { ITrainingUser } from '../../../Firebase/trainingModule/trainingModule.types';
+import { Timestamp } from 'firebase/firestore';
 
 const defaultFormState: IAddTrainingForm = {
   title: '',
@@ -66,17 +68,26 @@ export function useAddTrainingPage() {
     let validation = validateForm(formData);
     if (!validation.isValid) return handleErrors(validation.errors);
 
-    await trainingModule.createTraining({
+    const trainers: { [key: string]: ITrainingUser } = {};
+    const participants: { [key: string]: ITrainingUser } = {};
+
+    formData.trainers.forEach((v) => {
+      trainers[v.id] = {
+        status: eTrainingConfirmStatus.Pending,
+      };
+    });
+
+    formData.participants.forEach((v) => {
+      participants[v.id] = {
+        status: eTrainingConfirmStatus.Pending,
+      };
+    });
+
+    const trainingResp = await trainingModule.createTraining({
       creator: userId as string,
       title: formData.title as string,
-      trainers: formData.trainers.map((v) => ({
-        userId: v.id,
-        status: eTrainingConfirmStatus.Pending,
-      })),
-      participants: formData.participants.map((v) => ({
-        userId: v.id,
-        status: eTrainingConfirmStatus.Pending,
-      })),
+      trainers,
+      participants,
       description: formData.description,
       startDate: moment(formData.startDate).format(),
       endDate: moment(formData.endDate).format(),
@@ -90,6 +101,10 @@ export function useAddTrainingPage() {
         mainText: `Welcome to ${formData.title}!`,
         type: 'invitation',
         seen: false,
+        sentAt: Timestamp.now(),
+        extraInfo: {
+          trainingId: trainingResp.id,
+        },
       })
     );
     formData.participants.forEach((participant) =>
@@ -98,6 +113,10 @@ export function useAddTrainingPage() {
         mainText: `Welcome to ${formData.title}!`,
         type: 'invitation',
         seen: false,
+        sentAt: Timestamp.now(),
+        extraInfo: {
+          trainingId: trainingResp.id,
+        },
       })
     );
     setIsLoading(false);

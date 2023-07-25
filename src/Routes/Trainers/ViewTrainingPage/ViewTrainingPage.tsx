@@ -21,9 +21,14 @@ import moment from 'moment';
 import { eTrainingTypes } from '../../../lib/enums';
 import { grey } from '@mui/material/colors';
 import { UserAvatar } from '../../../Components/UserAvatar/UserAvatar';
-const calcTrainingTimeText = (start: string, end: string) => {
-  let startDate = moment(start);
-  let endDate = moment(end);
+import { ConfirmationChips } from '../../../Components/ConfirmationChips/ConfirmationChips';
+import { Timestamp } from 'firebase/firestore';
+import { useSelector } from 'react-redux';
+import { getUserProfile } from '../../../Models/User/selectors';
+
+const calcTrainingTimeText = (start: Timestamp, end: Timestamp) => {
+  let startDate = moment.unix(start.seconds);
+  let endDate = moment.unix(end.seconds);
   return startDate.isSame(endDate, 'date')
     ? `${startDate.format('LL')}`
     : `${startDate.format('LLL')} - ${endDate.format('LLL')}`;
@@ -36,8 +41,16 @@ const calcTrainingPlace = (type: eTrainingTypes, location?: string) => {
 export function ViewTrainingPage() {
   const { trainingId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const profile = useSelector(getUserProfile);
   const [training, setTraining] = useState<ITraining>();
   const navigate = useNavigate();
+  const isPartOfTrainingAndNotConfirmed = () => {
+    const userId = profile?.userId as string;
+    const searchOn =
+      profile?.role === 'trainer' ? training?.trainers : training?.participants;
+    if (!searchOn || !searchOn[userId] || searchOn[userId].status) return false;
+    return true;
+  };
 
   useEffect(() => {
     (async function () {
@@ -62,14 +75,19 @@ export function ViewTrainingPage() {
       <TitleContainer>
         <Typography variant="h4">{training?.title}</Typography>
       </TitleContainer>
+      {isPartOfTrainingAndNotConfirmed() && (
+        <div style={{ gridArea: 'chips', marginLeft: 'auto' }}>
+          <ConfirmationChips trainingId={trainingId as string} />
+        </div>
+      )}
       <DetailsContainer>
         <Stack direction="column" spacing={0.5}>
           <Stack direction="row" spacing={1} alignItems="center">
             <CalendarMonthIcon color="disabled" fontSize="small" />
             <Typography variant="subtitle2" color={grey[700]}>
               {calcTrainingTimeText(
-                training.startDate as string,
-                training.endDate as string
+                training.startDate as unknown as Timestamp,
+                training.endDate as unknown as Timestamp
               )}
             </Typography>
           </Stack>
@@ -97,14 +115,13 @@ export function ViewTrainingPage() {
           columns={{ sm: 2, md: 4 }}
           height="fit-content"
         >
-          {training.trainers.map((trainer) => (
-            <Grid item sm={1} height="fit-content">
+          {Object.keys(training.trainers).map((trainerId) => (
+            <Grid key={trainerId} item sm={1} height="fit-content">
               <UserAvatar
-                key={trainer.userId}
-                userId={trainer.userId as string}
-                status={trainer.status}
-                fullName={`${trainer.profile?.name} ${trainer.profile?.surname}`}
-                picture={trainer.profile?.imgSrc}
+                userId={trainerId}
+                status={training.trainers[trainerId].status}
+                fullName={`${training.trainers[trainerId].profile?.name} ${training.trainers[trainerId].profile?.surname}`}
+                picture={training.trainers[trainerId].profile?.imgSrc}
               />
             </Grid>
           ))}
@@ -119,14 +136,13 @@ export function ViewTrainingPage() {
           columns={{ sm: 2, md: 4 }}
           height="fit-content"
         >
-          {training.participants.map((participant) => (
-            <Grid item sm={1} height="fit-content">
+          {Object.keys(training.participants).map((participantId) => (
+            <Grid key={participantId} item sm={1} height="fit-content">
               <UserAvatar
-                key={participant.userId}
-                userId={participant.userId as string}
-                status={participant.status}
-                fullName={`${participant.profile?.name} ${participant.profile?.surname}`}
-                picture={participant.profile?.imgSrc}
+                userId={participantId}
+                status={training.participants[participantId].status}
+                fullName={`${training.participants[participantId].profile?.name} ${training.participants[participantId].profile?.surname}`}
+                picture={training.participants[participantId].profile?.imgSrc}
               />
             </Grid>
           ))}

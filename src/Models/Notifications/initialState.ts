@@ -1,5 +1,3 @@
 import { INotificationsState } from './types';
 
-export const initialState: INotificationsState = {
-  activeNotifications: {},
-};
+export const initialState: INotificationsState = {};

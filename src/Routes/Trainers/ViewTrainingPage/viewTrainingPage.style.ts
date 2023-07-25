@@ -6,7 +6,7 @@ export const ViewTrainingPageContainer = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: auto;
   grid-template-areas:
-    'navigate . . . '
+    'navigate . . chips'
     'title title . .'
     'details details details details'
     'trainers-box trainers-box pax-box pax-box'
@@ -18,6 +18,7 @@ export const ViewTrainingPageContainer = styled.div`
     padding: 0;
     grid-template-areas:
       'navigate'
+      'chips'
       'title'
       'details'
       'trainers-box'

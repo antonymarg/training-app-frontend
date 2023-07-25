@@ -24,7 +24,7 @@ interface ITrainingTableProps {
   role: IUserRole;
   userId: string;
   timePeriod: 'past' | 'presentAndFuture' | 'all';
-  trainingStatus: eTrainingConfirmStatus[];
+  trainingStatus: eTrainingConfirmStatus;
   allowAddTrainingButton: boolean;
   label: string;
 }

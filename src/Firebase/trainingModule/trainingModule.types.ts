@@ -9,8 +9,12 @@ export interface ITrainingOnCreate {
   title: string;
   description?: string;
   creator: string;
-  trainers: ITrainingUser[];
-  participants: ITrainingUser[];
+  trainers: {
+    [key: string]: ITrainingUser;
+  };
+  participants: {
+    [key: string]: ITrainingUser;
+  };
   startDate: string;
   endDate: string;
   topic: eTrainingTopics;
@@ -23,7 +27,6 @@ export interface ITraining extends ITrainingOnCreate {
 }
 
 export interface ITrainingUser {
-  userId: string;
   profile?: IUserProfile;
   status: eTrainingConfirmStatus;
 }

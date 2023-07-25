@@ -2,7 +2,7 @@ import { INotification } from './types';
 import { initialState } from './initialState';
 import { IAction } from '../../lib/actionCreator';
 import { createSlice } from '@reduxjs/toolkit';
-import { addNotification } from './actions';
+import { addNotification, clearNotifications } from './actions';
 
 const notificationsSlice = createSlice({
   name: 'notifications',
@@ -14,13 +14,11 @@ const notificationsSlice = createSlice({
       (state, action: IAction<INotification>) => {
         return {
           ...state,
-          activeNotifications: {
-            ...state.activeNotifications,
-            [action.payload.id]: action.payload,
-          },
+          ...action.payload,
         };
       }
     );
+    builder.addCase(clearNotifications, () => ({}));
   },
 });
 

@@ -49,6 +49,7 @@ export function NotificationsMenu() {
         </NotificationsHeaderDiv>
         {notifications.map((notif, index) => (
           <Notification
+            key={notif.notificationId}
             title={notif.title}
             text={notif.mainText}
             type={notif.type}

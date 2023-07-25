@@ -8,18 +8,20 @@ import {
   getDoc,
   doc,
   Timestamp,
+  updateDoc,
   QueryFieldFilterConstraint,
 } from '@firebase/firestore';
 import { db } from '../firebase';
-import {
-  ITraining,
-  ITrainingOnCreate,
-  ITrainingUser,
-} from './trainingModule.types';
+import { ITraining, ITrainingOnCreate } from './trainingModule.types';
 import { IUserRole } from '../../Models/User/types';
 import { eTrainingConfirmStatus } from '../../lib/enums';
 import { userModule } from '../userModule';
 import moment from 'moment';
+
+interface ITrainingSearchCriteria {
+  timePeriod: 'past' | 'presentAndFuture' | 'all';
+  trainingStatus: eTrainingConfirmStatus;
+}
 
 const createTraining = async (training: ITrainingOnCreate) => {
   let trainingToFirebase = {
@@ -31,41 +33,36 @@ const createTraining = async (training: ITrainingOnCreate) => {
   return await addDoc(collection(db, 'trainings'), trainingToFirebase);
 };
 
-interface ITrainingSearchCriteria {
-  timePeriod: 'past' | 'presentAndFuture' | 'all';
-  trainingStatus: eTrainingConfirmStatus[];
-}
-
 const getTrainingById = async (trainingId: string, getFullFields = false) => {
-  let training = await getDoc(doc(db, 'trainings', trainingId));
-  if (!getFullFields) return training.data() as ITraining;
+  let trainingResp = await getDoc(doc(db, 'trainings', trainingId));
+  const training = trainingResp.data() as ITraining;
+  if (!getFullFields) return training;
 
-  let trainers: ITrainingUser[] = [];
-  let participants: ITrainingUser[] = [];
-
-  for (let trainer of (training.data() as ITraining).trainers) {
-    let trainerProfile = await userModule.getUserById(trainer.userId);
+  for (let trainerId of Object.keys(training.trainers)) {
+    let trainerProfile = await userModule.getUserById(trainerId);
     if (trainerProfile.imgFirebasePath)
       trainerProfile.imgSrc = await userModule.getUserImage(
         trainerProfile.imgFirebasePath
       );
-    trainers.push({ ...trainer, profile: trainerProfile });
+    training.trainers[trainerId] = {
+      profile: trainerProfile,
+      ...training.trainers[trainerId],
+    };
   }
 
-  for (let pax of (training.data() as ITraining).participants) {
-    let paxProfile = await userModule.getUserById(pax.userId);
+  for (let participantId of Object.keys(training.participants)) {
+    let paxProfile = await userModule.getUserById(participantId);
     if (paxProfile.imgFirebasePath)
       paxProfile.imgSrc = await userModule.getUserImage(
         paxProfile.imgFirebasePath
       );
-    participants.push({ ...pax, profile: paxProfile });
+    training.participants[participantId] = {
+      profile: paxProfile,
+      ...training.participants[participantId],
+    };
   }
 
-  return {
-    ...training.data(),
-    trainers,
-    participants,
-  } as ITraining;
+  return training;
 };
 
 const getTrainings = async (
@@ -76,26 +73,19 @@ const getTrainings = async (
   const trainings: ITraining[] = [];
   let whereList: QueryFieldFilterConstraint[] = [];
 
-  if (criteria.trainingStatus) {
-    whereList.push(
-      where(
-        `${role}s`,
-        'array-contains-any',
-        criteria.trainingStatus.map((stat) => ({
-          userId,
-          status: stat,
-        }))
-      )
-    );
-  }
-
   if (criteria.timePeriod === 'past') {
-    whereList.push(where(`startDate`, '<=', new Date()));
+    whereList.push(where('startDate', '<', new Date()));
   }
 
   if (criteria.timePeriod === 'presentAndFuture') {
-    whereList.push(where(`startDate`, '>=', new Date()));
+    whereList.push(where('startDate', '>=', new Date()));
   }
+  // TODO: Fix
+  // if (criteria.trainingStatus) {
+  //   whereList.push(
+  //     where(`${role}s.${userId}`, '>=', { status: criteria.trainingStatus })
+  //   );
+  // }
 
   let searchQuery = query(collection(db, 'trainings'), ...whereList, limit(10));
   const queryResults = await getDocs(searchQuery);
@@ -106,8 +96,24 @@ const getTrainings = async (
   });
   return trainings;
 };
+
+const updateUserStatus = async (
+  trainingId: string,
+  userId: string,
+  role: IUserRole,
+  status: eTrainingConfirmStatus
+) => {
+  const ref = doc(db, 'trainings', trainingId);
+  return await updateDoc(ref, {
+    [`${role}s`]: {
+      [userId]: { status },
+    },
+  });
+};
+
 export const trainingModule = {
   createTraining,
   getTrainings,
   getTrainingById,
+  updateUserStatus,
 };
