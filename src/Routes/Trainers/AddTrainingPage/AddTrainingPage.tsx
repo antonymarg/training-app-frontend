@@ -104,7 +104,7 @@ export function AddTrainingPage() {
         style={{ gridArea: 'button' }}
       >
         {isLoading ? (
-          <CircularProgress color="secondary" size="25" />
+          <CircularProgress color="secondary" size={25} />
         ) : (
           'Create'
         )}

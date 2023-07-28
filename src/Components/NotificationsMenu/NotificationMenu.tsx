@@ -4,6 +4,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useNotifications } from './useNotifications';
+import { eRecipientStatus } from '../../Models/Notifications/types';
 
 const NotificationsHeaderDiv = styled.div`
   padding: 8px 16px;
@@ -11,7 +12,7 @@ const NotificationsHeaderDiv = styled.div`
 `;
 
 export function NotificationsMenu() {
-  const { notifications, onNotificationClick } = useNotifications();
+  const { notifications, onNotificationClick, userId } = useNotifications();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,7 +26,11 @@ export function NotificationsMenu() {
     <>
       <IconButton onClick={handleClick}>
         <Badge
-          badgeContent={notifications.filter((notif) => !notif.seen).length}
+          badgeContent={
+            notifications.filter(
+              (notif) => notif.recipients[userId] === eRecipientStatus.received
+            ).length
+          }
           color="secondary"
         >
           <NotificationsIcon color="secondary" />
@@ -53,7 +58,7 @@ export function NotificationsMenu() {
             title={notif.title}
             text={notif.mainText}
             type={notif.type}
-            seen={notif.seen}
+            seen={notif.recipients[userId] === eRecipientStatus.seen}
             withDivider={Boolean(index < notifications.length - 1)}
             handleClick={() => onNotificationClick(notif)}
           />

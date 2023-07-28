@@ -1,46 +1,80 @@
-import { onValue, ref, push, child, set, update, get } from 'firebase/database';
+import {
+  onValue,
+  ref,
+  push,
+  set,
+  get,
+  query,
+  orderByChild,
+  startAt,
+} from 'firebase/database';
 import { realtimeDb } from '../firebase';
 import {
   INotification,
   INotificationBodyOnCreate,
+  eRecipientStatus,
 } from '../../Models/Notifications/types';
+import { Timestamp } from 'firebase/firestore';
+
+const notificationsRef = ref(realtimeDb, 'notifications');
 
 const createNotifsListener = (
   userId: string,
-  callback: (notif: INotification) => void
+  callback: (notif: INotification[]) => void
 ) => {
-  const notifRef = ref(realtimeDb, 'notifs/' + userId);
-  return onValue(notifRef, (snap) => {
-    if (snap.val() === null) return;
-    const notification = snap.val();
-    const notificationId = Object.keys(notification)[0];
-    callback({
-      [notificationId]: {
-        ...notification[notificationId],
-        notificationId,
-      },
+  const notificationsQuery = query(
+    notificationsRef,
+    orderByChild(`recipients/${userId}`),
+    startAt(1)
+  );
+
+  return onValue(notificationsQuery, (snapshot) => {
+    const notifications: INotification[] = [];
+    snapshot.forEach((childSnapshot) => {
+      const notification: INotification = childSnapshot.val() ?? [];
+      notifications.push(notification);
     });
+    callback(notifications);
   });
 };
 
-const getNotifications = async (userId: string) => {
-  const snapshot = await get(child(ref(realtimeDb), `notifs/${userId}`));
-  if (snapshot.exists()) return snapshot.val() as INotification;
-  return null;
+const getNotifications = async (userId: string, trainingId?: string) => {
+  const notificationsQuery = query(
+    notificationsRef,
+    orderByChild(`recipients/${userId}`),
+    startAt(1)
+  );
+
+  const snapshot = await get(notificationsQuery);
+  const notifications: INotification[] = [];
+  snapshot.forEach((childSnapshot) => {
+    const notification: INotification = childSnapshot.val();
+    if (trainingId && notification.trainingId !== trainingId) return;
+    notifications.push(notification);
+  });
+  return notifications;
 };
 
-const sendNotification = (
-  userId: string,
-  notification: INotificationBodyOnCreate
+const sendNotification = (notificationBody: INotificationBodyOnCreate) => {
+  const newNotificationRef = push(notificationsRef);
+  const notification: INotification = {
+    notificationId: newNotificationRef.key as string,
+    sentAt: Timestamp.now(),
+    ...notificationBody,
+  };
+
+  set(newNotificationRef, notification);
+};
+
+const markNotificationAsSeen = (
+  notificationId: string,
+  recipientId: string
 ) => {
-  const newNotifKey = push(child(ref(realtimeDb), 'notifs/' + userId)).key;
-  const notifRef = ref(realtimeDb, `notifs/${userId}/${newNotifKey}`);
-  set(notifRef, notification);
-};
-
-const markNotificationAsSeen = (userId: string, notificationId: string) => {
-  const notifRef = ref(realtimeDb, `notifs/${userId}/${notificationId}`);
-  update(notifRef, { seen: true });
+  const field = ref(
+    realtimeDb,
+    `notifications/${notificationId}/recipients/${recipientId}`
+  );
+  set(field, eRecipientStatus.seen);
 };
 
 export const notificationsModule = {

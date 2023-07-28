@@ -1,27 +1,27 @@
 import { Timestamp } from 'firebase/firestore';
 
+export enum eRecipientStatus {
+  notReceived,
+  received,
+  seen,
+}
+
 export type INotificationTypes = 'announcement' | 'invitation' | 'reminder';
 
 export interface INotificationBodyOnCreate {
-  type: INotificationTypes;
+  senderId: string;
   title: string;
   mainText: string;
-  seen: boolean;
-  sentAt: Timestamp;
-  extraInfo?: {
-    senderId?: string;
-    trainingId?: string;
+  type: INotificationTypes;
+  trainingId: string;
+  recipients: {
+    [key: string]: eRecipientStatus;
   };
 }
 
-export interface INotificationBody extends INotificationBodyOnCreate {
+export interface INotification extends INotificationBodyOnCreate {
   notificationId: string;
+  sentAt: Timestamp;
 }
 
-export interface INotification {
-  [id: string]: INotificationBody;
-}
-
-export interface INotificationsState {
-  [key: string]: INotificationBody;
-}
+export type INotificationsState = INotification[];

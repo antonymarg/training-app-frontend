@@ -15,7 +15,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { ITrainingUser } from '../../../Firebase/trainingModule/trainingModule.types';
-import { Timestamp } from 'firebase/firestore';
+import { eRecipientStatus } from '../../../Models/Notifications/types';
 
 const defaultFormState: IAddTrainingForm = {
   title: '',
@@ -70,17 +70,21 @@ export function useAddTrainingPage() {
 
     const trainers: { [key: string]: ITrainingUser } = {};
     const participants: { [key: string]: ITrainingUser } = {};
+    const trainerNotifications: { [key: string]: eRecipientStatus } = {};
+    const participantNotifications: { [key: string]: eRecipientStatus } = {};
 
     formData.trainers.forEach((v) => {
       trainers[v.id] = {
         status: eTrainingConfirmStatus.Pending,
       };
+      trainerNotifications[v.id] = eRecipientStatus.received;
     });
 
     formData.participants.forEach((v) => {
       participants[v.id] = {
         status: eTrainingConfirmStatus.Pending,
       };
+      participantNotifications[v.id] = eRecipientStatus.received;
     });
 
     const trainingResp = await trainingModule.createTraining({
@@ -95,30 +99,29 @@ export function useAddTrainingPage() {
       type: formData.type as eTrainingTypes,
       ...(formData.type === 'live' && { location: formData.location }),
     });
-    formData.trainers.forEach((trainer) =>
-      notificationsModule.sendNotification(trainer.id, {
-        title: 'New training!',
-        mainText: `Welcome to ${formData.title}!`,
-        type: 'invitation',
-        seen: false,
-        sentAt: Timestamp.now(),
-        extraInfo: {
-          trainingId: trainingResp.id,
-        },
-      })
-    );
-    formData.participants.forEach((participant) =>
-      notificationsModule.sendNotification(participant.id, {
-        title: 'New training for pax!',
-        mainText: `Welcome to ${formData.title}!`,
-        type: 'invitation',
-        seen: false,
-        sentAt: Timestamp.now(),
-        extraInfo: {
-          trainingId: trainingResp.id,
-        },
-      })
-    );
+
+    formData.participants.forEach((v) => {
+      participants[v.id] = {
+        status: eTrainingConfirmStatus.Pending,
+      };
+    });
+
+    notificationsModule.sendNotification({
+      senderId: userId as string,
+      title: 'New training!',
+      mainText: `You've been invited to be a trainer at: ${formData.title}!`,
+      type: 'invitation',
+      trainingId: trainingResp.id,
+      recipients: trainerNotifications,
+    });
+    notificationsModule.sendNotification({
+      senderId: userId as string,
+      title: 'New training!',
+      mainText: `You've been invited to participate at: ${formData.title}!`,
+      type: 'invitation',
+      trainingId: trainingResp.id,
+      recipients: participantNotifications,
+    });
     setIsLoading(false);
     navigate('/');
   };

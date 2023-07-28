@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNotifications } from '../../Models/Notifications/selector';
 import { AppDispatch } from '../../Store';
-import { addNotification } from '../../Models/Notifications/actions';
+import { updateNotifications } from '../../Models/Notifications/actions';
 import {
   INotification,
-  INotificationBody,
+  eRecipientStatus,
 } from '../../Models/Notifications/types';
 import { notificationsModule } from '../../Firebase';
 import { getUserProfile } from '../../Models/User/selectors';
@@ -16,46 +16,30 @@ export function useNotifications() {
   const navigate = useNavigate();
   const profile = useSelector(getUserProfile);
   const dispatch = useDispatch<AppDispatch>();
+  const userId = profile?.userId as string;
 
   useEffect(() => {
-    notificationsModule
-      .getNotifications(profile?.userId as string)
-      .then((notifications) => {
-        if (notifications) {
-          Object.keys(notifications).forEach((n) => {
-            dispatch(
-              addNotification({
-                [n]: {
-                  ...notifications[n],
-                  notificationId: n,
-                },
-              })
-            );
-          });
-        }
-      });
-
     notificationsModule.createNotifsListener(
-      profile?.userId as string,
-      (notif: INotification) => {
-        dispatch(addNotification(notif));
+      userId,
+      (notifications: INotification[]) => {
+        dispatch(updateNotifications(notifications));
       }
     );
-  }, [dispatch, profile?.userId]);
+  }, [dispatch, userId]);
 
-  const onNotificationClick = (notification: INotificationBody) => {
-    if (!notification.seen)
+  const onNotificationClick = (notification: INotification) => {
+    if (!(notification.recipients[userId] === eRecipientStatus.seen))
       notificationsModule.markNotificationAsSeen(
-        profile?.userId as string,
-        notification.notificationId
+        notification.notificationId,
+        userId
       );
     if (
       (notification.type === 'invitation' ||
         notification.type === 'announcement') &&
-      notification.extraInfo?.trainingId
+      notification.trainingId
     )
-      navigate('trainings/' + notification.extraInfo.trainingId);
+      navigate('trainings/' + notification.trainingId);
   };
 
-  return { notifications, onNotificationClick };
+  return { notifications, onNotificationClick, userId };
 }

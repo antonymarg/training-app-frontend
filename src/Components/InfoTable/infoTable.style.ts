@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const TrainingsHeader = styled.div`
+export const TableHeader = styled.div`
   background-color: ${(props) => props.theme.palette.primary.main};
   padding: 16px;
   display: grid;

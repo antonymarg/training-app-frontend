@@ -1,3 +1,3 @@
 import { INotificationsState } from './types';
 
-export const initialState: INotificationsState = {};
+export const initialState: INotificationsState = [];

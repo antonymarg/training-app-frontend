@@ -25,6 +25,7 @@ import { ConfirmationChips } from '../../../Components/ConfirmationChips/Confirm
 import { Timestamp } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
+import { NotificationsTable } from '../../../Components/NotificationsTable/NotificationsTable';
 
 const calcTrainingTimeText = (start: Timestamp, end: Timestamp) => {
   let startDate = moment.unix(start.seconds);
@@ -44,8 +45,8 @@ export function ViewTrainingPage() {
   const profile = useSelector(getUserProfile);
   const [training, setTraining] = useState<ITraining>();
   const navigate = useNavigate();
+  const userId = profile?.userId as string;
   const isPartOfTrainingAndNotConfirmed = () => {
-    const userId = profile?.userId as string;
     const searchOn =
       profile?.role === 'trainer' ? training?.trainers : training?.participants;
     if (!searchOn || !searchOn[userId] || searchOn[userId].status) return false;
@@ -149,7 +150,11 @@ export function ViewTrainingPage() {
         </Grid>
       </ParticipantsBoxContainer>
       <AnnouncementsContainer>
-        <Typography variant="h6">Announcements</Typography>
+        <NotificationsTable
+          userId={userId as string}
+          trainingId={training.id}
+          showAddAnnouncements={Boolean(training.trainers[userId])}
+        />
       </AnnouncementsContainer>
     </ViewTrainingPageContainer>
   );
