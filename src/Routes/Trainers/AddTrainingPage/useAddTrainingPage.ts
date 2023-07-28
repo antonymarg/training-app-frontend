@@ -15,7 +15,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { ITrainingUser } from '../../../Firebase/trainingModule/trainingModule.types';
-import { eRecipientStatus } from '../../../Models/Notifications/types';
 
 const defaultFormState: IAddTrainingForm = {
   title: '',
@@ -70,21 +69,17 @@ export function useAddTrainingPage() {
 
     const trainers: { [key: string]: ITrainingUser } = {};
     const participants: { [key: string]: ITrainingUser } = {};
-    const trainerNotifications: { [key: string]: eRecipientStatus } = {};
-    const participantNotifications: { [key: string]: eRecipientStatus } = {};
 
     formData.trainers.forEach((v) => {
       trainers[v.id] = {
         status: eTrainingConfirmStatus.Pending,
       };
-      trainerNotifications[v.id] = eRecipientStatus.received;
     });
 
     formData.participants.forEach((v) => {
       participants[v.id] = {
         status: eTrainingConfirmStatus.Pending,
       };
-      participantNotifications[v.id] = eRecipientStatus.received;
     });
 
     const trainingResp = await trainingModule.createTraining({
@@ -112,7 +107,7 @@ export function useAddTrainingPage() {
       mainText: `You've been invited to be a trainer at: ${formData.title}!`,
       type: 'invitation',
       trainingId: trainingResp.id,
-      recipients: trainerNotifications,
+      recipients: Object.keys(trainers),
     });
     notificationsModule.sendNotification({
       senderId: userId as string,
@@ -120,7 +115,7 @@ export function useAddTrainingPage() {
       mainText: `You've been invited to participate at: ${formData.title}!`,
       type: 'invitation',
       trainingId: trainingResp.id,
-      recipients: participantNotifications,
+      recipients: Object.keys(participants),
     });
     setIsLoading(false);
     navigate('/');

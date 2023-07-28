@@ -19,16 +19,30 @@ export function useNotifications() {
   const userId = profile?.userId as string;
 
   useEffect(() => {
-    notificationsModule.createNotifsListener(
+    notificationsModule.getNotificationsListener(
       userId,
-      (notifications: INotification[]) => {
-        dispatch(updateNotifications(notifications));
+      async (
+        fetchedNotifications: [id: string, status: eRecipientStatus][]
+      ) => {
+        const notifications: INotification[] = [];
+        for (const fetchedNotif of fetchedNotifications) {
+          let notif = await notificationsModule.getNotificationById(
+            fetchedNotif[0]
+          );
+          notifications.push({
+            ...notif,
+            status: fetchedNotif[1],
+          });
+        }
+
+        if (notifications.length !== 0)
+          dispatch(updateNotifications(notifications));
       }
     );
   }, [dispatch, userId]);
 
   const onNotificationClick = (notification: INotification) => {
-    if (!(notification.recipients[userId] === eRecipientStatus.seen))
+    if (!(notification.status === eRecipientStatus.seen))
       notificationsModule.markNotificationAsSeen(
         notification.notificationId,
         userId
@@ -41,5 +55,5 @@ export function useNotifications() {
       navigate('trainings/' + notification.trainingId);
   };
 
-  return { notifications, onNotificationClick, userId };
+  return { notifications, onNotificationClick };
 }

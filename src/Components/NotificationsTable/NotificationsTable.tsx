@@ -30,9 +30,8 @@ export function NotificationsTable({
   useEffect(() => {
     (async function () {
       setIsLoading(true);
-      let res = await notificationsModule.getTrainingAnnouncements(
-        trainingId,
-        userId
+      let res = await notificationsModule.getAllAnnouncementsForTraining(
+        trainingId
       );
       setNotifications(
         res.map((e) => ({

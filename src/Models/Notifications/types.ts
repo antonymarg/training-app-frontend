@@ -14,14 +14,20 @@ export interface INotificationBodyOnCreate {
   mainText: string;
   type: INotificationTypes;
   trainingId: string;
-  recipients: {
-    [key: string]: eRecipientStatus;
-  };
+  recipients: string[];
 }
 
-export interface INotification extends INotificationBodyOnCreate {
+export interface IFetchedNotification {
   notificationId: string;
   sentAt: Timestamp;
+  senderId: string;
+  title: string;
+  mainText: string;
+  type: INotificationTypes;
+  trainingId: string;
+}
+export interface INotification extends IFetchedNotification {
+  status: eRecipientStatus;
 }
 
 export type INotificationsState = INotification[];

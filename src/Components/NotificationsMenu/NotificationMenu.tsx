@@ -12,7 +12,7 @@ const NotificationsHeaderDiv = styled.div`
 `;
 
 export function NotificationsMenu() {
-  const { notifications, onNotificationClick, userId } = useNotifications();
+  const { notifications, onNotificationClick } = useNotifications();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -28,7 +28,7 @@ export function NotificationsMenu() {
         <Badge
           badgeContent={
             notifications.filter(
-              (notif) => notif.recipients[userId] === eRecipientStatus.received
+              (notif) => notif.status === eRecipientStatus.received
             ).length
           }
           color="secondary"
@@ -58,7 +58,7 @@ export function NotificationsMenu() {
             title={notif.title}
             text={notif.mainText}
             type={notif.type}
-            seen={notif.recipients[userId] === eRecipientStatus.seen}
+            seen={notif.status === eRecipientStatus.seen}
             withDivider={Boolean(index < notifications.length - 1)}
             handleClick={() => onNotificationClick(notif)}
           />

@@ -11,40 +11,35 @@ import {
 import { notificationsModule, trainingModule } from '../../../Firebase';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
-import { eRecipientStatus } from '../../../Models/Notifications/types';
 
 interface IAnnounement {
   title: string;
   mainText: string;
 }
-interface IRecipients {
-  [key: string]: eRecipientStatus;
-}
+
 const defaultState: IAnnounement = {
   title: '',
   mainText: '',
 };
+
 export function SendAnnouncement() {
   const { trainingId } = useParams();
   const profile = useSelector(getUserProfile);
   const navigate = useNavigate();
   const [formData, setFormData] = useState<IAnnounement>(defaultState);
   const [isLoading, setIsLoading] = useState(false);
-  const recipients: IRecipients = {};
 
   const onContinue = async () => {
     setIsLoading(true);
     let training = await trainingModule.getTrainingById(trainingId as string);
-    Object.keys(training.participants).forEach(
-      (pax) => (recipients[pax] = eRecipientStatus.received)
-    );
+
     await notificationsModule.sendNotification({
       senderId: profile?.userId as string,
       title: formData.title,
       mainText: formData.mainText,
       type: 'announcement',
       trainingId: trainingId as string,
-      recipients,
+      recipients: Object.keys(training.participants),
     });
     setIsLoading(false);
     navigate(`/trainings/${trainingId}`);
