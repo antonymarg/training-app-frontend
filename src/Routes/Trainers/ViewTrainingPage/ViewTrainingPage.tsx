@@ -152,7 +152,7 @@ export function ViewTrainingPage() {
       <AnnouncementsContainer>
         <NotificationsTable
           userId={userId as string}
-          trainingId={training.id}
+          trainingId={trainingId as string}
           showAddAnnouncements={Boolean(training.trainers[userId])}
         />
       </AnnouncementsContainer>

@@ -7,6 +7,7 @@ import {
   query,
   orderByChild,
   startAt,
+  equalTo,
 } from 'firebase/database';
 import { realtimeDb } from '../firebase';
 import {
@@ -38,7 +39,30 @@ const createNotifsListener = (
   });
 };
 
-const getNotifications = async (userId: string, trainingId?: string) => {
+const getTrainingAnnouncements = async (trainingId: string, userId: string) => {
+  const notificationsQuery = query(
+    notificationsRef,
+    orderByChild(`trainingId`),
+    equalTo(trainingId)
+  );
+  const snapshot = await get(notificationsQuery);
+  const notifications: INotification[] = [];
+  snapshot.forEach((childSnapshot) => {
+    const notification: INotification = childSnapshot.val();
+
+    if (
+      (!notification.recipients[userId] && notification.senderId !== userId) ||
+      notification.type !== 'announcement'
+    )
+      return;
+    notifications.push(notification);
+  });
+  return notifications.sort((a, b) =>
+    a.sentAt.seconds > b.sentAt.seconds ? -1 : 1
+  );
+};
+
+const getNotifications = async (userId: string) => {
   const notificationsQuery = query(
     notificationsRef,
     orderByChild(`recipients/${userId}`),
@@ -49,7 +73,6 @@ const getNotifications = async (userId: string, trainingId?: string) => {
   const notifications: INotification[] = [];
   snapshot.forEach((childSnapshot) => {
     const notification: INotification = childSnapshot.val();
-    if (trainingId && notification.trainingId !== trainingId) return;
     notifications.push(notification);
   });
   return notifications;
@@ -82,4 +105,5 @@ export const notificationsModule = {
   sendNotification,
   markNotificationAsSeen,
   getNotifications,
+  getTrainingAnnouncements,
 };

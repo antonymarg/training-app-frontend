@@ -61,7 +61,7 @@ export function TrainingsTable({
       title={label}
       showCreateButton={allowAddTrainingButton}
       onCreateClick={() => navigate('/create')}
-      createButtonLabel="AddTraining"
+      createButtonLabel="Add Training"
       onRowClick={(e, id) => navigate(`/trainings/${id}`)}
     />
   );

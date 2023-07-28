@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { InfoTable } from '../InfoTable/InfoTable';
 import { notificationsModule } from '../../Firebase';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 interface INotificationsTableProps {
   showAddAnnouncements: boolean;
@@ -13,7 +14,7 @@ type INotificationsDetailsTable = {
   id: string;
   title: string;
   type: string;
-  text: string;
+  sentAt: string;
 };
 
 export function NotificationsTable({
@@ -29,13 +30,16 @@ export function NotificationsTable({
   useEffect(() => {
     (async function () {
       setIsLoading(true);
-      let res = await notificationsModule.getNotifications(userId, trainingId);
+      let res = await notificationsModule.getTrainingAnnouncements(
+        trainingId,
+        userId
+      );
       setNotifications(
         res.map((e) => ({
           id: e.notificationId,
           title: e.title,
           type: e.type,
-          text: e.mainText,
+          sentAt: moment.unix(e.sentAt.seconds).calendar(),
         }))
       );
       setIsLoading(false);
@@ -52,7 +56,7 @@ export function NotificationsTable({
       }}
       title="Announcements"
       showCreateButton={showAddAnnouncements}
-      onCreateClick={() => navigate('/announce')}
+      onCreateClick={() => navigate(`/announce/${trainingId}`)}
       createButtonLabel="Send announcement"
     />
   );
