@@ -9,6 +9,10 @@ import { eRecipientStatus } from '../../Models/Notifications/types';
 const NotificationsHeaderDiv = styled.div`
   padding: 8px 16px;
   min-width: 400px;
+
+  @media only screen and (max-width: 768px) {
+    min-width: unset;
+  }
 `;
 
 export function NotificationsMenu() {

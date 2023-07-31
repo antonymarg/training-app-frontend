@@ -27,7 +27,7 @@ export function Notification({
             {!seen && <CircleIcon sx={{ fontSize: '8px' }} color="secondary" />}
             <Typography fontWeight="bold">{title}</Typography>
           </Stack>
-          <Typography>{text}</Typography>
+          <Typography flexWrap="wrap">{text}</Typography>
         </Stack>
       </Stack>
     </MenuItem>

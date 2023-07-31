@@ -10,6 +10,18 @@ export const ViewTrainingPageContainer = styled.div`
   grid-template-areas:
     'navigate chips'
     'trainingInfo sidebar';
+
+  @media only screen and (max-width: 768px) {
+    padding: 0px;
+    grid-template-columns: 1fr;
+    grid-template-rows: fit-content;
+    gap: 16px;
+    grid-template-areas:
+      'navigate'
+      'chips'
+      'sidebar'
+      'trainingInfo';
+  }
 `;
 
 export const TrainingInfoContainer = styled.div`
