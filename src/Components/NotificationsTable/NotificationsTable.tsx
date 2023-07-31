@@ -31,7 +31,8 @@ export function NotificationsTable({
     (async function () {
       setIsLoading(true);
       let res = await notificationsModule.getAllAnnouncementsForTraining(
-        trainingId
+        trainingId,
+        userId
       );
       setNotifications(
         res.map((e) => ({

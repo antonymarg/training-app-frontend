@@ -40,7 +40,7 @@ export enum eTrainingTypes {
 
 export enum eTrainingConfirmStatus {
   'Declined' = -1,
-  'Pending',
+  'Pending' = 1,
   'Accepted',
   'Confirmed',
 }

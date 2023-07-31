@@ -73,24 +73,23 @@ const getTrainings = async (
   const trainings: ITraining[] = [];
   let whereList: QueryFieldFilterConstraint[] = [];
 
-  if (criteria.timePeriod === 'past') {
-    whereList.push(where('startDate', '<', new Date()));
+  if (criteria.trainingStatus) {
+    whereList.push(
+      where(`${role}s.${userId}`, '>=', { status: criteria.trainingStatus })
+    );
   }
-
-  if (criteria.timePeriod === 'presentAndFuture') {
-    whereList.push(where('startDate', '>=', new Date()));
-  }
-  // TODO: Fix
-  // if (criteria.trainingStatus) {
-  //   whereList.push(
-  //     where(`${role}s.${userId}`, '>=', { status: criteria.trainingStatus })
-  //   );
-  // }
 
   let searchQuery = query(collection(db, 'trainings'), ...whereList, limit(10));
   const queryResults = await getDocs(searchQuery);
   queryResults.forEach((tr) => {
     let training = tr.data();
+    if (
+      (criteria.timePeriod === 'past' &&
+        moment.unix(training.startDate).isAfter(moment())) ||
+      (criteria.timePeriod === 'presentAndFuture' &&
+        moment.unix(training.startDate).isBefore(moment()))
+    )
+      return;
     training.startDate = moment(training.startDate.toDate()).format();
     trainings.push({ id: tr.id, ...training } as ITraining);
   });

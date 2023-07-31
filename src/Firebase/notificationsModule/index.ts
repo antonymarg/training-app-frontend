@@ -96,7 +96,10 @@ const getAllNotificationsForUser = async (userId: string) => {
   );
 };
 
-const getAllAnnouncementsForTraining = async (trainingId: string) => {
+const getAllAnnouncementsForTraining = async (
+  trainingId: string,
+  userId: string
+): Promise<INotification[]> => {
   const notificationsQuery = query(
     notificationsRef,
     orderByChild(`trainingId`),
@@ -105,10 +108,21 @@ const getAllAnnouncementsForTraining = async (trainingId: string) => {
   const snapshot = await get(notificationsQuery);
   const notifications: INotification[] = [];
   snapshot.forEach((childSnapshot) => {
-    const notification: INotification = childSnapshot.val();
-    if (notification.type === 'announcement') notifications.push(notification);
+    const notification: IFetchedNotification = childSnapshot.val();
+    if (notification.type === 'announcement')
+      notifications.push({
+        ...notification,
+        status: eRecipientStatus.notReceived,
+      });
   });
-  return _sortNotifications(notifications);
+  for (const notificationInd in notifications) {
+    let status = await getNotificationUserStatus(
+      userId,
+      notifications[notificationInd].notificationId
+    );
+    notifications[notificationInd].status = status;
+  }
+  return _sortNotifications(notifications) as INotification[];
 };
 
 const getNotificationsListener = (

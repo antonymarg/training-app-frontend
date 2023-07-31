@@ -6,7 +6,6 @@ import { trainingModule } from '../../Firebase';
 import { IUserRole } from '../../Models/User/types';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../Models/User/selectors';
-import { useNavigate } from 'react-router-dom';
 
 interface ConfirmationChipsProps {
   trainingId: string;
@@ -14,7 +13,6 @@ interface ConfirmationChipsProps {
 
 export function ConfirmationChips({ trainingId }: ConfirmationChipsProps) {
   const profile = useSelector(getUserProfile);
-  const navigate = useNavigate();
   const onChipClick = async (status: eTrainingConfirmStatus) => {
     await trainingModule.updateUserStatus(
       trainingId,
@@ -22,7 +20,7 @@ export function ConfirmationChips({ trainingId }: ConfirmationChipsProps) {
       profile?.role as IUserRole,
       status
     );
-    navigate('/trainings/' + trainingId);
+    window.location.reload();
   };
 
   return (
