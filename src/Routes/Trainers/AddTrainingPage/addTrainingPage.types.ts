@@ -1,4 +1,4 @@
-import { IUserAutocompleteOptions } from '../../../Components/AutocompleteUser/AutocompleteUser';
+import { IUserAutocompleteOptions } from '../../../Components/AutocompleteUserMultiple/AutocompleteUserMultiple';
 import { eTrainingTopics } from '../../../lib/enums';
 
 export interface IAddTrainingForm {

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { ITraining } from '../../../Firebase/trainingModule/trainingModule.types';
 import { notificationsModule, trainingModule } from '../../../Firebase';
-import { FullBodyLoader } from '../../../Components/FullBodyLoader/FullBodyLoader';
 import {
   AnnouncementsContainer,
   TrainingInfoContainer,
@@ -28,10 +27,13 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { eTrainingConfirmStatus, eTrainingTypes } from '../../../lib/enums';
 import { grey } from '@mui/material/colors';
-import { ConfirmationChips } from '../../../Components/ConfirmationChips/ConfirmationChips';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
-import { Announcement } from '../../../Components/Announcement/Announcement';
+import {
+  Announcement,
+  ConfirmationChips,
+  FullBodyLoader,
+} from '../../../Components';
 import { INotification } from '../../../Models/Notifications/types';
 import moment from 'moment';
 import { Timestamp } from 'firebase/firestore';

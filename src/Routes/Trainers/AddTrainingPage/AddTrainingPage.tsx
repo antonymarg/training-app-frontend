@@ -15,7 +15,7 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { AddTrainingPageContainer } from './addTrainingPage.style';
-import { AutocompleteUserMutliple } from '../../../Components/AutocompleteUser/AutocompleteUser';
+import { AutocompleteUserMultiple } from '../../../Components';
 import { useAddTrainingPage } from './useAddTrainingPage';
 import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
 import {
@@ -49,7 +49,7 @@ export function AddTrainingPage() {
           setValue={(v) => handleInputChange({ description: v })}
         />
         <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
-          <AutocompleteUserMutliple
+          <AutocompleteUserMultiple
             onPick={(val) => handleInputChange({ trainers: val })}
             value={formData.trainers}
             label="Trainers"
@@ -90,7 +90,7 @@ export function AddTrainingPage() {
             />
           )}
         </Stack>
-        <AutocompleteUserMutliple
+        <AutocompleteUserMultiple
           onPick={(val) => handleInputChange({ participants: val })}
           value={formData.participants}
           label="Participants"

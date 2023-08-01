@@ -9,8 +9,7 @@ import { IUserProfile } from '../../../Models/User/types';
 import { userModule } from '../../../Firebase';
 import userImage from '../../../Assets/img/user.png';
 import { Stack, Typography } from '@mui/material';
-import { TrainingsTable } from '../../../Components/TrainingsTable/TrainingsTable';
-import { FullBodyLoader } from '../../../Components/FullBodyLoader/FullBodyLoader';
+import { FullBodyLoader, TrainingsTable } from '../../../Components';
 import { eTrainingConfirmStatus } from '../../../lib/enums';
 
 export function ViewUser() {

@@ -1,5 +1,6 @@
 import { Button, TextField, Typography, CircularProgress } from '@mui/material';
-import { GoogleButton } from '../../../../Components/GoogleButton/GoogleButton';
+import { GoogleButton } from '../../../../Components';
+
 import {
   EmailCollectionContainer,
   FormContainer,

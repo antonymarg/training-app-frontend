@@ -19,7 +19,7 @@ export interface IUserAutocompleteOptions {
   id: string;
 }
 
-export function AutocompleteUserMutliple({
+export function AutocompleteUserMultiple({
   onPick,
   value,
   label,
