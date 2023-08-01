@@ -150,6 +150,7 @@ export function ViewTrainingPage() {
                       />
                     }
                     onClick={() => navigate(`/user/${trainerId}`)}
+                    sx={{ paddingLeft: 0.5 }}
                   />
                 );
               })}
@@ -172,6 +173,7 @@ export function ViewTrainingPage() {
                         imgSrc={participant.profile?.imgSrc}
                       />
                     }
+                    sx={{ paddingLeft: 0.5 }}
                     onClick={() => navigate(`/user/${participantId}`)}
                   />
                 );
