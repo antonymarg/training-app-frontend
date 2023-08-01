@@ -99,7 +99,7 @@ export function ViewTrainingPage() {
         )}
       </NavigatorContainer>
       {training.trainers[userId]?.status > 1 && (
-        <ManageMyTraining trainingId={trainingId as string} />
+        <ManageMyTraining training={training} userId={userId} />
       )}
       <TrainingInfoContainer>
         <TitleContainer>
