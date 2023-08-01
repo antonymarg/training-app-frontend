@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
-import { Chip, Divider, Stack, Typography, rgbToHex } from '@mui/material';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import PersonIcon from '@mui/icons-material/Person';
+import { Divider, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import styled from 'styled-components';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { TransparentChip } from '../TransparentChip/TransparentChip';
+import PersonIcon from '@mui/icons-material/Person';
 import { AnnouncementsContainer } from './announcement.style';
 import { userModule } from '../../Firebase';
 import { INotification } from '../../Models/Notifications/types';
 import { eRecipientStatus } from '../../lib/enums';
 import moment from 'moment';
-import { TransparentChip } from '../TransparentChip/TransparentChip';
 
 interface IAnnouncementProps {
   announcement: INotification;

@@ -1,7 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { ITraining } from '../../../Firebase/trainingModule/trainingModule.types';
-import { notificationsModule, trainingModule } from '../../../Firebase';
+
+import { Chip, Typography, Stack, Button } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import {
+  Announcement,
+  AvatarWithBadge,
+  ConfirmationChips,
+  FullBodyLoader,
+} from '../../../Components';
+
 import {
   AnnouncementsContainer,
   TrainingInfoContainer,
@@ -12,32 +20,21 @@ import {
   ViewTrainingPageContainer,
   ManageYourTrainingBar,
 } from './viewTrainingPage.style';
-import {
-  Avatar,
-  Chip,
-  Typography,
-  Badge,
-  Stack,
-  Theme,
-  BadgeProps,
-  Button,
-} from '@mui/material';
+
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { eTrainingConfirmStatus, eTrainingTypes } from '../../../lib/enums';
-import { grey } from '@mui/material/colors';
+
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
-import {
-  Announcement,
-  ConfirmationChips,
-  FullBodyLoader,
-} from '../../../Components';
+
+import { notificationsModule, trainingModule } from '../../../Firebase';
+import { eTrainingConfirmStatus, eTrainingTypes } from '../../../lib/enums';
 import { INotification } from '../../../Models/Notifications/types';
-import moment from 'moment';
+import { ITraining } from '../../../Firebase/trainingModule/trainingModule.types';
 import { Timestamp } from 'firebase/firestore';
-import styled from 'styled-components';
+
+import moment from 'moment';
 
 const calcTrainingTimeText = (start: Timestamp, end: Timestamp) => {
   let startDate = moment.unix(start.seconds);
@@ -163,20 +160,10 @@ export function ViewTrainingPage() {
                     key={trainerId}
                     label={`${trainer.profile?.name} ${trainer.profile?.surname}`}
                     icon={
-                      <StyledBadge
-                        overlap="circular"
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'right',
-                        }}
-                        variant="dot"
+                      <AvatarWithBadge
                         status={trainer.status}
-                      >
-                        <Avatar
-                          sx={{ width: 24, height: 24 }}
-                          src={trainer.profile?.imgSrc}
-                        />
-                      </StyledBadge>
+                        imgSrc={trainer.profile?.imgSrc}
+                      />
                     }
                     onClick={() => navigate(`/user/${trainerId}`)}
                   />
@@ -189,28 +176,22 @@ export function ViewTrainingPage() {
               Participants
             </Typography>
             <Stack direction="row" useFlexGap gap={0.5}>
-              {Object.keys(training.participants).map((participantId) => (
-                <Chip
-                  key={participantId}
-                  label={`${training.participants[participantId].profile?.name} ${training.participants[participantId].profile?.surname}`}
-                  icon={
-                    <StyledBadge
-                      overlap="circular"
-                      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                      variant="dot"
-                      status={training.participants[participantId].status}
-                    >
-                      <Avatar
-                        sx={{ width: 24, height: 24 }}
-                        src={
-                          training.participants[participantId].profile?.imgSrc
-                        }
+              {Object.keys(training.participants).map((participantId) => {
+                let participant = training.participants[participantId];
+                return (
+                  <Chip
+                    key={participantId}
+                    label={`${participant.profile?.name} ${participant.profile?.surname}`}
+                    icon={
+                      <AvatarWithBadge
+                        status={participant.status}
+                        imgSrc={participant.profile?.imgSrc}
                       />
-                    </StyledBadge>
-                  }
-                  onClick={() => navigate(`/user/${participantId}`)}
-                />
-              ))}
+                    }
+                    onClick={() => navigate(`/user/${participantId}`)}
+                  />
+                );
+              })}
             </Stack>
           </Stack>
         </UsersBoxContainer>
@@ -230,27 +211,3 @@ export function ViewTrainingPage() {
     </ViewTrainingPageContainer>
   );
 }
-const getBadgeColour = (status: eTrainingConfirmStatus) => {
-  switch (status) {
-    case eTrainingConfirmStatus.Confirmed:
-    case eTrainingConfirmStatus.Accepted:
-      return 'success';
-    case eTrainingConfirmStatus.Declined:
-      return 'error';
-    case eTrainingConfirmStatus.Pending:
-      return 'secondary';
-  }
-};
-
-const StyledBadge = styled(Badge)(
-  ({
-    theme,
-    status,
-  }: BadgeProps & { status: eTrainingConfirmStatus; theme: Theme }) => ({
-    '& .MuiBadge-badge': {
-      backgroundColor: theme.palette[getBadgeColour(status)].main,
-      color: theme.palette[getBadgeColour(status)].main,
-      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    },
-  })
-);
