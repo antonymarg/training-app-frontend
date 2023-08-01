@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-import { Chip, Typography, Stack, Button } from '@mui/material';
+import { Chip, Typography, Stack } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import {
   Announcement,
@@ -18,7 +18,6 @@ import {
   TitleContainer,
   UsersBoxContainer,
   ViewTrainingPageContainer,
-  ManageYourTrainingBar,
 } from './viewTrainingPage.style';
 
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -35,6 +34,7 @@ import { ITraining } from '../../../Firebase/trainingModule/trainingModule.types
 import { Timestamp } from 'firebase/firestore';
 
 import moment from 'moment';
+import { ManageMyTraining } from './ManageMyTrainingSidebar/ManageMyTraining';
 
 const calcTrainingTimeText = (start: Timestamp, end: Timestamp) => {
   let startDate = moment.unix(start.seconds);
@@ -59,15 +59,11 @@ export function ViewTrainingPage() {
   const userId = profile?.userId as string;
 
   const isPartOfTrainingAndNotConfirmed = () => {
-    const searchOn =
-      profile?.role === 'trainer' ? training?.trainers : training?.participants;
     if (
-      !searchOn ||
-      !searchOn[userId] ||
-      searchOn[userId].status !== eTrainingConfirmStatus.Pending
+      training?.trainers[userId]?.status === eTrainingConfirmStatus.Pending ||
+      training?.participants[userId]?.status === eTrainingConfirmStatus.Pending
     )
-      return false;
-    return true;
+      return true;
   };
 
   useEffect(() => {
@@ -103,19 +99,7 @@ export function ViewTrainingPage() {
         )}
       </NavigatorContainer>
       {training.trainers[userId]?.status > 1 && (
-        <ManageYourTrainingBar>
-          <Typography fontSize="1.4rem" fontWeight="bold">
-            Manage my training
-          </Typography>
-          <Button variant="contained">Add participants</Button>
-          <Button
-            variant="contained"
-            onClick={() => navigate(`/announce/${trainingId}`)}
-          >
-            Send announcement
-          </Button>
-          <Button variant="contained">Send feedback form</Button>
-        </ManageYourTrainingBar>
+        <ManageMyTraining trainingId={trainingId as string} />
       )}
       <TrainingInfoContainer>
         <TitleContainer>
