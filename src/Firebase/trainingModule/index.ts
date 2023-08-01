@@ -87,7 +87,6 @@ const getTrainings = async (
         moment.unix(training.startDate).isBefore(moment()))
     )
       return;
-    training.startDate = moment.unix(training.startDate.seconds).format();
     trainings.push({ id: tr.id, ...training } as ITraining);
   });
   return trainings;
