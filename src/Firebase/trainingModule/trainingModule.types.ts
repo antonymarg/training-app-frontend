@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore';
 import { IUserProfile } from '../../Models/User/types';
 import {
   eTrainingConfirmStatus,
@@ -15,8 +16,8 @@ export interface ITrainingOnCreate {
   participants: {
     [key: string]: ITrainingUser;
   };
-  startDate: string;
-  endDate: string;
+  startDate: Timestamp;
+  endDate: Timestamp;
   topic: eTrainingTopics;
   type: eTrainingTypes;
   location?: string;

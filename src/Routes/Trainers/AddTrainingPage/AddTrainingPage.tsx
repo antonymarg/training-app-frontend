@@ -22,7 +22,7 @@ import {
   DesktopDateTimePicker,
   MobileDateTimePicker,
 } from '@mui/x-date-pickers';
-import moment from 'moment';
+import { Timestamp } from 'firebase/firestore';
 
 const TOPIC_LIST = Object.keys(eTrainingTopics) as Array<
   keyof typeof eTrainingTopics
@@ -63,14 +63,14 @@ export function AddTrainingPage() {
         </Stack>
         <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
           <DateOfDeliveryInput
-            value={formData.startDate ?? ''}
+            value={formData.startDate as Timestamp}
             error={errors.startDateError}
             setValue={(v) => handleInputChange({ startDate: v })}
             label="Start date"
             id="startDate"
           />
           <DateOfDeliveryInput
-            value={formData.endDate ?? ''}
+            value={formData.endDate as Timestamp}
             error={errors.endDateError}
             setValue={(v) => handleInputChange({ endDate: v })}
             label="End date"
@@ -184,16 +184,16 @@ const DateOfDeliveryInput = ({
   setValue,
   label,
   id,
-}: IFieldInputs<string>) => {
+}: IFieldInputs<Timestamp>) => {
   const isMobile = window.innerWidth < 768;
 
   return isMobile ? (
     <MobileDateTimePicker
       label={label}
       value={value}
-      onChange={(v) => setValue(v as string)}
+      onChange={(v) => setValue(v as Timestamp)}
       inputFormat="DD/MM/YY HH:mm"
-      minDate={moment().format()}
+      minDate={Timestamp.now()}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -211,9 +211,9 @@ const DateOfDeliveryInput = ({
     <DesktopDateTimePicker
       label={label}
       value={value}
-      onChange={(v) => setValue(v as string)}
+      onChange={(v) => setValue(v as Timestamp)}
       inputFormat="DD/MM/YY HH:mm"
-      minDate={moment().format()}
+      minDate={Timestamp.now()}
       renderInput={(params) => (
         <TextField
           {...params}

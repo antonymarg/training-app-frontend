@@ -13,8 +13,8 @@ import {
   eTrainingTypes,
 } from '../../../lib/enums';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
 import { ITrainingUser } from '../../../Firebase/trainingModule/trainingModule.types';
+import { Timestamp } from 'firebase/firestore';
 
 const defaultFormState: IAddTrainingForm = {
   title: '',
@@ -88,8 +88,8 @@ export function useAddTrainingPage() {
       trainers,
       participants,
       description: formData.description,
-      startDate: moment(formData.startDate).format(),
-      endDate: moment(formData.endDate).format(),
+      startDate: formData.startDate as Timestamp,
+      endDate: formData.endDate as Timestamp,
       topic: formData.topic as eTrainingTopics,
       type: formData.type as eTrainingTypes,
       ...(formData.type === 'live' && { location: formData.location }),
