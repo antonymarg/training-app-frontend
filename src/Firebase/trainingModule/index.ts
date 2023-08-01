@@ -49,7 +49,6 @@ const getTrainingById = async (trainingId: string, getFullFields = false) => {
       ...training.trainers[trainerId],
     };
   }
-
   for (let participantId of Object.keys(training.participants)) {
     let paxProfile = await userModule.getUserById(participantId);
     if (paxProfile.imgFirebasePath)
@@ -104,9 +103,7 @@ const updateUserStatus = async (
 ) => {
   const ref = doc(db, 'trainings', trainingId);
   return await updateDoc(ref, {
-    [`${role}s`]: {
-      [userId]: { status },
-    },
+    [`${role}s.${userId}`]: { status },
   });
 };
 

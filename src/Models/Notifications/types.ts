@@ -1,10 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-
-export enum eRecipientStatus {
-  notReceived,
-  received,
-  seen,
-}
+import { eRecipientStatus } from '../../lib/enums';
 
 export type INotificationTypes = 'announcement' | 'invitation' | 'reminder';
 

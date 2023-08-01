@@ -4,7 +4,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useNotifications } from './useNotifications';
-import { eRecipientStatus } from '../../Models/Notifications/types';
+import { eRecipientStatus } from '../../lib/enums';
 
 const NotificationsHeaderDiv = styled.div`
   padding: 8px 16px;

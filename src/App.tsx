@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { HomePage, SignupPage, SignupCompletePage } from './Routes';
-import { Navbar } from './Components/Navbar/Navbar';
+import { Navbar } from './Components';
 import { AppContainer, LayoutContainer } from './App.style';
 import { AddTrainingPage } from './Routes/Trainers/AddTrainingPage/AddTrainingPage';
 import { LocalizationProvider } from '@mui/x-date-pickers';

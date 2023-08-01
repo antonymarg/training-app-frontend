@@ -13,11 +13,10 @@ import {
   where,
   limit,
 } from '@firebase/firestore';
-import { auth, db } from '../';
+import { assetsModule, auth, db } from '../';
 import { IUserCredentials } from './userModule.types';
 import { IUserProfile } from '../../Models/User/types';
 import { provider } from '../firebase';
-import { getAsset, uploadAsset } from '../assets';
 
 const getUserById = async (userId: string, getExtendedProfile = false) => {
   let user: IUserProfile | null =
@@ -72,11 +71,14 @@ const signInWithGoogle = async () => {
 
 const uploadProfilePicture = async (userId: string, img: File) => {
   let extension = img.name.split('.')[1];
-  return await uploadAsset(`users/profilePictures/${userId}.${extension}`, img);
+  return await assetsModule.uploadAsset(
+    `users/profilePictures/${userId}.${extension}`,
+    img
+  );
 };
 
 const getUserImage = async (imagePath: string) => {
-  return await getAsset(imagePath);
+  return await assetsModule.getAsset(imagePath);
 };
 
 export const userModule = {

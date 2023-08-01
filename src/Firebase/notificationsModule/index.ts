@@ -16,9 +16,9 @@ import {
   IFetchedNotification,
   INotification,
   INotificationBodyOnCreate,
-  eRecipientStatus,
 } from '../../Models/Notifications/types';
 import { Timestamp } from 'firebase/firestore';
+import { eRecipientStatus } from '../../lib/enums';
 
 type userNotifs = [id: string, status: eRecipientStatus][];
 

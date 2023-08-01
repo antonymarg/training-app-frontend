@@ -3,8 +3,7 @@ import {
   TrainingsContainer,
   ProfileContainer,
 } from './trainerHomePage.style';
-import { TrainingsTable } from '../../../Components/TrainingsTable/TrainingsTable';
-import { Profile } from '../../../Components/Profile/Profile';
+import { TrainingsTable, Profile } from '../../../Components';
 import { eTrainingConfirmStatus } from '../../../lib/enums';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';

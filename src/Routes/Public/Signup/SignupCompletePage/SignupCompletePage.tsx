@@ -2,7 +2,7 @@ import { CompletePageContainer } from './SignupCompletePage.style';
 import SignupCompletedIcon from '../../../../Assets/svg/SignupCompletedIcon.svg';
 import { Typography, Button } from '@mui/material';
 import { useState } from 'react';
-import { LoginModal } from '../../../../Components/LoginModal/LoginModal';
+import { LoginModal } from '../../../../Components';
 
 export function SignupCompletePage() {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);

@@ -1,17 +1,14 @@
-import { Chip, Divider, Stack, Typography } from '@mui/material';
-import { AnnouncementsContainer } from './announcement.style';
-import {
-  INotification,
-  eRecipientStatus,
-} from '../../Models/Notifications/types';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import PersonIcon from '@mui/icons-material/Person';
 import { useEffect, useState } from 'react';
-import moment from 'moment';
-import { userModule } from '../../Firebase';
+import { Divider, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import styled from 'styled-components';
-import { rgbToHex } from '@mui/material';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { TransparentChip } from '../TransparentChip/TransparentChip';
+import PersonIcon from '@mui/icons-material/Person';
+import { AnnouncementsContainer } from './announcement.style';
+import { userModule } from '../../Firebase';
+import { INotification } from '../../Models/Notifications/types';
+import { eRecipientStatus } from '../../lib/enums';
+import moment from 'moment';
 
 interface IAnnouncementProps {
   announcement: INotification;
@@ -34,9 +31,25 @@ export function Announcement({ announcement }: IAnnouncementProps) {
           {announcement.title}
         </Typography>
         <Stack direction="row" spacing={1}>
-          {announcement.status === eRecipientStatus.received && <NotSeenChip />}
-          {announcement.type === 'announcement' && <AnnouncementChip />}
-          {announcement.type === 'reminder' && <ReminderChip />}
+          {announcement.status === eRecipientStatus.received && (
+            <TransparentChip
+              label="New"
+              color="secondary"
+              variant="outlined"
+              size="small"
+            />
+          )}
+          {announcement.type === 'announcement' && (
+            <TransparentChip
+              variant="outlined"
+              label="Announcement"
+              color="info"
+              size="small"
+            />
+          )}
+          {announcement.type === 'reminder' && (
+            <TransparentChip variant="outlined" label="reminder" color="info" />
+          )}
         </Stack>
       </Stack>
       <Stack direction="row" spacing={1} alignItems="center">
@@ -58,25 +71,3 @@ export function Announcement({ announcement }: IAnnouncementProps) {
     </AnnouncementsContainer>
   );
 }
-
-const MixedChip = styled(Chip)(({ theme, color }) => ({
-  '&.MuiChip-root': {
-    borderColor: theme.palette[color as string].main,
-    background: `${rgbToHex(theme.palette[color as string].light) + '20'}`,
-    color: theme.palette[color as string].dark,
-  },
-}));
-const NotSeenChip = () => (
-  <MixedChip label="New" color="secondary" variant="outlined" size="small" />
-);
-const AnnouncementChip = () => (
-  <MixedChip
-    variant="outlined"
-    label="Announcement"
-    color="info"
-    size="small"
-  />
-);
-const ReminderChip = () => (
-  <MixedChip variant="outlined" label="reminder" color="info" />
-);
