@@ -27,8 +27,6 @@ const createTraining = async (training: ITrainingOnCreate) => {
   let trainingToFirebase = {
     ...training,
     createdAt: Timestamp.now(),
-    startDate: Timestamp.fromDate(new Date(training.startDate)),
-    endDate: Timestamp.fromDate(new Date(training.endDate)),
   };
   return await addDoc(collection(db, 'trainings'), trainingToFirebase);
 };
@@ -89,7 +87,6 @@ const getTrainings = async (
         moment.unix(training.startDate).isBefore(moment()))
     )
       return;
-    training.startDate = moment(training.startDate.toDate()).format();
     trainings.push({ id: tr.id, ...training } as ITraining);
   });
   return trainings;

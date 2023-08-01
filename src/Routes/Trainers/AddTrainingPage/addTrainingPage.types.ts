@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore';
 import { IUserAutocompleteOptions } from '../../../Components/AutocompleteUserMultiple/AutocompleteUserMultiple';
 import { eTrainingTopics } from '../../../lib/enums';
 
@@ -6,8 +7,8 @@ export interface IAddTrainingForm {
   description?: string;
   trainers: IUserAutocompleteOptions[];
   topic: eTrainingTopics | '';
-  startDate?: string;
-  endDate?: string;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
   type: 'live' | 'online' | '';
   location?: string;
   participants: IUserAutocompleteOptions[];
