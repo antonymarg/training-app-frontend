@@ -44,3 +44,9 @@ export enum eTrainingConfirmStatus {
   'Accepted',
   'Confirmed',
 }
+
+export enum eRecipientStatus {
+  notReceived,
+  received,
+  seen,
+}

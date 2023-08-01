@@ -3,13 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getNotifications } from '../../Models/Notifications/selector';
 import { AppDispatch } from '../../Store';
 import { updateNotifications } from '../../Models/Notifications/actions';
-import {
-  INotification,
-  eRecipientStatus,
-} from '../../Models/Notifications/types';
+import { INotification } from '../../Models/Notifications/types';
 import { notificationsModule } from '../../Firebase';
 import { getUserProfile } from '../../Models/User/selectors';
 import { useNavigate } from 'react-router-dom';
+import { eRecipientStatus } from '../../lib/enums';
 
 export function useNotifications() {
   const notifications = useSelector(getNotifications);

@@ -1,9 +1,6 @@
 import { Chip, Divider, Stack, Typography } from '@mui/material';
 import { AnnouncementsContainer } from './announcement.style';
-import {
-  INotification,
-  eRecipientStatus,
-} from '../../Models/Notifications/types';
+import { INotification } from '../../Models/Notifications/types';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PersonIcon from '@mui/icons-material/Person';
 import { useEffect, useState } from 'react';
@@ -12,6 +9,7 @@ import { userModule } from '../../Firebase';
 import { grey } from '@mui/material/colors';
 import styled from 'styled-components';
 import { rgbToHex } from '@mui/material';
+import { eRecipientStatus } from '../../lib/enums';
 
 interface IAnnouncementProps {
   announcement: INotification;
