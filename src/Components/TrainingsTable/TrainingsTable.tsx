@@ -42,7 +42,12 @@ export function TrainingsTable({
       setTrainings(
         res.map((training) => {
           let { id, title, type, startDate } = training;
-          return { id, title, type, date: moment(startDate).calendar() };
+          return {
+            id,
+            title,
+            type,
+            date: moment.unix(startDate.seconds).calendar(),
+          };
         })
       );
       setIsLoading(false);
