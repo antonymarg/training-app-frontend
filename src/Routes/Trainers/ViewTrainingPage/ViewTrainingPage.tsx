@@ -91,10 +91,17 @@ export function ViewTrainingPage() {
     <ViewTrainingPageContainer>
       <NavigatorContainer>
         <Chip
+          style={{ gridArea: 'navigation' }}
           icon={<ArrowBackIosIcon />}
           label="Go back"
           onClick={() => navigate('/')}
         />
+        {isPartOfTrainingAndNotConfirmed() && (
+          <ConfirmationChips
+            containerStyle={{ gridArea: 'accept' }}
+            trainingId={trainingId as string}
+          />
+        )}
       </NavigatorContainer>
       {training.trainers[userId]?.status > 1 && (
         <ManageYourTrainingBar>
@@ -115,11 +122,6 @@ export function ViewTrainingPage() {
         <TitleContainer>
           <Typography variant="h4">{training?.title}</Typography>
         </TitleContainer>
-        {isPartOfTrainingAndNotConfirmed() && (
-          <div style={{ gridArea: 'chips', marginLeft: 'auto' }}>
-            <ConfirmationChips trainingId={trainingId as string} />
-          </div>
-        )}
         <DetailsContainer>
           <Stack direction="column" spacing={0.5} flexWrap="wrap">
             <Stack direction="row" spacing={1} alignItems="center">

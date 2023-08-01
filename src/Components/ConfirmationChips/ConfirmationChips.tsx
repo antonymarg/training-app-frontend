@@ -6,12 +6,17 @@ import { trainingModule } from '../../Firebase';
 import { IUserRole } from '../../Models/User/types';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../Models/User/selectors';
+import { CSSProperties } from 'react';
 
 interface ConfirmationChipsProps {
   trainingId: string;
+  containerStyle: CSSProperties;
 }
 
-export function ConfirmationChips({ trainingId }: ConfirmationChipsProps) {
+export function ConfirmationChips({
+  trainingId,
+  containerStyle,
+}: ConfirmationChipsProps) {
   const profile = useSelector(getUserProfile);
   const onChipClick = async (status: eTrainingConfirmStatus) => {
     await trainingModule.updateUserStatus(
@@ -24,7 +29,7 @@ export function ConfirmationChips({ trainingId }: ConfirmationChipsProps) {
   };
 
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} style={containerStyle}>
       <Chip
         color="info"
         icon={<DoneIcon />}

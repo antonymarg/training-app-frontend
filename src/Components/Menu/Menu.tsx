@@ -12,18 +12,27 @@ export function Menu() {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const handleClickOpenLoginModal = () => setLoginModalOpen(true);
   const handleClickCloseLoginModal = () => setLoginModalOpen(false);
+  const isMobile = window.innerWidth < 768;
 
-  const showStartButton = !window.location.href.includes('signup');
+  const showStartButton =
+    !user.isLoggedIn && !window.location.href.includes('signup');
 
   return (
     <StyledMenu>
-      {user.isLoggedIn ? (
+      {user.isLoggedIn && (
         <Stack direction="row" spacing={2} alignItems="center">
-          <Avatar src={user.profile?.imgSrc || User} />
-          <Typography color="secondary">Hello {user.profile?.name}</Typography>
+          {!isMobile && (
+            <div>
+              <Avatar src={user.profile?.imgSrc || User} />
+              <Typography color="secondary">
+                Hello {user.profile?.name}
+              </Typography>
+            </div>
+          )}
           <NotificationsMenu />
         </Stack>
-      ) : showStartButton ? (
+      )}
+      {showStartButton && (
         <Button
           variant="contained"
           color="secondary"
@@ -32,8 +41,7 @@ export function Menu() {
         >
           Start
         </Button>
-      ) : null}
-
+      )}
       <LoginModal
         open={isLoginModalOpen}
         onClose={handleClickCloseLoginModal}

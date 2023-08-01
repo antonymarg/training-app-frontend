@@ -8,7 +8,7 @@ export const ViewTrainingPageContainer = styled.div`
   grid-template-rows: fit-content;
   gap: 32px;
   grid-template-areas:
-    'navigate chips'
+    'navigate navigate'
     'trainingInfo sidebar';
 
   @media only screen and (max-width: 768px) {
@@ -18,7 +18,6 @@ export const ViewTrainingPageContainer = styled.div`
     gap: 16px;
     grid-template-areas:
       'navigate'
-      'chips'
       'sidebar'
       'trainingInfo';
   }
@@ -62,6 +61,9 @@ export const ManageYourTrainingBar = styled.div`
 
 export const NavigatorContainer = styled.div`
   grid-area: navigate;
+  display: grid;
+  grid-template-columns: min-content 1fr max-content;
+  grid-template-areas: 'navigation . accept';
 `;
 
 export const TitleContainer = styled.div`
