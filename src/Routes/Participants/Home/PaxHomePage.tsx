@@ -20,11 +20,7 @@ const PaxHomePage = () => {
           userId={userProfile?.userId as string}
           role="participant"
           timePeriod="presentAndFuture"
-          trainingStatus={[
-            eTrainingConfirmStatus.Accepted,
-            eTrainingConfirmStatus.Confirmed,
-            eTrainingConfirmStatus.Pending,
-          ]}
+          trainingStatus={eTrainingConfirmStatus.Pending}
           allowAddTrainingButton={true}
         />
       </TrainingsContainer>

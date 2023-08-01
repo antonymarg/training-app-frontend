@@ -50,11 +50,7 @@ export function ViewUser() {
           role={user.role}
           allowAddTrainingButton={false}
           timePeriod="presentAndFuture"
-          trainingStatus={[
-            eTrainingConfirmStatus.Accepted,
-            eTrainingConfirmStatus.Confirmed,
-            eTrainingConfirmStatus.Pending,
-          ]}
+          trainingStatus={eTrainingConfirmStatus.Pending}
         />
         <TrainingsTable
           label={`Previously ${
@@ -64,10 +60,7 @@ export function ViewUser() {
           role={user.role}
           allowAddTrainingButton={false}
           timePeriod="past"
-          trainingStatus={[
-            eTrainingConfirmStatus.Accepted,
-            eTrainingConfirmStatus.Confirmed,
-          ]}
+          trainingStatus={eTrainingConfirmStatus.Accepted}
         />
       </Stack>
     </ViewUserContainer>

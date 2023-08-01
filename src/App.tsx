@@ -7,6 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { ViewTrainingPage } from './Routes/Trainers/ViewTrainingPage/ViewTrainingPage';
 import { ViewUser } from './Routes/Public/ViewUser/ViewUser';
+import { SendAnnouncement } from './Routes/Trainers/SendAnnouncement/SendAnnouncement';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               path="trainings/:trainingId"
               element={<ViewTrainingPage />}
             />
+            <Route path="announce/:trainingId" element={<SendAnnouncement />} />
             <Route path="user/:userId" element={<ViewUser />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
