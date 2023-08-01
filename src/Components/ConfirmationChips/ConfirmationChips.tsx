@@ -1,12 +1,13 @@
-import { Chip, Stack } from '@mui/material';
+import { CSSProperties } from 'react';
+import { Stack } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
-import { eTrainingConfirmStatus } from '../../lib/enums';
-import { trainingModule } from '../../Firebase';
-import { IUserRole } from '../../Models/User/types';
+import { TransparentChip } from '../TransparentChip/TransparentChip';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../Models/User/selectors';
-import { CSSProperties } from 'react';
+import { trainingModule } from '../../Firebase';
+import { IUserRole } from '../../Models/User/types';
+import { eTrainingConfirmStatus } from '../../lib/enums';
 
 interface ConfirmationChipsProps {
   trainingId: string;
@@ -30,13 +31,13 @@ export function ConfirmationChips({
 
   return (
     <Stack direction="row" spacing={1} style={containerStyle}>
-      <Chip
+      <TransparentChip
         color="info"
         icon={<DoneIcon />}
         label="Accept"
         onClick={() => onChipClick(eTrainingConfirmStatus.Accepted)}
       />
-      <Chip
+      <TransparentChip
         color="error"
         icon={<CloseIcon />}
         label="Decline"
