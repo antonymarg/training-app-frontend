@@ -22,12 +22,12 @@ export function Menu() {
       {user.isLoggedIn && (
         <Stack direction="row" spacing={2} alignItems="center">
           {!isMobile && (
-            <div>
+            <Stack direction="row" alignItems="center" spacing={1}>
               <Avatar src={user.profile?.imgSrc || User} />
               <Typography color="secondary">
                 Hello {user.profile?.name}
               </Typography>
-            </div>
+            </Stack>
           )}
           <NotificationsMenu />
         </Stack>
