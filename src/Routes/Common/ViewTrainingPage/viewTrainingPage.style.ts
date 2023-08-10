@@ -2,21 +2,16 @@ import styled from 'styled-components';
 
 export const ViewTrainingPageContainer = styled.div`
   display: grid;
-  padding: 32px 0;
   grid-template-columns: 8fr 2fr;
   grid-template-rows: fit-content;
-  gap: 32px;
-  grid-template-areas:
-    'navigate navigate'
-    'trainingInfo sidebar';
+  gap: 64px;
+  grid-template-areas: 'trainingInfo sidebar';
 
   @media only screen and (max-width: 768px) {
-    padding: 0px;
     grid-template-columns: 1fr;
     grid-template-rows: fit-content;
     gap: 16px;
     grid-template-areas:
-      'navigate'
       'sidebar'
       'trainingInfo';
   }
@@ -48,13 +43,6 @@ export const TrainingInfoContainer = styled.div`
   }
 `;
 
-export const NavigatorContainer = styled.div`
-  grid-area: navigate;
-  display: grid;
-  grid-template-columns: min-content 1fr max-content;
-  grid-template-areas: 'navigation . accept';
-`;
-
 export const TitleContainer = styled.div`
   grid-area: title;
 `;
@@ -72,4 +60,8 @@ export const AnnouncementsContainer = styled.div`
   grid-area: announcements;
   display: grid;
   gap: 8px;
+`;
+
+export const SidebarContainer = styled.div`
+  grid-area: sidebar;
 `;

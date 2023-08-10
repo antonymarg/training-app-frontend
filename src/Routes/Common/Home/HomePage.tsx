@@ -1,15 +1,23 @@
 import { Typography } from '@mui/material';
 import {
   BigPhoto,
-  BodyContainer,
+  MainBodyContainer,
   Header,
   MainText,
   PhotoAndHeaderContainer,
 } from './HomePage.style';
+import PaxHomePage from '../../Participants/Home/PaxHomePage';
+import TrainerHomePage from '../../Trainers/Home/TrainerHomePage';
+import { useSelector } from 'react-redux';
+import { getUser } from '../../../Models/User/selectors';
 
 const HomePage = () => {
+  const user = useSelector(getUser);
+  if (user.profile?.role === 'participant') return <PaxHomePage />;
+  if (user.profile?.role === 'trainer') return <TrainerHomePage />;
+
   return (
-    <BodyContainer>
+    <MainBodyContainer>
       <PhotoAndHeaderContainer>
         <BigPhoto />
         <Header>
@@ -29,7 +37,7 @@ const HomePage = () => {
           perspiciatis nisi velit, rerum assumenda dicta.
         </Typography>
       </MainText>
-    </BodyContainer>
+    </MainBodyContainer>
   );
 };
 
