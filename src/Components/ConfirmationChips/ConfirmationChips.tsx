@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react';
 import { Stack } from '@mui/material';
 import DoneIcon from '@mui/icons-material/Done';
 import CloseIcon from '@mui/icons-material/Close';
@@ -8,18 +7,21 @@ import { getUserProfile } from '../../Models/User/selectors';
 import { trainingModule } from '../../Firebase';
 import { IUserRole } from '../../Models/User/types';
 import { eTrainingConfirmStatus } from '../../lib/enums';
+import { useNavigate } from 'react-router-dom';
 
 interface ConfirmationChipsProps {
   trainingId: string;
-  containerStyle: CSSProperties;
 }
 
-export function ConfirmationChips({
-  trainingId,
-  containerStyle,
-}: ConfirmationChipsProps) {
+export function ConfirmationChips({ trainingId }: ConfirmationChipsProps) {
   const profile = useSelector(getUserProfile);
+  const navigate = useNavigate();
   const onChipClick = async (status: eTrainingConfirmStatus) => {
+    if (
+      profile?.role === 'participant' &&
+      status === eTrainingConfirmStatus.Accepted
+    )
+      return navigate(`/trainings/${trainingId}/enroll`);
     await trainingModule.updateUserStatus(
       trainingId,
       profile?.userId as string,
@@ -30,7 +32,7 @@ export function ConfirmationChips({
   };
 
   return (
-    <Stack direction="row" spacing={1} style={containerStyle}>
+    <Stack direction="row" spacing={1}>
       <TransparentChip
         color="info"
         icon={<DoneIcon />}

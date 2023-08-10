@@ -4,7 +4,9 @@ import {
   eTrainingConfirmStatus,
   eTrainingTopics,
   eTrainingTypes,
+  eFeedbackFormStatus
 } from '../../lib/enums';
+
 
 export interface ITrainingOnCreate {
   title: string;
@@ -25,6 +27,7 @@ export interface ITrainingOnCreate {
 
 export interface ITraining extends ITrainingOnCreate {
   id: string;
+  feedbackFormStatus: eFeedbackFormStatus;
 }
 
 export interface ITrainingUser {

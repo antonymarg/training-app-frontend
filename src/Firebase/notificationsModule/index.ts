@@ -6,10 +6,8 @@ import {
   get,
   query,
   orderByChild,
-  startAt,
   equalTo,
   update,
-  orderByValue,
 } from 'firebase/database';
 import { realtimeDb } from '../firebase';
 import {
@@ -78,24 +76,6 @@ const sendNotification = (newNotification: INotificationBodyOnCreate) => {
   });
 };
 
-const getAllNotificationsForUser = async (userId: string) => {
-  const userNotificationsQuery = query(
-    userNotificationsRef(userId),
-    orderByValue(),
-    startAt(1)
-  );
-
-  const userNotifications = await get(userNotificationsQuery);
-  const notifications: IFetchedNotification[] = [];
-  userNotifications.forEach((notification) => {
-    notifications.push(notification.val());
-  });
-
-  notifications.map(
-    async (notif) => await getNotificationById(notif.notificationId)
-  );
-};
-
 const getAllAnnouncementsForTraining = async (
   trainingId: string,
   userId: string
@@ -157,7 +137,6 @@ const markNotificationAsSeen = (
 export const notificationsModule = {
   sendNotification,
   markNotificationAsSeen,
-  getAllNotificationsForUser,
   getAllAnnouncementsForTraining,
   getNotificationsListener,
   getNotificationUserStatus,

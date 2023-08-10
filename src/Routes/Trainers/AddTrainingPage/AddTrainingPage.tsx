@@ -15,7 +15,7 @@ import {
   FormHelperText,
 } from '@mui/material';
 import { AddTrainingPageContainer } from './addTrainingPage.style';
-import { AutocompleteUserMultiple } from '../../../Components';
+import { AutocompleteUserMultiple, BodyContainer } from '../../../Components';
 import { useAddTrainingPage } from './useAddTrainingPage';
 import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
 import {
@@ -34,82 +34,84 @@ export function AddTrainingPage() {
   const isMobile = window.innerWidth < 768;
 
   return (
-    <AddTrainingPageContainer>
-      <Typography style={{ gridArea: 'header' }} variant="h4">
-        Create new training
-      </Typography>
-      <Stack style={{ gridArea: 'form' }} direction="column" spacing={1}>
-        <TitleInput
-          value={formData.title}
-          error={errors.titleError}
-          setValue={(v) => handleInputChange({ title: v })}
-        />
-        <DescriptionInput
-          value={formData.description}
-          setValue={(v) => handleInputChange({ description: v })}
-        />
-        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
-          <AutocompleteUserMultiple
-            onPick={(val) => handleInputChange({ trainers: val })}
-            value={formData.trainers}
-            label="Trainers"
-            userRole="trainer"
+    <BodyContainer>
+      <AddTrainingPageContainer>
+        <Typography style={{ gridArea: 'header' }} variant="h4">
+          Create new training
+        </Typography>
+        <Stack style={{ gridArea: 'form' }} direction="column" spacing={1}>
+          <TitleInput
+            value={formData.title}
+            error={errors.titleError}
+            setValue={(v) => handleInputChange({ title: v })}
           />
-          <TopicInput
-            value={formData.topic}
-            error={errors.topicError}
-            setValue={(v) => handleInputChange({ topic: v })}
+          <DescriptionInput
+            value={formData.description}
+            setValue={(v) => handleInputChange({ description: v })}
           />
-        </Stack>
-        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
-          <DateOfDeliveryInput
-            value={formData.startDate as Timestamp}
-            error={errors.startDateError}
-            setValue={(v) => handleInputChange({ startDate: v })}
-            label="Start date"
-            id="startDate"
-          />
-          <DateOfDeliveryInput
-            value={formData.endDate as Timestamp}
-            error={errors.endDateError}
-            setValue={(v) => handleInputChange({ endDate: v })}
-            label="End date"
-            id="endDate"
-          />
-        </Stack>
-        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
-          <TypeOfTrainingInput
-            value={formData.type as eTrainingTypes}
-            error={errors.typeOfTrainingError}
-            setValue={(v) => handleInputChange({ ...formData, type: v })}
-          />
-          {formData.type === 'live' && (
-            <LocationInput
-              value={formData.location ?? ''}
-              setValue={(v) => handleInputChange({ location: v })}
+          <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
+            <AutocompleteUserMultiple
+              onPick={(val) => handleInputChange({ trainers: val })}
+              value={formData.trainers}
+              label="Trainers"
+              userRole="trainer"
             />
-          )}
+            <TopicInput
+              value={formData.topic}
+              error={errors.topicError}
+              setValue={(v) => handleInputChange({ topic: v })}
+            />
+          </Stack>
+          <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
+            <DateOfDeliveryInput
+              value={formData.startDate as Timestamp}
+              error={errors.startDateError}
+              setValue={(v) => handleInputChange({ startDate: v })}
+              label="Start date"
+              id="startDate"
+            />
+            <DateOfDeliveryInput
+              value={formData.endDate as Timestamp}
+              error={errors.endDateError}
+              setValue={(v) => handleInputChange({ endDate: v })}
+              label="End date"
+              id="endDate"
+            />
+          </Stack>
+          <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
+            <TypeOfTrainingInput
+              value={formData.type as eTrainingTypes}
+              error={errors.typeOfTrainingError}
+              setValue={(v) => handleInputChange({ ...formData, type: v })}
+            />
+            {formData.type === 'live' && (
+              <LocationInput
+                value={formData.location ?? ''}
+                setValue={(v) => handleInputChange({ location: v })}
+              />
+            )}
+          </Stack>
+          <AutocompleteUserMultiple
+            onPick={(val) => handleInputChange({ participants: val })}
+            value={formData.participants}
+            label="Participants"
+            userRole="participant"
+          />
         </Stack>
-        <AutocompleteUserMultiple
-          onPick={(val) => handleInputChange({ participants: val })}
-          value={formData.participants}
-          label="Participants"
-          userRole="participant"
-        />
-      </Stack>
-      <Button
-        variant="contained"
-        size="large"
-        onClick={onContinue}
-        style={{ gridArea: 'button' }}
-      >
-        {isLoading ? (
-          <CircularProgress color="secondary" size={25} />
-        ) : (
-          'Create'
-        )}
-      </Button>
-    </AddTrainingPageContainer>
+        <Button
+          variant="contained"
+          size="large"
+          onClick={onContinue}
+          style={{ gridArea: 'button' }}
+        >
+          {isLoading ? (
+            <CircularProgress color="secondary" size={25} />
+          ) : (
+            'Create'
+          )}
+        </Button>
+      </AddTrainingPageContainer>
+    </BodyContainer>
   );
 }
 

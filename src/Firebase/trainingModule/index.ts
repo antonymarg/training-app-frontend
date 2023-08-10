@@ -14,7 +14,7 @@ import {
 import { db } from '../firebase';
 import { ITraining, ITrainingOnCreate } from './trainingModule.types';
 import { IUserRole } from '../../Models/User/types';
-import { eTrainingConfirmStatus } from '../../lib/enums';
+import { eFeedbackFormStatus, eTrainingConfirmStatus } from '../../lib/enums';
 import { userModule } from '../userModule';
 import moment from 'moment';
 
@@ -104,9 +104,20 @@ const updateUserStatus = async (
   });
 };
 
+const updateFeedbackField = async (
+  trainingId: string,
+  value: eFeedbackFormStatus
+) => {
+  const ref = doc(db, 'trainings', trainingId);
+  return await updateDoc(ref, {
+    feedbackFormStatus: value,
+  });
+};
+
 export const trainingModule = {
   createTraining,
   getTrainings,
   getTrainingById,
   updateUserStatus,
+  updateFeedbackField,
 };

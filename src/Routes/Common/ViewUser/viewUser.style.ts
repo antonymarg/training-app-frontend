@@ -6,7 +6,6 @@ export const ViewUserContainer = styled.div`
   justify-self: center;
   gap: 16px;
   row-gap: 8px;
-  padding: 32px 0;
   width: 100%;
   grid-template-areas:
     'profile_picture header'

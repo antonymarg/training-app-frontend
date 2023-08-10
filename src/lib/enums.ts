@@ -50,3 +50,10 @@ export enum eRecipientStatus {
   received,
   seen,
 }
+
+
+export enum eFeedbackFormStatus {
+  notSent,
+  sent,
+  closed
+}
