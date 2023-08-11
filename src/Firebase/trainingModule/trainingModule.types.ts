@@ -4,9 +4,8 @@ import {
   eTrainingConfirmStatus,
   eTrainingTopics,
   eTrainingTypes,
-  eFeedbackFormStatus
+  eFeedbackFormStatus,
 } from '../../lib/enums';
-
 
 export interface ITrainingOnCreate {
   title: string;
@@ -20,7 +19,7 @@ export interface ITrainingOnCreate {
   };
   startDate: Timestamp;
   endDate: Timestamp;
-  topic: eTrainingTopics;
+  topic: keyof typeof eTrainingTopics;
   type: eTrainingTypes;
   location?: string;
 }

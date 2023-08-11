@@ -13,9 +13,10 @@ import {
   FormLabel,
   Typography,
   FormHelperText,
+  useMediaQuery,
 } from '@mui/material';
 import { AddTrainingPageContainer } from './addTrainingPage.style';
-import { AutocompleteUserMultiple, BodyContainer } from '../../../Components';
+import { AutocompleteUserMultiple } from '../../../Components';
 import { useAddTrainingPage } from './useAddTrainingPage';
 import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
 import {
@@ -31,87 +32,85 @@ const TOPIC_LIST = Object.keys(eTrainingTopics) as Array<
 export function AddTrainingPage() {
   const { formData, handleInputChange, errors, onContinue, isLoading } =
     useAddTrainingPage();
-  const isMobile = window.innerWidth < 768;
+  const isMobile = useMediaQuery('@media only screen and (max-width: 768px)');
 
   return (
-    <BodyContainer>
-      <AddTrainingPageContainer>
-        <Typography style={{ gridArea: 'header' }} variant="h4">
-          Create new training
-        </Typography>
-        <Stack style={{ gridArea: 'form' }} direction="column" spacing={1}>
-          <TitleInput
-            value={formData.title}
-            error={errors.titleError}
-            setValue={(v) => handleInputChange({ title: v })}
-          />
-          <DescriptionInput
-            value={formData.description}
-            setValue={(v) => handleInputChange({ description: v })}
-          />
-          <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
-            <AutocompleteUserMultiple
-              onPick={(val) => handleInputChange({ trainers: val })}
-              value={formData.trainers}
-              label="Trainers"
-              userRole="trainer"
-            />
-            <TopicInput
-              value={formData.topic}
-              error={errors.topicError}
-              setValue={(v) => handleInputChange({ topic: v })}
-            />
-          </Stack>
-          <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
-            <DateOfDeliveryInput
-              value={formData.startDate as Timestamp}
-              error={errors.startDateError}
-              setValue={(v) => handleInputChange({ startDate: v })}
-              label="Start date"
-              id="startDate"
-            />
-            <DateOfDeliveryInput
-              value={formData.endDate as Timestamp}
-              error={errors.endDateError}
-              setValue={(v) => handleInputChange({ endDate: v })}
-              label="End date"
-              id="endDate"
-            />
-          </Stack>
-          <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
-            <TypeOfTrainingInput
-              value={formData.type as eTrainingTypes}
-              error={errors.typeOfTrainingError}
-              setValue={(v) => handleInputChange({ ...formData, type: v })}
-            />
-            {formData.type === 'live' && (
-              <LocationInput
-                value={formData.location ?? ''}
-                setValue={(v) => handleInputChange({ location: v })}
-              />
-            )}
-          </Stack>
+    <AddTrainingPageContainer>
+      <Typography style={{ gridArea: 'header' }} variant="h4">
+        Create new training
+      </Typography>
+      <Stack style={{ gridArea: 'form' }} direction="column" spacing={1}>
+        <TitleInput
+          value={formData.title}
+          error={errors.titleError}
+          setValue={(v) => handleInputChange({ title: v })}
+        />
+        <DescriptionInput
+          value={formData.description}
+          setValue={(v) => handleInputChange({ description: v })}
+        />
+        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
           <AutocompleteUserMultiple
-            onPick={(val) => handleInputChange({ participants: val })}
-            value={formData.participants}
-            label="Participants"
-            userRole="participant"
+            onPick={(val) => handleInputChange({ trainers: val })}
+            value={formData.trainers}
+            label="Trainers"
+            userRole="trainer"
+          />
+          <TopicInput
+            value={formData.topic}
+            error={errors.topicError}
+            setValue={(v) => handleInputChange({ topic: v })}
           />
         </Stack>
-        <Button
-          variant="contained"
-          size="large"
-          onClick={onContinue}
-          style={{ gridArea: 'button' }}
-        >
-          {isLoading ? (
-            <CircularProgress color="secondary" size={25} />
-          ) : (
-            'Create'
+        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
+          <DateOfDeliveryInput
+            value={formData.startDate as Timestamp}
+            error={errors.startDateError}
+            setValue={(v) => handleInputChange({ startDate: v })}
+            label="Start date"
+            id="startDate"
+          />
+          <DateOfDeliveryInput
+            value={formData.endDate as Timestamp}
+            error={errors.endDateError}
+            setValue={(v) => handleInputChange({ endDate: v })}
+            label="End date"
+            id="endDate"
+          />
+        </Stack>
+        <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
+          <TypeOfTrainingInput
+            value={formData.type as eTrainingTypes}
+            error={errors.typeOfTrainingError}
+            setValue={(v) => handleInputChange({ ...formData, type: v })}
+          />
+          {formData.type === 'live' && (
+            <LocationInput
+              value={formData.location ?? ''}
+              setValue={(v) => handleInputChange({ location: v })}
+            />
           )}
-        </Button>
-      </AddTrainingPageContainer>
-    </BodyContainer>
+        </Stack>
+        <AutocompleteUserMultiple
+          onPick={(val) => handleInputChange({ participants: val })}
+          value={formData.participants}
+          label="Participants"
+          userRole="participant"
+        />
+      </Stack>
+      <Button
+        variant="contained"
+        size="large"
+        onClick={onContinue}
+        style={{ gridArea: 'button' }}
+      >
+        {isLoading ? (
+          <CircularProgress color="secondary" size={25} />
+        ) : (
+          'Create'
+        )}
+      </Button>
+    </AddTrainingPageContainer>
   );
 }
 
@@ -157,7 +156,7 @@ const TopicInput = ({
   value,
   error,
   setValue,
-}: IFieldInputs<eTrainingTopics | ''>) => (
+}: IFieldInputs<keyof typeof eTrainingTopics | ''>) => (
   <FormControl fullWidth>
     <InputLabel id="topic-label">Topic</InputLabel>
     <Select
@@ -168,7 +167,7 @@ const TopicInput = ({
       required
       fullWidth
       error={Boolean(error)}
-      onChange={(v) => setValue(v.target.value as eTrainingTopics)}
+      onChange={(v) => setValue(v.target.value as keyof typeof eTrainingTopics)}
     >
       {TOPIC_LIST.map((i) => (
         <MenuItem key={i} value={i}>

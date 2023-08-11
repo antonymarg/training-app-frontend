@@ -6,7 +6,7 @@ export interface IAddTrainingForm {
   title: string;
   description?: string;
   trainers: IUserAutocompleteOptions[];
-  topic: eTrainingTopics | '';
+  topic: keyof typeof eTrainingTopics | '';
   startDate?: Timestamp;
   endDate?: Timestamp;
   type: 'live' | 'online' | '';

@@ -11,8 +11,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { NAModule } from '../../../Firebase/NAModule';
-import { BodyContainer } from '../../../Components';
+import { needsAssessmentModule } from '../../../Firebase/needsAssessmentModule';
 
 export function SendNAFormPage() {
   const { trainingId } = useParams();
@@ -40,7 +39,7 @@ export function SendNAFormPage() {
       setIsLoading(false);
       return setFormErrors({ expectationError: 'This is required' });
     }
-    await NAModule.sendNAForm(
+    await needsAssessmentModule.sendNAForm(
       trainingId as string,
       profile?.userId as string,
       formReplies
@@ -55,54 +54,52 @@ export function SendNAFormPage() {
     navigate(`/trainings/${trainingId}`);
   };
   return (
-    <BodyContainer>
-      <Stack spacing={2}>
-        <div>
-          <Typography variant="h4">Before you join...</Typography>
-          <Typography>Let us get to know you better!</Typography>
-        </div>
-        <Stack spacing={1}>
-          <TextField
-            id="Q1"
-            label="Why do you want to participate in this session?"
-            value={formReplies.motivation}
-            required
-            multiline
-            minRows={2}
-            fullWidth
-            onChange={(v) =>
-              setFormReplies({ ...formReplies, motivation: v.target.value })
-            }
-            error={Boolean(formErrors.motivationError)}
-            helperText={formErrors.motivationError}
-          />
-          <TextField
-            id="Q2"
-            label="What do you expect from this session?"
-            value={formReplies.expectation}
-            required
-            multiline
-            minRows={2}
-            fullWidth
-            onChange={(v) =>
-              setFormReplies({ ...formReplies, expectation: v.target.value })
-            }
-            error={Boolean(formErrors.expectationError)}
-            helperText={formErrors.expectationError}
-          />
-        </Stack>
-        <Button
-          variant="contained"
-          onClick={onSubmit}
-          sx={{ width: 'fit-content', marginLeft: 'auto' }}
-        >
-          {isLoading ? (
-            <CircularProgress color="secondary" size={25} />
-          ) : (
-            'Confirm attendance'
-          )}
-        </Button>
+    <Stack spacing={2}>
+      <div>
+        <Typography variant="h4">Before you join...</Typography>
+        <Typography>Let us get to know you better!</Typography>
+      </div>
+      <Stack spacing={1}>
+        <TextField
+          id="Q1"
+          label="Why do you want to participate in this session?"
+          value={formReplies.motivation}
+          required
+          multiline
+          minRows={2}
+          fullWidth
+          onChange={(v) =>
+            setFormReplies({ ...formReplies, motivation: v.target.value })
+          }
+          error={Boolean(formErrors.motivationError)}
+          helperText={formErrors.motivationError}
+        />
+        <TextField
+          id="Q2"
+          label="What do you expect from this session?"
+          value={formReplies.expectation}
+          required
+          multiline
+          minRows={2}
+          fullWidth
+          onChange={(v) =>
+            setFormReplies({ ...formReplies, expectation: v.target.value })
+          }
+          error={Boolean(formErrors.expectationError)}
+          helperText={formErrors.expectationError}
+        />
       </Stack>
-    </BodyContainer>
+      <Button
+        variant="contained"
+        onClick={onSubmit}
+        sx={{ width: 'fit-content', marginLeft: 'auto' }}
+      >
+        {isLoading ? (
+          <CircularProgress color="secondary" size={25} />
+        ) : (
+          'Confirm attendance'
+        )}
+      </Button>
+    </Stack>
   );
 }

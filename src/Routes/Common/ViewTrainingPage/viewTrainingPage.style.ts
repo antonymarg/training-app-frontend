@@ -5,15 +5,20 @@ export const ViewTrainingPageContainer = styled.div`
   grid-template-columns: 8fr 2fr;
   grid-template-rows: fit-content;
   gap: 64px;
-  grid-template-areas: 'trainingInfo sidebar';
+  row-gap: 0px;
+  grid-template-areas:
+    'title sidebar'
+    'trainingInfo sidebar';
 
   @media only screen and (max-width: 768px) {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr min-content;
     grid-template-rows: fit-content;
     gap: 16px;
+    row-gap: 0px;
+
     grid-template-areas:
-      'sidebar'
-      'trainingInfo';
+      'title sidebar'
+      'trainingInfo trainingInfo';
   }
 `;
 
@@ -25,7 +30,6 @@ export const TrainingInfoContainer = styled.div`
   grid-template-areas:
     'title title . .'
     'details details details details'
-    'present present present present'
     'trainers-box trainers-box pax-box pax-box'
     'announcements announcements announcements announcements';
   gap: 16px;
@@ -36,7 +40,6 @@ export const TrainingInfoContainer = styled.div`
     grid-template-areas:
       'title'
       'details'
-      'present'
       'trainers-box'
       'pax-box'
       'announcements';

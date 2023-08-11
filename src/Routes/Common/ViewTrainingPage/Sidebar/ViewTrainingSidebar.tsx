@@ -1,8 +1,14 @@
-import { Button, Stack } from '@mui/material';
+import {
+  Button,
+  Drawer,
+  IconButton,
+  Stack,
+  useMediaQuery,
+} from '@mui/material';
 import { SidebarContainer } from './viewTrainingSidebar.style';
 import { useNavigate } from 'react-router-dom';
 import { ITraining } from '../../../../Firebase/trainingModule/trainingModule.types';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Timestamp } from 'firebase/firestore';
 import {
   eFeedbackFormStatus,
@@ -10,6 +16,7 @@ import {
 } from '../../../../lib/enums';
 import { trainingModule } from '../../../../Firebase';
 import { ConfirmationChips } from '../../../../Components';
+import MenuIcon from '@mui/icons-material/Menu';
 
 interface IViewTrainingSidebarProps {
   training: ITraining;
@@ -20,7 +27,10 @@ export function ViewTrainingSidebar({
   training,
   userId,
 }: IViewTrainingSidebarProps) {
+  const isMobile = useMediaQuery('@media only screen and (max-width: 768px)');
   const navigate = useNavigate();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const permissions = useMemo(() => {
     let participantStatus = training.participants[userId]?.status;
     let trainerStatus = training.trainers[userId]?.status;
@@ -94,8 +104,37 @@ export function ViewTrainingSidebar({
     </Stack>
   );
   if (!permissions.isPartOfTheSession) return null;
+  if (isMobile)
+    return (
+      <>
+        <IconButton
+          onClick={() => setIsDrawerOpen(true)}
+          sx={{ background: 'black', color: 'white' }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Drawer
+          open={isDrawerOpen}
+          anchor="bottom"
+          onClose={() => setIsDrawerOpen(false)}
+        >
+          <Stack spacing={4}>
+            {permissions.isPartOfTheSession &&
+              !permissions.hasConfirmedAttendance && (
+                <ConfirmationChips trainingId={training.id} />
+              )}
+            {permissions.hasConfirmedAttendance && (
+              <SidebarContainer>
+                {permissions.isTrainerInTheSession && trainerButtons}
+                {permissions.isParticipantInTheSession && participantButtons}
+              </SidebarContainer>
+            )}
+          </Stack>
+        </Drawer>
+      </>
+    );
   return (
-    <Stack spacing={4}>
+    <Stack spacing={4} minWidth="200px">
       {permissions.isPartOfTheSession &&
         !permissions.hasConfirmedAttendance && (
           <ConfirmationChips trainingId={training.id} />
