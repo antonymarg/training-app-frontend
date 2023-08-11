@@ -1,5 +1,11 @@
 import { useState } from 'react';
-import { Avatar, Button, Stack, Typography } from '@mui/material';
+import {
+  Avatar,
+  Button,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 import { StyledMenu } from './menu.style';
 import { LoginModal } from '../LoginModal/LoginModal';
 import { useSelector } from 'react-redux';
@@ -12,7 +18,7 @@ export function Menu() {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const handleClickOpenLoginModal = () => setLoginModalOpen(true);
   const handleClickCloseLoginModal = () => setLoginModalOpen(false);
-  const isMobile = window.innerWidth < 768;
+  const isMobile = useMediaQuery('@media only screen and (max-width: 768px)');
 
   const showStartButton =
     !user.isLoggedIn && !window.location.href.includes('signup');

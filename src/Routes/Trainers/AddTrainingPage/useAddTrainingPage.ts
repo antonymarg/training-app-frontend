@@ -90,7 +90,7 @@ export function useAddTrainingPage() {
       description: formData.description,
       startDate: formData.startDate as Timestamp,
       endDate: formData.endDate as Timestamp,
-      topic: formData.topic as eTrainingTopics,
+      topic: formData.topic as keyof typeof eTrainingTopics,
       type: formData.type as eTrainingTypes,
       ...(formData.type === 'live' && { location: formData.location }),
     });

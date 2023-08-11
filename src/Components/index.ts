@@ -1,7 +1,7 @@
 import { Announcement } from './Announcement/Announcement';
 import { AutocompleteUserMultiple } from './AutocompleteUserMultiple/AutocompleteUserMultiple';
 import { AvatarWithBadge } from './AvatarWithBadge/AvatarWithBadge';
-import { BodyContainer } from './BodyContainer/BodyContainer';
+
 import { ConfirmationChips } from './ConfirmationChips/ConfirmationChips';
 import { FullBodyLoader } from './FullBodyLoader/FullBodyLoader';
 import { GoogleButton } from './GoogleButton/GoogleButton';
@@ -18,7 +18,6 @@ export {
   Announcement,
   AutocompleteUserMultiple,
   AvatarWithBadge,
-  BodyContainer,
   ConfirmationChips,
   FullBodyLoader,
   GoogleButton,

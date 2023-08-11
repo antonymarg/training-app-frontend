@@ -11,7 +11,6 @@ import {
 import { notificationsModule, trainingModule } from '../../../Firebase';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
-import { BodyContainer } from '../../../Components';
 
 interface IAnnounement {
   title: string;
@@ -47,47 +46,43 @@ export function SendAnnouncementPage() {
   };
 
   return (
-    <BodyContainer>
-      <SendAnnouncementContainer>
-        <Typography style={{ gridArea: 'header' }} variant="h4">
-          Send announcement
-        </Typography>
-        <Stack style={{ gridArea: 'form' }} direction="column" spacing={1}>
-          <TextField
-            id="title"
-            label="Title"
-            value={formData.title}
-            required
-            fullWidth
-            onChange={(v) =>
-              setFormData({ ...formData, title: v.target.value })
-            }
-          />
-          <TextField
-            id="mainText"
-            label="Main text"
-            value={formData.mainText}
-            multiline
-            minRows={2}
-            fullWidth
-            onChange={(v) =>
-              setFormData({ ...formData, mainText: v.target.value })
-            }
-          />
-        </Stack>
-        <Button
-          variant="contained"
-          size="large"
-          onClick={onContinue}
-          style={{ gridArea: 'button' }}
-        >
-          {isLoading ? (
-            <CircularProgress color="secondary" size={25} />
-          ) : (
-            'Create'
-          )}
-        </Button>
-      </SendAnnouncementContainer>
-    </BodyContainer>
+    <SendAnnouncementContainer>
+      <Typography style={{ gridArea: 'header' }} variant="h4">
+        Send announcement
+      </Typography>
+      <Stack style={{ gridArea: 'form' }} direction="column" spacing={1}>
+        <TextField
+          id="title"
+          label="Title"
+          value={formData.title}
+          required
+          fullWidth
+          onChange={(v) => setFormData({ ...formData, title: v.target.value })}
+        />
+        <TextField
+          id="mainText"
+          label="Main text"
+          value={formData.mainText}
+          multiline
+          minRows={2}
+          fullWidth
+          onChange={(v) =>
+            setFormData({ ...formData, mainText: v.target.value })
+          }
+        />
+      </Stack>
+      <Button
+        variant="contained"
+        size="large"
+        onClick={onContinue}
+        style={{ gridArea: 'button' }}
+      >
+        {isLoading ? (
+          <CircularProgress color="secondary" size={25} />
+        ) : (
+          'Create'
+        )}
+      </Button>
+    </SendAnnouncementContainer>
   );
 }
