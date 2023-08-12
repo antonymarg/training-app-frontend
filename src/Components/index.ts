@@ -6,7 +6,6 @@ import { ConfirmationChips } from './ConfirmationChips/ConfirmationChips';
 import { FullBodyLoader } from './FullBodyLoader/FullBodyLoader';
 import { GoogleButton } from './GoogleButton/GoogleButton';
 import { InfoTable } from './InfoTable/InfoTable';
-import { LoginModal } from './LoginModal/LoginModal';
 import { Menu } from './Menu/Menu';
 import { Navbar } from './Navbar/Navbar';
 import { NotificationsMenu } from './NotificationsMenu/NotificationMenu';
@@ -22,7 +21,6 @@ export {
   FullBodyLoader,
   GoogleButton,
   InfoTable,
-  LoginModal,
   Menu,
   Navbar,
   NotificationsMenu,
