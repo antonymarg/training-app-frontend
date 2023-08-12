@@ -4,15 +4,17 @@ export function GoogleButton({
   onClick,
   isLoading,
   text,
+  color,
 }: {
   onClick: () => void;
   isLoading: boolean;
   text: string;
+  color: 'primary' | 'secondary';
 }) {
   return (
     <Button
       variant="contained"
-      color="primary"
+      color={color}
       size="large"
       style={{ alignSelf: 'center' }}
       onClick={onClick}

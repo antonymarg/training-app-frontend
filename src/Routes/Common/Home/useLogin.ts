@@ -1,19 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { IUserCredentials } from '../../Firebase/userModule/userModule.types';
-import { AppDispatch } from '../../Store';
+import {
+  ILoginFormErrors,
+  IUserCredentials,
+} from '../../../Firebase/userModule/userModule.types';
+import { AppDispatch } from '../../../Store';
 import { useNavigate } from 'react-router-dom';
-import { userModule } from '../../Firebase';
-import { updateUserLogin, updateUserProfile } from '../../Models/User/actions';
-import { IValidateForm } from '../../lib/types';
-import { IUseLoginProps, ILoginFormErrors } from './loginModal.types';
+import { userModule } from '../../../Firebase';
+import {
+  updateUserLogin,
+  updateUserProfile,
+} from '../../../Models/User/actions';
+import { IValidateForm } from '../../../lib/types';
 
 const defaultFormState: IUserCredentials = {
   email: '',
   password: '',
 };
 
-export function useLogin({ open = false, onClose }: IUseLoginProps) {
+export function useLogin() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -52,7 +57,6 @@ export function useLogin({ open = false, onClose }: IUseLoginProps) {
       user.imgSrc = await userModule.getUserImage(user.imgFirebasePath);
     dispatch(updateUserLogin());
     dispatch(updateUserProfile(user));
-    if (onClose) onClose();
     navigate('/');
   };
 
@@ -74,7 +78,7 @@ export function useLogin({ open = false, onClose }: IUseLoginProps) {
     setFormData(defaultFormState);
     setErrors({});
     setIsLoading(null);
-  }, [open]);
+  }, []);
 
   const onLoginClick = async () => {
     setErrors({});
