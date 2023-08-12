@@ -73,6 +73,7 @@ export function EmailCollectionPage({
         <Typography variant="overline">Or</Typography>
       </StyledDivider>
       <GoogleButton
+        color="primary"
         onClick={onSignupWithGoogle}
         isLoading={false}
         text="Sign up with Google"

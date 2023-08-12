@@ -16,6 +16,8 @@ import { ViewFeedbackFormPage } from './Routes/Trainers/ViewFeedbackFormPage/Vie
 import { SendFeedbackFormPage } from './Routes/Participants/SendFeedbackFormPage/SendFeedbackFormPage';
 import { ViewNAFormPage } from './Routes/Trainers/ViewNAFormPage/ViewNAFormPage';
 import { SendNAFormPage } from './Routes/Participants/SendNAFormPage/SendNAFormPage';
+import TrainerHomePage from './Routes/Trainers/Home/TrainerHomePage';
+import PaxHomePage from './Routes/Participants/Home/PaxHomePage';
 
 function App() {
   const userRole = useSelector(getUserRole);
@@ -25,7 +27,18 @@ function App() {
         <Navbar />
         <LayoutContainer>
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route
+              path="/"
+              element={
+                !userRole ? (
+                  <HomePage />
+                ) : userRole === 'trainer' ? (
+                  <TrainerHomePage />
+                ) : (
+                  <PaxHomePage />
+                )
+              }
+            />
             <Route path="signup" element={<SignupPage />} />
             <Route path="signup/complete" element={<SignupCompletePage />} />
             <Route path="create" element={<AddTrainingPage />} />

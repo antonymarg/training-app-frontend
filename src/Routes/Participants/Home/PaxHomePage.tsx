@@ -20,7 +20,7 @@ const PaxHomePage = () => {
           role="participant"
           timePeriod="presentAndFuture"
           trainingStatus={eTrainingConfirmStatus.Pending}
-          allowAddTrainingButton={true}
+          allowAddTrainingButton={false}
         />
       </TrainingsContainer>
       <ProfileContainer>
