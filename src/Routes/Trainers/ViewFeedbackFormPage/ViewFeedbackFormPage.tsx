@@ -35,7 +35,7 @@ export function ViewFeedbackFormPage() {
       );
       setTraining(training);
     })();
-  }, []);
+  }, [trainingId]);
 
   if (!training) return <FullBodyLoader />;
 
