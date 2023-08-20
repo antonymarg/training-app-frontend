@@ -8,9 +8,10 @@ export const TrainerHomePageContainer = styled.div`
 
   @media only screen and (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 16px;
     grid-template-areas:
-      'trainings'
-      'profile';
+      'profile'
+      'trainings';
   }
 `;
 

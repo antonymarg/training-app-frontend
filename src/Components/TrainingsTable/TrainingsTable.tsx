@@ -60,7 +60,7 @@ export function TrainingsTable({
       isLoading={isLoading}
       noDataMessage="No trainings"
       tableData={{
-        headers: ['Title', 'Type', 'Data'].map((h) => ({ label: h })),
+        headers: ['Title', 'Type', 'Starting'].map((h) => ({ label: h })),
         data: [...trainings],
       }}
       title={label}

@@ -8,15 +8,15 @@ import {
 import { SidebarContainer } from './viewTrainingSidebar.style';
 import { useNavigate } from 'react-router-dom';
 import { ITraining } from '../../../../Firebase/trainingModule/trainingModule.types';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Timestamp } from 'firebase/firestore';
 import {
   eFeedbackFormStatus,
   eTrainingConfirmStatus,
 } from '../../../../lib/enums';
-import { trainingModule } from '../../../../Firebase';
 import { ConfirmationChips } from '../../../../Components';
 import MenuIcon from '@mui/icons-material/Menu';
+import { feedbackModule } from '../../../../Firebase/feedbackModule/feedbackModule';
 
 interface IViewTrainingSidebarProps {
   training: ITraining;
@@ -30,6 +30,14 @@ export function ViewTrainingSidebar({
   const isMobile = useMediaQuery('@media only screen and (max-width: 768px)');
   const navigate = useNavigate();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [hasFilledFeedback, setHasFilledFeedback] = useState(true);
+
+  useEffect(() => {
+    (async function () {
+      let val = await feedbackModule.hasFilledFeedback(training.id, userId);
+      setHasFilledFeedback(val);
+    })();
+  }, [training.id, userId]);
 
   const permissions = useMemo(() => {
     let participantStatus = training.participants[userId]?.status;
@@ -54,13 +62,9 @@ export function ViewTrainingSidebar({
     userId,
   ]);
 
-  const onSendFeedbackForm = async () => {
-    await trainingModule.updateFeedbackField(
-      training.id,
-      eFeedbackFormStatus.sent
-    );
-    window.location.reload();
-  };
+  const onSendFeedbackForm = () =>
+    navigate(`/trainings/${training.id}/feedback`);
+
   const onSendAnnouncement = () =>
     navigate(`/trainings/${training.id}/announce`);
   const onViewNAFormResults = () =>
@@ -93,10 +97,12 @@ export function ViewTrainingSidebar({
         )}
     </Stack>
   );
+
   const participantButtons = (
     <Stack spacing={1}>
       {permissions.hasSessionFinished &&
-        training.feedbackFormStatus === eFeedbackFormStatus.sent && (
+        training.feedbackFormStatus === eFeedbackFormStatus.sent &&
+        !hasFilledFeedback && (
           <Button variant="contained" onClick={onSendFeedbackForm}>
             Fill out feedback form
           </Button>

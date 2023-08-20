@@ -15,7 +15,7 @@ const PaxHomePage = () => {
     <PaxHomePageContainer>
       <TrainingsContainer>
         <TrainingsTable
-          label="My upcoming trainings"
+          label="My trainings"
           userId={userProfile?.userId as string}
           role="participant"
           timePeriod="presentAndFuture"

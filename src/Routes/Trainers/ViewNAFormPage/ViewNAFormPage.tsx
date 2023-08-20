@@ -29,27 +29,33 @@ export function ViewNAFormPage() {
       <Typography fontSize="1.4em" fontWeight="bold">
         Need assessment form responses
       </Typography>
-      <Stack direction="row" flexWrap="wrap" useFlexGap gap={4} flex="1 1 0">
-        {NAReplies.map((repl, index) => (
-          <ResponseContainer key={repl.user.userId}>
-            <Stack spacing={1}>
-              <Typography fontSize="1.2em" fontWeight="bold">
-                <Link variant="inherit" href={`/user/${repl.user.userId}`}>
-                  {`#${index + 1} - ${repl.user.name} ${repl.user.surname}`}
-                </Link>
-              </Typography>
-              <Stack>
-                <Typography>Why do you want to attend this session?</Typography>
-                <Typography>{repl.response.motivation}</Typography>
+      {NAReplies.length === 0 ? (
+        <Typography>No responses</Typography>
+      ) : (
+        <Stack direction="row" flexWrap="wrap" useFlexGap gap={4} flex="1 1 0">
+          {NAReplies.map((repl, index) => (
+            <ResponseContainer key={repl.user.userId}>
+              <Stack spacing={1}>
+                <Typography fontSize="1.2em" fontWeight="bold">
+                  <Link variant="inherit" href={`/user/${repl.user.userId}`}>
+                    {`#${index + 1} - ${repl.user.name} ${repl.user.surname}`}
+                  </Link>
+                </Typography>
+                <Stack>
+                  <Typography>
+                    Why do you want to attend this session?
+                  </Typography>
+                  <Typography>{repl.response.motivation}</Typography>
+                </Stack>
+                <Stack>
+                  <Typography>Why do you expect from this session?</Typography>
+                  <Typography>{repl.response.expectation}</Typography>
+                </Stack>
               </Stack>
-              <Stack>
-                <Typography>Why do you expect from this session?</Typography>
-                <Typography>{repl.response.expectation}</Typography>
-              </Stack>
-            </Stack>
-          </ResponseContainer>
-        ))}
-      </Stack>
+            </ResponseContainer>
+          ))}
+        </Stack>
+      )}
     </Stack>
   );
 }

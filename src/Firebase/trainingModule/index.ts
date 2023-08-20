@@ -23,6 +23,12 @@ interface ITrainingSearchCriteria {
   trainingStatus: eTrainingConfirmStatus;
 }
 
+const _sortTrainings = (trainings: ITraining[]) => {
+  return trainings.sort((a, b) =>
+    a.startDate.seconds > b.startDate.seconds ? -1 : 1
+  );
+};
+
 const createTraining = async (training: ITrainingOnCreate) => {
   let trainingToFirebase = {
     ...training,
@@ -89,7 +95,7 @@ const getTrainings = async (
       return;
     trainings.push({ id: tr.id, ...training } as ITraining);
   });
-  return trainings;
+  return _sortTrainings(trainings);
 };
 
 const updateUserStatus = async (

@@ -29,6 +29,7 @@ export function EmailCollectionPage({
           id="email"
           type="email"
           label="Email"
+          autoComplete="off"
           value={formData.email}
           onChange={(v) => setFormData({ ...formData, email: v.target.value })}
           error={Boolean(errors.emailError)}
@@ -39,6 +40,7 @@ export function EmailCollectionPage({
           type="password"
           label="Password"
           value={formData.password}
+          autoComplete="off"
           onChange={(v) =>
             setFormData({ ...formData, password: v.target.value })
           }
@@ -49,6 +51,7 @@ export function EmailCollectionPage({
           id="confirmPassword"
           type="password"
           label="Confirm password"
+          autoComplete="off"
           value={formData.confirmPassword}
           onChange={(v) =>
             setFormData({ ...formData, confirmPassword: v.target.value })

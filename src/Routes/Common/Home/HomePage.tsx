@@ -39,8 +39,8 @@ const HomePage = () => {
         alignItems="center"
         direction={isMobile ? 'column' : 'row'}
         style={{
-          margin: '-16px -10vw',
-          padding: '32px 10vw',
+          margin: isMobile ? '-16px' : '-16px -10vw',
+          padding: isMobile ? '32px 16px' : '32px 10vw',
           background: theme.palette.primary.main,
         }}
       >
