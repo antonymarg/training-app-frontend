@@ -4,7 +4,7 @@ import { userModule } from '../userModule';
 import { INAFormResponse, INAResponse } from './needsAssementModule.types';
 
 const needsAssessmentRef = (trainingId: string) =>
-  ref(realtimeDb, 'needsAssesment/' + trainingId);
+  ref(realtimeDb, 'needsAssessment/' + trainingId);
 
 const sendNAForm = async (
   trainingId: string,
