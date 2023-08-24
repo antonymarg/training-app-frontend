@@ -191,10 +191,12 @@ const DateOfDeliveryInput = ({
   return isMobile ? (
     <MobileDateTimePicker
       label={label}
-      value={value}
-      onChange={(v) => setValue(v as Timestamp)}
+      value={value.toDate().toISOString()}
+      onChange={(v: string | null) => {
+        setValue(Timestamp.fromDate(v ? new Date(v) : new Date()));
+      }}
       inputFormat="DD/MM/YY HH:mm"
-      minDate={Timestamp.now()}
+      minDate={new Date().toISOString()}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -211,10 +213,12 @@ const DateOfDeliveryInput = ({
   ) : (
     <DesktopDateTimePicker
       label={label}
-      value={value}
-      onChange={(v) => setValue(v as Timestamp)}
+      value={value.toDate().toISOString()}
+      onChange={(v: string | null) => {
+        setValue(Timestamp.fromDate(v ? new Date(v) : new Date()));
+      }}
       inputFormat="DD/MM/YY HH:mm"
-      minDate={Timestamp.now()}
+      minDate={new Date().toISOString()}
       renderInput={(params) => (
         <TextField
           {...params}

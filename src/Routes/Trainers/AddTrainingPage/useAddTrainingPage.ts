@@ -22,6 +22,8 @@ const defaultFormState: IAddTrainingForm = {
   topic: '',
   type: '',
   participants: [],
+  startDate: Timestamp.now(),
+  endDate: Timestamp.now(),
 };
 
 export function useAddTrainingPage() {
