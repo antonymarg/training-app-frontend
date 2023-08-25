@@ -27,8 +27,8 @@ export function AutocompleteUserMultiple({
   error,
   userRole,
 }: IAutocompleteUserProps) {
-  const [inputValue, setInputValue] = React.useState('');
-  const [options, setOptions] = useState<IUserAutocompleteOptions[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [options, setOptions] = useState<IUserAutocompleteOptions[]>(value);
   const [loading, setLoading] = useState(false);
 
   const loadUsers = useMemo(
@@ -72,6 +72,7 @@ export function AutocompleteUserMultiple({
       multiple
       noOptionsText="No users found"
       onChange={(_, v) => onPick(v)}
+      value={value}
       renderInput={(params) => (
         <TextField
           {...params}

@@ -120,8 +120,18 @@ const updateFeedbackField = async (
   });
 };
 
+const updateTraining = async (
+  trainingId: string,
+  training: ITrainingOnCreate
+) => {
+  console.log(trainingId);
+  const ref = doc(db, 'trainings', trainingId);
+  return await updateDoc(ref, { ...training });
+};
+
 export const trainingModule = {
   createTraining,
+  updateTraining,
   getTrainings,
   getTrainingById,
   updateUserStatus,

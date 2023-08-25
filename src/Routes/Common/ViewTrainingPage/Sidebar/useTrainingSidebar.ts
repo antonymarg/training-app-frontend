@@ -25,11 +25,15 @@ export function useTrainingSidebar({
   const permissions = useMemo(() => {
     let participantStatus = training.participants[userId]?.status;
     let trainerStatus = training.trainers[userId]?.status;
+    let hasDeclined =
+      (participantStatus || trainerStatus) === eTrainingConfirmStatus.Declined;
     let hasConfirmedAttendance =
-      (participantStatus || trainerStatus) > eTrainingConfirmStatus.Pending;
+      (participantStatus || trainerStatus) !== eTrainingConfirmStatus.Pending;
     return {
-      isPartOfTheSession: Boolean(trainerStatus || participantStatus),
+      isPartOfTheSession:
+        Boolean(trainerStatus || participantStatus) && !hasDeclined,
       hasConfirmedAttendance,
+      hasDeclined,
       isTrainerInTheSession: Boolean(trainerStatus && hasConfirmedAttendance),
       isParticipantInTheSession: Boolean(
         participantStatus && hasConfirmedAttendance
@@ -55,7 +59,6 @@ export function useTrainingSidebar({
     setIsModalOpen(true);
   };
 
-  console.log(getTraining);
   const onRefresh = async () => await getTraining();
 
   return {
@@ -66,6 +69,7 @@ export function useTrainingSidebar({
       onSendAnnouncement: openModalWithBody('announcement'),
       onViewNAFormResults: navigateToTrainingPage('enroll'),
       onCreateTask: openModalWithBody('task'),
+      onEditTraining: navigateToTrainingPage('edit'),
     },
     isModalOpen,
     onModalClose: async (refresh: boolean) => {
