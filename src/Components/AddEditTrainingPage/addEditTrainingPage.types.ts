@@ -1,8 +1,8 @@
 import { Timestamp } from 'firebase/firestore';
-import { IUserAutocompleteOptions } from '../../../Components/AutocompleteUserMultiple/AutocompleteUserMultiple';
-import { eTrainingTopics } from '../../../lib/enums';
+import { IUserAutocompleteOptions } from '../AutocompleteUserMultiple/AutocompleteUserMultiple';
+import { eTrainingTopics } from '../../lib/enums';
 
-export interface IAddTrainingForm {
+export interface IAddEditTrainingForm {
   title: string;
   description?: string;
   trainers: IUserAutocompleteOptions[];
@@ -14,7 +14,7 @@ export interface IAddTrainingForm {
   participants: IUserAutocompleteOptions[];
 }
 
-export interface IAddTrainingFormErrors {
+export interface IAddEditTrainingFormErrors {
   genericError?: string;
   titleError?: string;
   cotrainerError?: string;

@@ -31,8 +31,6 @@ export function ViewTrainingSidebar({
   userId,
   getTraining,
 }: IViewTrainingSidebarProps) {
-  console.log(getTraining);
-
   const { actions, permissions, isModalOpen, onModalClose, modalBody } =
     useTrainingSidebar({ training, userId, getTraining });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -41,7 +39,9 @@ export function ViewTrainingSidebar({
   const trainerButtons = (
     <Stack spacing={1}>
       {!permissions.hasSessionStarted && (
-        <Button variant="contained">Add participants</Button>
+        <Button variant="contained" onClick={actions.onEditTraining}>
+          Edit training
+        </Button>
       )}
       <Button variant="contained" onClick={actions.onSendAnnouncement}>
         Send announcement
@@ -99,7 +99,10 @@ export function ViewTrainingSidebar({
           <Stack spacing={4}>
             {permissions.isPartOfTheSession &&
               !permissions.hasConfirmedAttendance && (
-                <ConfirmationChips trainingId={training.id} />
+                <ConfirmationChips
+                  trainingId={training.id}
+                  getTraining={getTraining}
+                />
               )}
             {permissions.hasConfirmedAttendance && (
               <SidebarContainer>
@@ -115,7 +118,10 @@ export function ViewTrainingSidebar({
     <Stack spacing={4} minWidth="200px">
       {permissions.isPartOfTheSession &&
         !permissions.hasConfirmedAttendance && (
-          <ConfirmationChips trainingId={training.id} />
+          <ConfirmationChips
+            trainingId={training.id}
+            getTraining={getTraining}
+          />
         )}
       {permissions.hasConfirmedAttendance && (
         <SidebarContainer>

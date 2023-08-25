@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  IAddTrainingForm,
-  IAddTrainingFormErrors,
-} from './addTrainingPage.types';
+  IAddEditTrainingForm,
+  IAddEditTrainingFormErrors,
+} from '../../../Components/AddEditTrainingPage/addEditTrainingPage.types';
 import { IValidateForm } from '../../../lib/types';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { ITrainingUser } from '../../../Firebase/trainingModule/trainingModule.types';
 import { Timestamp } from 'firebase/firestore';
 
-const defaultFormState: IAddTrainingForm = {
+const defaultFormState: IAddEditTrainingForm = {
   title: '',
   trainers: [],
   topic: '',
@@ -27,17 +27,21 @@ const defaultFormState: IAddTrainingForm = {
 };
 
 export function useAddTrainingPage() {
-  let [formData, setFormData] = useState<IAddTrainingForm>(defaultFormState);
-  let [errors, setErrors] = useState<IAddTrainingFormErrors>({});
+  let [formData, setFormData] =
+    useState<IAddEditTrainingForm>(defaultFormState);
+  let [errors, setErrors] = useState<IAddEditTrainingFormErrors>({});
   let [isLoading, setIsLoading] = useState(false);
   let navigate = useNavigate();
   let userProfile = useSelector(getUserProfile);
   let userId = userProfile?.userId;
 
+  useEffect(() => {
+    document.title = 'Create new training';
+  }, []);
   const validateForm = (
-    formData: IAddTrainingForm
-  ): IValidateForm<IAddTrainingFormErrors> => {
-    const requiredFields: Array<keyof IAddTrainingForm> = [
+    formData: IAddEditTrainingForm
+  ): IValidateForm<IAddEditTrainingFormErrors> => {
+    const requiredFields: Array<keyof IAddEditTrainingForm> = [
       'title',
       'topic',
       'startDate',
@@ -56,12 +60,12 @@ export function useAddTrainingPage() {
     }
     return { isValid: true, errors: {} };
   };
-  const handleErrors = (errors: IAddTrainingFormErrors) => {
+  const handleErrors = (errors: IAddEditTrainingFormErrors) => {
     setIsLoading(false);
     setErrors(errors);
   };
 
-  const handleInputChange = (input: Partial<IAddTrainingForm>) =>
+  const handleInputChange = (input: Partial<IAddEditTrainingForm>) =>
     setFormData({ ...formData, ...input });
 
   let onContinue = async () => {
@@ -95,12 +99,6 @@ export function useAddTrainingPage() {
       topic: formData.topic as keyof typeof eTrainingTopics,
       type: formData.type as eTrainingTypes,
       ...(formData.type === 'live' && { location: formData.location }),
-    });
-
-    formData.participants.forEach((v) => {
-      participants[v.id] = {
-        status: eTrainingConfirmStatus.Pending,
-      };
     });
 
     notificationsModule.sendNotification({

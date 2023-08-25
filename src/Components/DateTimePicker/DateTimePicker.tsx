@@ -4,6 +4,7 @@ import {
   MobileDateTimePicker,
 } from '@mui/x-date-pickers';
 import { Timestamp } from 'firebase/firestore';
+import moment from 'moment';
 
 interface IDateTimePickerProps {
   value: Timestamp;
@@ -27,9 +28,9 @@ export const DateTimePicker = ({
       label={label}
       value={value.toDate().toISOString()}
       onChange={(v: string | null) => {
-        setValue(Timestamp.fromDate(v ? new Date(v) : new Date()));
+        if (v && moment(v).isValid()) setValue(Timestamp.fromDate(new Date(v)));
       }}
-      inputFormat="DD/MM/YY HH:mm"
+      ampm={false}
       minDate={new Date().toISOString()}
       renderInput={(params) => (
         <TextField
@@ -41,6 +42,7 @@ export const DateTimePicker = ({
           InputLabelProps={{ shrink: true }}
           error={Boolean(error)}
           helperText={error}
+          InputProps={{ readOnly: true }}
         />
       )}
     />
@@ -49,10 +51,10 @@ export const DateTimePicker = ({
       label={label}
       value={value.toDate().toISOString()}
       onChange={(v: string | null) => {
-        setValue(Timestamp.fromDate(v ? new Date(v) : new Date()));
+        if (v && moment(v).isValid()) setValue(Timestamp.fromDate(new Date(v)));
       }}
-      inputFormat="DD/MM/YY HH:mm"
       minDate={new Date().toISOString()}
+      ampm={false}
       renderInput={(params) => (
         <TextField
           {...params}

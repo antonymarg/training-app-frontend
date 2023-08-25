@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { CircularProgress } from '@mui/material';
 
 const LoaderContainer = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 90vw;
+  height: calc(100vh - 60px - 32px);
   display: flex;
   justify-content: center;
   align-items: center;

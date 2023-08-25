@@ -11,9 +11,13 @@ import { useNavigate } from 'react-router-dom';
 
 interface ConfirmationChipsProps {
   trainingId: string;
+  getTraining: () => Promise<void>;
 }
 
-export function ConfirmationChips({ trainingId }: ConfirmationChipsProps) {
+export function ConfirmationChips({
+  trainingId,
+  getTraining,
+}: ConfirmationChipsProps) {
   const profile = useSelector(getUserProfile);
   const navigate = useNavigate();
   const onChipClick = async (status: eTrainingConfirmStatus) => {
@@ -28,7 +32,7 @@ export function ConfirmationChips({ trainingId }: ConfirmationChipsProps) {
       profile?.role as IUserRole,
       status
     );
-    window.location.reload();
+    await getTraining();
   };
 
   return (

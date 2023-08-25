@@ -17,9 +17,11 @@ import { ViewNAFormPage } from './Routes/Trainers/ViewNAFormPage/ViewNAFormPage'
 import { SendNAFormPage } from './Routes/Participants/SendNAFormPage/SendNAFormPage';
 import TrainerHomePage from './Routes/Trainers/Home/TrainerHomePage';
 import PaxHomePage from './Routes/Participants/Home/PaxHomePage';
+import { EditTrainingPage } from './Routes/Trainers/EditTrainingPage/EditTrainingPage';
 
 function App() {
   const userRole = useSelector(getUserRole);
+
   return (
     <AppContainer>
       <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -44,6 +46,10 @@ function App() {
             <Route
               path="trainings/:trainingId"
               element={<ViewTrainingPage />}
+            />
+            <Route
+              path="trainings/:trainingId/edit"
+              element={<EditTrainingPage />}
             />
             <Route
               path="trainings/:trainingId/enroll"
