@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   IAddEditTrainingForm,
   IAddEditTrainingFormErrors,
@@ -35,6 +35,9 @@ export function useAddTrainingPage() {
   let userProfile = useSelector(getUserProfile);
   let userId = userProfile?.userId;
 
+  useEffect(() => {
+    document.title = 'Create new training';
+  }, []);
   const validateForm = (
     formData: IAddEditTrainingForm
   ): IValidateForm<IAddEditTrainingFormErrors> => {

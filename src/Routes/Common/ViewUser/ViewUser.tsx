@@ -22,6 +22,7 @@ export function ViewUser() {
     (async () => {
       let user = await userModule.getUserById(userId as string, true);
       setUser(user);
+      document.title = `${user.name} ${user.surname}`;
     })();
   }, [userId]);
 

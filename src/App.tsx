@@ -21,6 +21,7 @@ import { EditTrainingPage } from './Routes/Trainers/EditTrainingPage/EditTrainin
 
 function App() {
   const userRole = useSelector(getUserRole);
+
   return (
     <AppContainer>
       <LocalizationProvider dateAdapter={AdapterMoment}>

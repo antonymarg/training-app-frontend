@@ -69,6 +69,7 @@ export function ViewTrainingPage() {
       userId
     );
     setNotifications(notifResp);
+    document.title = trainingResp.title;
     setIsLoading(false);
   }, [trainingId, userId]);
 

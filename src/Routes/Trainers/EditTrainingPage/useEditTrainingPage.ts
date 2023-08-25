@@ -76,6 +76,7 @@ export function useEditTrainingPage() {
         location: trainingResp?.location,
       });
       setTraining(trainingResp);
+      document.title = 'Edit ' + trainingResp.title;
     })();
   }, [setFormData, setTraining, trainingId]);
 
