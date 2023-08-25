@@ -53,12 +53,6 @@ export const DetailsContainer = styled.div`
   grid-area: details;
 `;
 
-export const UsersBoxContainer = styled.div`
-  grid-area: trainers-box;
-  display: grid;
-  grid-template-rows: min-content;
-  gap: 16px;
-`;
 export const AnnouncementsContainer = styled.div`
   grid-area: announcements;
   display: grid;

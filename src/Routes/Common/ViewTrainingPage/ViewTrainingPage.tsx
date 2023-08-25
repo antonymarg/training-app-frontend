@@ -14,7 +14,6 @@ import {
   TrainingInfoContainer,
   DetailsContainer,
   TitleContainer,
-  UsersBoxContainer,
   ViewTrainingPageContainer,
   SidebarContainer,
 } from './viewTrainingPage.style';
@@ -124,17 +123,16 @@ export function ViewTrainingPage() {
             )}
           </Stack>
         </DetailsContainer>
-        <UsersBoxContainer>
-          <Stack spacing={1}>
-            <Typography fontWeight="bold" fontSize="1.4rem">
-              Trainers
-            </Typography>
-            <Stack direction="row" useFlexGap gap={0.5} flexWrap="wrap">
-              {Object.keys(training.trainers).map((trainerId) => {
-                let trainer = training.trainers[trainerId];
-                return (
+        <Stack spacing={1} sx={{ gridArea: 'trainers-box' }}>
+          <Typography fontWeight="bold" fontSize="1.4rem">
+            Trainers
+          </Typography>
+          <Grid container spacing={1}>
+            {Object.keys(training.trainers).map((trainerId) => {
+              let trainer = training.trainers[trainerId];
+              return (
+                <Grid key={trainerId} item xs={6} md={4}>
                   <Chip
-                    key={trainerId}
                     label={`${trainer.profile?.name} ${trainer.profile?.surname}`}
                     icon={
                       <AvatarWithBadge
@@ -145,20 +143,21 @@ export function ViewTrainingPage() {
                     onClick={() => navigate(`/user/${trainerId}`)}
                     sx={{ paddingLeft: 0.5 }}
                   />
-                );
-              })}
-            </Stack>
-          </Stack>
-          <Stack spacing={1}>
-            <Typography fontWeight="bold" fontSize="1.4rem">
-              Participants
-            </Typography>
-            <Stack direction="row" useFlexGap gap={0.5}>
-              {Object.keys(training.participants).map((participantId) => {
-                let participant = training.participants[participantId];
-                return (
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Stack>
+        <Stack spacing={1} sx={{ gridArea: 'pax-box' }}>
+          <Typography fontWeight="bold" fontSize="1.4rem">
+            Participants
+          </Typography>
+          <Grid container spacing={1}>
+            {Object.keys(training.participants).map((participantId) => {
+              let participant = training.participants[participantId];
+              return (
+                <Grid key={participantId} item xs={6} md={4}>
                   <Chip
-                    key={participantId}
                     label={`${participant.profile?.name} ${participant.profile?.surname}`}
                     icon={
                       <AvatarWithBadge
@@ -169,11 +168,11 @@ export function ViewTrainingPage() {
                     sx={{ paddingLeft: 0.5 }}
                     onClick={() => navigate(`/user/${participantId}`)}
                   />
-                );
-              })}
-            </Stack>
-          </Stack>
-        </UsersBoxContainer>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Stack>
         {notifications.length !== 0 && (
           <AnnouncementsContainer>
             <Typography fontWeight="bold" fontSize="1.4rem">
