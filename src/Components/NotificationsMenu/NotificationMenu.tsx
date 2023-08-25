@@ -47,6 +47,7 @@ export function NotificationsMenu() {
         onClose={handleClose}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        sx={{ maxWidth: '500px' }}
       >
         <NotificationsHeaderDiv>
           <Typography fontSize={24} fontWeight="bold">

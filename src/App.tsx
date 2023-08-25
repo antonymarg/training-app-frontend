@@ -9,7 +9,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { ViewTrainingPage } from './Routes/Common/ViewTrainingPage/ViewTrainingPage';
 import { ViewUser } from './Routes/Common/ViewUser/ViewUser';
-import { SendAnnouncementPage } from './Routes/Trainers/SendAnnouncementPage/SendAnnouncementPage';
 import { useSelector } from 'react-redux';
 import { getUserRole } from './Models/User/selectors';
 import { ViewFeedbackFormPage } from './Routes/Trainers/ViewFeedbackFormPage/ViewFeedbackFormPage';
@@ -45,10 +44,6 @@ function App() {
             <Route
               path="trainings/:trainingId"
               element={<ViewTrainingPage />}
-            />
-            <Route
-              path="trainings/:trainingId/announce"
-              element={<SendAnnouncementPage />}
             />
             <Route
               path="trainings/:trainingId/enroll"

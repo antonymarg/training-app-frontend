@@ -1,13 +1,7 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { SendAnnouncementContainer } from './sendAnnouncement.style';
-import {
-  Stack,
-  Typography,
-  TextField,
-  Button,
-  CircularProgress,
-} from '@mui/material';
+import { Stack, TextField, Button, CircularProgress } from '@mui/material';
 import { notificationsModule, trainingModule } from '../../../Firebase';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
@@ -22,10 +16,13 @@ const defaultState: IAnnounement = {
   mainText: '',
 };
 
-export function SendAnnouncementPage() {
+export function SendAnnouncementPage({
+  onSent,
+}: {
+  onSent: (refresh: boolean) => Promise<void>;
+}) {
   const { trainingId } = useParams();
   const profile = useSelector(getUserProfile);
-  const navigate = useNavigate();
   const [formData, setFormData] = useState<IAnnounement>(defaultState);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,14 +39,11 @@ export function SendAnnouncementPage() {
       recipients: Object.keys(training.participants),
     });
     setIsLoading(false);
-    navigate(`/trainings/${trainingId}`);
+    await onSent(true);
   };
 
   return (
     <SendAnnouncementContainer>
-      <Typography style={{ gridArea: 'header' }} variant="h4">
-        Send announcement
-      </Typography>
       <Stack style={{ gridArea: 'form' }} direction="column" spacing={1}>
         <TextField
           id="title"

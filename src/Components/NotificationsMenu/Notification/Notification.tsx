@@ -21,7 +21,7 @@ export function Notification({
 }: INotificationProps) {
   return (
     <MenuItem divider={withDivider} onClick={handleClick}>
-      <Stack direction="row" spacing={2}>
+      <Stack direction="row" spacing={2} whiteSpace="break-spaces">
         <Stack>
           <Stack direction="row" alignItems="center" spacing={1}>
             {!seen && <CircleIcon sx={{ fontSize: '8px' }} color="secondary" />}

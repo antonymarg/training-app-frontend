@@ -1,97 +1,69 @@
 import {
+  Box,
   Button,
+  Dialog,
+  DialogTitle,
   Drawer,
   IconButton,
   Stack,
   useMediaQuery,
 } from '@mui/material';
 import { SidebarContainer } from './viewTrainingSidebar.style';
-import { useNavigate } from 'react-router-dom';
 import { ITraining } from '../../../../Firebase/trainingModule/trainingModule.types';
-import { useEffect, useMemo, useState } from 'react';
-import { Timestamp } from 'firebase/firestore';
-import {
-  eFeedbackFormStatus,
-  eTrainingConfirmStatus,
-} from '../../../../lib/enums';
+import { eFeedbackFormStatus } from '../../../../lib/enums';
 import { ConfirmationChips } from '../../../../Components';
 import MenuIcon from '@mui/icons-material/Menu';
-import { feedbackModule } from '../../../../Firebase/feedbackModule/feedbackModule';
 
-interface IViewTrainingSidebarProps {
+import { useTrainingSidebar } from './useTrainingSidebar';
+import { useState } from 'react';
+import { CreateTaskPage } from '../../../Trainers/CreateTaskPage/CreateTaskPage';
+import { SendAnnouncementPage } from '../../../Trainers/SendAnnouncementPage/SendAnnouncementPage';
+import { theme } from '../../../../theme';
+
+export interface IViewTrainingSidebarProps {
   training: ITraining;
   userId: string;
+  getTraining: () => Promise<void>;
 }
 
 export function ViewTrainingSidebar({
   training,
   userId,
+  getTraining,
 }: IViewTrainingSidebarProps) {
-  const isMobile = useMediaQuery('@media only screen and (max-width: 768px)');
-  const navigate = useNavigate();
+  console.log(getTraining);
+
+  const { actions, permissions, isModalOpen, onModalClose, modalBody } =
+    useTrainingSidebar({ training, userId, getTraining });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [hasFilledFeedback, setHasFilledFeedback] = useState(true);
-
-  useEffect(() => {
-    (async function () {
-      let val = await feedbackModule.hasFilledFeedback(training.id, userId);
-      setHasFilledFeedback(val);
-    })();
-  }, [training.id, userId]);
-
-  const permissions = useMemo(() => {
-    let participantStatus = training.participants[userId]?.status;
-    let trainerStatus = training.trainers[userId]?.status;
-    let hasConfirmedAttendance =
-      (participantStatus || trainerStatus) > eTrainingConfirmStatus.Pending;
-    return {
-      isPartOfTheSession: Boolean(trainerStatus || participantStatus),
-      hasConfirmedAttendance,
-      isTrainerInTheSession: Boolean(trainerStatus && hasConfirmedAttendance),
-      isParticipantInTheSession: Boolean(
-        participantStatus && hasConfirmedAttendance
-      ),
-      hasSessionStarted: training.startDate.seconds < Timestamp.now().seconds,
-      hasSessionFinished: training.endDate.seconds < Timestamp.now().seconds,
-    };
-  }, [
-    training.endDate.seconds,
-    training.participants,
-    training.startDate.seconds,
-    training.trainers,
-    userId,
-  ]);
-
-  const onSendFeedbackForm = () =>
-    navigate(`/trainings/${training.id}/feedback`);
-
-  const onSendAnnouncement = () =>
-    navigate(`/trainings/${training.id}/announce`);
-  const onViewNAFormResults = () =>
-    navigate(`/trainings/${training.id}/enroll`);
-  const onViewFeedbackFormResults = () =>
-    navigate(`/trainings/${training.id}/feedback`);
+  const isMobile = useMediaQuery('@media only screen and (max-width: 768px)');
 
   const trainerButtons = (
     <Stack spacing={1}>
       {!permissions.hasSessionStarted && (
         <Button variant="contained">Add participants</Button>
       )}
-      <Button variant="contained" onClick={onSendAnnouncement}>
+      <Button variant="contained" onClick={actions.onSendAnnouncement}>
         Send announcement
       </Button>
-      <Button variant="contained" onClick={onViewNAFormResults}>
+      {/* <Button variant="contained" onClick={actions.onCreateTask}>
+        Create task
+      </Button> */}
+      <Button variant="contained" onClick={actions.onViewNAFormResults}>
         See results of enrollment form
       </Button>
       {permissions.hasSessionFinished &&
         training.feedbackFormStatus === eFeedbackFormStatus.notSent && (
-          <Button variant="contained" onClick={onSendFeedbackForm}>
+          <Button variant="contained" onClick={actions.onSendFeedbackForm}>
             Send feedback form
           </Button>
         )}
       {permissions.hasSessionFinished &&
         training.feedbackFormStatus === eFeedbackFormStatus.sent && (
-          <Button variant="contained" onClick={onViewFeedbackFormResults}>
+          <Button
+            variant="contained"
+            onClick={actions.onViewFeedbackFormResults}
+          >
             See feedback form results
           </Button>
         )}
@@ -102,8 +74,8 @@ export function ViewTrainingSidebar({
     <Stack spacing={1}>
       {permissions.hasSessionFinished &&
         training.feedbackFormStatus === eFeedbackFormStatus.sent &&
-        !hasFilledFeedback && (
-          <Button variant="contained" onClick={onSendFeedbackForm}>
+        !permissions.hasFilledFeedback && (
+          <Button variant="contained" onClick={actions.onSendFeedbackForm}>
             Fill out feedback form
           </Button>
         )}
@@ -151,6 +123,25 @@ export function ViewTrainingSidebar({
           {permissions.isParticipantInTheSession && participantButtons}
         </SidebarContainer>
       )}
+      <Dialog
+        open={isModalOpen}
+        onClose={() => onModalClose(false)}
+        fullWidth
+        maxWidth={isMobile ? 'lg' : 'sm'}
+      >
+        <DialogTitle
+          sx={{ background: theme.palette.primary.main, color: 'white' }}
+        >
+          {modalBody === 'task' ? 'Create new task' : 'Send announcement'}
+        </DialogTitle>
+        <Box padding={2}>
+          {modalBody === 'task' ? (
+            <CreateTaskPage onCreated={onModalClose} training={training} />
+          ) : (
+            <SendAnnouncementPage onSent={onModalClose} />
+          )}
+        </Box>
+      </Dialog>
     </Stack>
   );
 }

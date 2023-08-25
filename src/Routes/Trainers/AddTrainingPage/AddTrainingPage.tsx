@@ -16,13 +16,9 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { AddTrainingPageContainer } from './addTrainingPage.style';
-import { AutocompleteUserMultiple } from '../../../Components';
+import { AutocompleteUserMultiple, DateTimePicker } from '../../../Components';
 import { useAddTrainingPage } from './useAddTrainingPage';
 import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
-import {
-  DesktopDateTimePicker,
-  MobileDateTimePicker,
-} from '@mui/x-date-pickers';
 import { Timestamp } from 'firebase/firestore';
 
 const TOPIC_LIST = Object.keys(eTrainingTopics) as Array<
@@ -63,14 +59,14 @@ export function AddTrainingPage() {
           />
         </Stack>
         <Stack direction={isMobile ? 'column' : 'row'} spacing={1}>
-          <DateOfDeliveryInput
+          <DateTimePicker
             value={formData.startDate as Timestamp}
             error={errors.startDateError}
             setValue={(v) => handleInputChange({ startDate: v })}
             label="Start date"
             id="startDate"
           />
-          <DateOfDeliveryInput
+          <DateTimePicker
             value={formData.endDate as Timestamp}
             error={errors.endDateError}
             setValue={(v) => handleInputChange({ endDate: v })}
@@ -178,62 +174,6 @@ const TopicInput = ({
     {error && <FormHelperText error={Boolean(error)}>{error}</FormHelperText>}
   </FormControl>
 );
-
-const DateOfDeliveryInput = ({
-  value,
-  error,
-  setValue,
-  label,
-  id,
-}: IFieldInputs<Timestamp>) => {
-  const isMobile = window.innerWidth < 768;
-
-  return isMobile ? (
-    <MobileDateTimePicker
-      label={label}
-      value={value.toDate().toISOString()}
-      onChange={(v: string | null) => {
-        setValue(Timestamp.fromDate(v ? new Date(v) : new Date()));
-      }}
-      inputFormat="DD/MM/YY HH:mm"
-      minDate={new Date().toISOString()}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          id={id}
-          variant="outlined"
-          color="primary"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          error={Boolean(error)}
-          helperText={error}
-        />
-      )}
-    />
-  ) : (
-    <DesktopDateTimePicker
-      label={label}
-      value={value.toDate().toISOString()}
-      onChange={(v: string | null) => {
-        setValue(Timestamp.fromDate(v ? new Date(v) : new Date()));
-      }}
-      inputFormat="DD/MM/YY HH:mm"
-      minDate={new Date().toISOString()}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          id={id}
-          variant="outlined"
-          color="primary"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          error={Boolean(error)}
-          helperText={error}
-        />
-      )}
-    />
-  );
-};
 
 const TypeOfTrainingInput = ({
   value,

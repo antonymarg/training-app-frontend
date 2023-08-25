@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-import { Chip, Typography, Stack } from '@mui/material';
+import { Chip, Typography, Stack, Grid } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import {
   Announcement,
@@ -39,7 +39,9 @@ const calcTrainingTimeText = (start: Timestamp, end: Timestamp) => {
   let startDate = moment.unix(start.seconds);
   let endDate = moment.unix(end.seconds);
   return startDate.isSame(endDate, 'date')
-    ? `${startDate.format('LL')}`
+    ? `${startDate.format('LL')} ${startDate.format(
+        'HH:MM'
+      )} - ${endDate.format('HH:MM')} `
     : `${startDate.format('LLL')} - ${endDate.format('LLL')}`;
 };
 
@@ -57,26 +59,34 @@ export function ViewTrainingPage() {
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const userId = profile?.userId as string;
 
+  const getTraining = useCallback(async () => {
+    setIsLoading(true);
+    if (!trainingId) return;
+    let trainingResp = await trainingModule.getTrainingById(trainingId, true);
+    setTraining({ ...trainingResp, id: trainingId });
+    let notifResp = await notificationsModule.getAllAnnouncementsForTraining(
+      trainingId,
+      userId
+    );
+    setNotifications(notifResp);
+    setIsLoading(false);
+  }, [trainingId, userId]);
+
   useEffect(() => {
     (async function () {
-      setIsLoading(true);
-      if (!trainingId) return;
-      let trainingResp = await trainingModule.getTrainingById(trainingId, true);
-      setTraining({ ...trainingResp, id: trainingId });
-      let notifResp = await notificationsModule.getAllAnnouncementsForTraining(
-        trainingId,
-        userId
-      );
-      setNotifications(notifResp);
-      setIsLoading(false);
+      await getTraining();
     })();
-  }, [trainingId, userId]);
+  }, [getTraining]);
 
   if (isLoading || !training) return <FullBodyLoader />;
   return (
     <ViewTrainingPageContainer>
       <SidebarContainer>
-        <ViewTrainingSidebar training={training} userId={userId} />
+        <ViewTrainingSidebar
+          training={training}
+          userId={userId}
+          getTraining={getTraining}
+        />
       </SidebarContainer>
       <TitleContainer>
         <Typography variant="h4">{training?.title}</Typography>
@@ -87,10 +97,7 @@ export function ViewTrainingPage() {
             <Stack direction="row" spacing={1} alignItems="center">
               <CalendarMonthIcon color="disabled" fontSize="small" />
               <Typography variant="subtitle2" color={grey[700]}>
-                {calcTrainingTimeText(
-                  training.startDate as unknown as Timestamp,
-                  training.endDate as unknown as Timestamp
-                )}
+                {calcTrainingTimeText(training.startDate, training.endDate)}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1} alignItems="center">
@@ -171,11 +178,19 @@ export function ViewTrainingPage() {
             <Typography fontWeight="bold" fontSize="1.4rem">
               Announcements
             </Typography>
-            <Stack direction="row" spacing={2} useFlexGap flexWrap="wrap">
+            <Grid container spacing={2}>
               {notifications.map((notif) => (
-                <Announcement key={notif.notificationId} announcement={notif} />
+                <Grid item xs={12} md={6} key={notif.notificationId}>
+                  <Announcement announcement={notif} />
+                </Grid>
               ))}
-            </Stack>
+            </Grid>
+            <Stack
+              direction="row"
+              spacing={2}
+              useFlexGap
+              flexWrap="wrap"
+            ></Stack>
           </AnnouncementsContainer>
         )}
       </TrainingInfoContainer>

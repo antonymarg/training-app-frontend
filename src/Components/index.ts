@@ -3,6 +3,7 @@ import { AutocompleteUserMultiple } from './AutocompleteUserMultiple/Autocomplet
 import { AvatarWithBadge } from './AvatarWithBadge/AvatarWithBadge';
 
 import { ConfirmationChips } from './ConfirmationChips/ConfirmationChips';
+import { DateTimePicker } from './DateTimePicker/DateTimePicker';
 import { FullBodyLoader } from './FullBodyLoader/FullBodyLoader';
 import { GoogleButton } from './GoogleButton/GoogleButton';
 import { InfoTable } from './InfoTable/InfoTable';
@@ -18,6 +19,7 @@ export {
   AutocompleteUserMultiple,
   AvatarWithBadge,
   ConfirmationChips,
+  DateTimePicker,
   FullBodyLoader,
   GoogleButton,
   InfoTable,

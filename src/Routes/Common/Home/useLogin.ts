@@ -62,9 +62,11 @@ export function useLogin() {
 
   const handleError = (error: { code?: string; message: string }) => {
     setIsLoading(null);
+
     switch (error.code) {
       case 'auth/invalid-email':
-        return { emailError: 'This email is invalid' };
+      case 'auth/user-not-found':
+        return { emailError: 'This email is not correct' };
       case 'auth/wrong-password':
         return { passwordError: 'This password is wrong' };
       case undefined:

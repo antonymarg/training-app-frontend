@@ -28,7 +28,14 @@ export function GoogleButton({
         )
       }
     >
-      {isLoading ? <CircularProgress color="secondary" size={25} /> : text}
+      {isLoading ? (
+        <CircularProgress
+          color={color === 'primary' ? 'secondary' : 'primary'}
+          size={25}
+        />
+      ) : (
+        text
+      )}
     </Button>
   );
 }

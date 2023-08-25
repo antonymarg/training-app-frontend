@@ -12,8 +12,5 @@ const MixedChip = styled(Chip)(({ theme, color }) => ({
     borderColor: theme.palette[color as string].main,
     background: `${rgbToHex(theme.palette[color as string].light) + '20'}`,
     color: theme.palette[color as string].dark,
-    '&:hover': {
-      color: theme.palette[color as string].contrastText,
-    },
   },
 }));
