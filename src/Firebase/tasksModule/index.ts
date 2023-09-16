@@ -66,10 +66,16 @@ const getTaskFromId = async (taskId: string, trainingId: string) => {
 const markTaskAsCompleted = async (
   taskId: string,
   userId: string,
-  trainingId: string
+  trainingId: string,
+  userName: string
 ) => {
   await update(userTaskStatusRef(userId, trainingId), {
     [taskId]: 'completed',
+  });
+  let { completedBy } = await getTaskFromId(taskId, trainingId);
+  if (!completedBy) completedBy = [];
+  await update(ref(realtimeDb, `/tasks/${trainingId}/${taskId}`), {
+    completedBy: [...completedBy, userName],
   });
 };
 

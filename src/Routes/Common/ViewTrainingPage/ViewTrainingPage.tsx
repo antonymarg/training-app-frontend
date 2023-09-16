@@ -87,7 +87,8 @@ export function ViewTrainingPage() {
     await taskModule.markTaskAsCompleted(
       taskId,
       userId,
-      training?.id as string
+      training?.id as string,
+      `${profile?.name} ${profile?.surname}`
     );
     await getTraining();
   };
@@ -205,7 +206,11 @@ export function ViewTrainingPage() {
             <Grid container marginTop={1} spacing={1}>
               {tasks.map((task) => (
                 <Grid item xs={12} key={task.id}>
-                  <Task task={task} onTaskComplete={onTaskComplete} />
+                  <Task
+                    task={task}
+                    onTaskComplete={onTaskComplete}
+                    userRole={profile?.role as IUserRole}
+                  />
                 </Grid>
               ))}
             </Grid>
@@ -220,7 +225,11 @@ export function ViewTrainingPage() {
           <Grid container marginTop={1} spacing={1}>
             {tasks.map((task) => (
               <Grid item xs={12} key={task.id}>
-                <Task task={task} onTaskComplete={onTaskComplete} />
+                <Task
+                  task={task}
+                  onTaskComplete={onTaskComplete}
+                  userRole={profile?.role as IUserRole}
+                />
               </Grid>
             ))}
           </Grid>

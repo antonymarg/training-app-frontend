@@ -18,4 +18,5 @@ export interface ITask extends ITaskOnCreate {
   createdBy: string;
   status?: ITaskStatus;
   trainingId: string;
+  completedBy?: string[];
 }

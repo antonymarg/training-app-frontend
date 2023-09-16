@@ -21,7 +21,12 @@ export function PaxTasks() {
       <Typography variant="h4">My tasks</Typography>
       {tasks.length ? (
         tasks.map((task) => (
-          <Task key={task.id} task={task} showTraining={true} />
+          <Task
+            key={task.id}
+            task={task}
+            showTraining={true}
+            userRole="participant"
+          />
         ))
       ) : (
         <Typography>Congrats! No tasks for you</Typography>

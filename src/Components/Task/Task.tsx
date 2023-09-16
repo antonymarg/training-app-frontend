@@ -5,14 +5,21 @@ import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import moment from 'moment';
 import { ITask } from '../../Firebase/tasksModule/tasksModule.types';
 import styled from 'styled-components';
-
+import { IUserRole } from '../../Models/User/types';
+import CheckIcon from '@mui/icons-material/Check';
 interface ITaskProps {
   task: ITask;
   onTaskComplete?: (taskId: string) => Promise<void>;
   showTraining?: boolean;
+  userRole: IUserRole;
 }
 
-export function Task({ task, onTaskComplete, showTraining }: ITaskProps) {
+export function Task({
+  task,
+  onTaskComplete,
+  showTraining,
+  userRole,
+}: ITaskProps) {
   return (
     <TasksContainer>
       <Stack direction="column" spacing={1}>
@@ -55,6 +62,15 @@ export function Task({ task, onTaskComplete, showTraining }: ITaskProps) {
           {moment.unix(task.createdAt.seconds).calendar()}
         </Typography>
       </Stack>
+      {userRole === 'trainer' && task.completedBy && (
+        <Stack direction="row" spacing={0.5}>
+          <CheckIcon color="disabled" fontSize="small" />
+          <Typography variant="subtitle2" color={grey[700]}>
+            Completed by{' '}
+            {task.completedBy ? task.completedBy.join(', ') : 'none'}
+          </Typography>
+        </Stack>
+      )}
       {showTraining && (
         <Link href={`/trainings/${task.trainingId}`}>
           <Typography variant="subtitle2" color={grey[700]}>
@@ -64,17 +80,19 @@ export function Task({ task, onTaskComplete, showTraining }: ITaskProps) {
       )}
       <Divider style={{ margin: '8px 0px' }} />
       <Typography>{task.description}</Typography>
-      {task.status === 'pending' && onTaskComplete && (
-        <Button
-          size="small"
-          variant="contained"
-          onClick={async () => {
-            await onTaskComplete(task.id);
-          }}
-        >
-          Mark as completed
-        </Button>
-      )}
+      {userRole === 'participant' &&
+        task.status === 'pending' &&
+        onTaskComplete && (
+          <Button
+            size="small"
+            variant="contained"
+            onClick={async () => {
+              await onTaskComplete(task.id);
+            }}
+          >
+            Mark as completed
+          </Button>
+        )}
     </TasksContainer>
   );
 }
