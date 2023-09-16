@@ -1,22 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-import { Chip, Typography, Stack, Grid } from '@mui/material';
+import { Chip, Typography, Stack, Grid, useMediaQuery } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import {
   Announcement,
   AvatarWithBadge,
   FullBodyLoader,
+  Task,
 } from '../../../Components';
 
-import {
-  AnnouncementsContainer,
-  TrainingInfoContainer,
-  DetailsContainer,
-  TitleContainer,
-  ViewTrainingPageContainer,
-  SidebarContainer,
-} from './viewTrainingPage.style';
+import { ViewTrainingPageContainer } from './viewTrainingPage.style';
 import { ViewTrainingSidebar } from './Sidebar/ViewTrainingSidebar';
 
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -33,6 +27,9 @@ import { ITraining } from '../../../Firebase/trainingModule/trainingModule.types
 import { Timestamp } from 'firebase/firestore';
 
 import moment from 'moment';
+import { ITask } from '../../../Firebase/tasksModule/tasksModule.types';
+import { taskModule } from '../../../Firebase/tasksModule';
+import { IUserRole } from '../../../Models/User/types';
 
 const calcTrainingTimeText = (start: Timestamp, end: Timestamp) => {
   let startDate = moment.unix(start.seconds);
@@ -53,9 +50,11 @@ export function ViewTrainingPage() {
   const profile = useSelector(getUserProfile);
   const navigate = useNavigate();
 
+  const isMobile = useMediaQuery('@media only screen and (max-width: 768px)');
   const [isLoading, setIsLoading] = useState(true);
   const [training, setTraining] = useState<ITraining>();
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [tasks, setTasks] = useState<ITask[]>([]);
   const userId = profile?.userId as string;
 
   const getTraining = useCallback(async () => {
@@ -67,10 +66,16 @@ export function ViewTrainingPage() {
       trainingId,
       userId
     );
+    let tasksResp = await taskModule.getTasksForTraining(
+      trainingId,
+      userId,
+      profile?.role as IUserRole
+    );
     setNotifications(notifResp);
+    setTasks(tasksResp);
     document.title = trainingResp.title;
     setIsLoading(false);
-  }, [trainingId, userId]);
+  }, [profile?.role, trainingId, userId]);
 
   useEffect(() => {
     (async function () {
@@ -78,52 +83,50 @@ export function ViewTrainingPage() {
     })();
   }, [getTraining]);
 
+  const onTaskComplete = async (taskId: string) => {
+    await taskModule.markTaskAsCompleted(
+      taskId,
+      userId,
+      training?.id as string
+    );
+    await getTraining();
+  };
+
   if (isLoading || !training) return <FullBodyLoader />;
   return (
     <ViewTrainingPageContainer>
-      <SidebarContainer>
-        <ViewTrainingSidebar
-          training={training}
-          userId={userId}
-          getTraining={getTraining}
-        />
-      </SidebarContainer>
-      <TitleContainer>
+      <Stack spacing={2} gridArea="main-content">
         <Typography variant="h4">{training?.title}</Typography>
-      </TitleContainer>
-      <TrainingInfoContainer>
-        <DetailsContainer>
-          <Stack direction="column" spacing={0.5} flexWrap="wrap">
-            <Stack direction="row" spacing={1} alignItems="center">
-              <CalendarMonthIcon color="disabled" fontSize="small" />
-              <Typography variant="subtitle2" color={grey[700]}>
-                {calcTrainingTimeText(training.startDate, training.endDate)}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <LocationOnIcon color="disabled" fontSize="small" />
-              <Typography variant="subtitle2" color={grey[700]}>
-                {calcTrainingPlace(training.type, training.location)}
-              </Typography>
-            </Stack>
-            {training.topic && (
-              <Stack direction="row" spacing={1} alignItems="center">
-                <LocalOfferIcon color="disabled" fontSize="small" />
-                <Typography variant="subtitle2" color={grey[700]}>
-                  {eTrainingTopics[training.topic]}
-                </Typography>
-              </Stack>
-            )}
-            {training.description && (
-              <Stack direction="row" spacing={1}>
-                <Typography variant="body2" color={grey[700]}>
-                  {training.description}
-                </Typography>
-              </Stack>
-            )}
+        <Stack direction="column" spacing={0.5} flexWrap="wrap">
+          <Stack direction="row" spacing={1} alignItems="center">
+            <CalendarMonthIcon color="disabled" fontSize="small" />
+            <Typography variant="subtitle2" color={grey[700]}>
+              {calcTrainingTimeText(training.startDate, training.endDate)}
+            </Typography>
           </Stack>
-        </DetailsContainer>
-        <Stack spacing={1} sx={{ gridArea: 'trainers-box' }}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <LocationOnIcon color="disabled" fontSize="small" />
+            <Typography variant="subtitle2" color={grey[700]}>
+              {calcTrainingPlace(training.type, training.location)}
+            </Typography>
+          </Stack>
+          {training.topic && (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <LocalOfferIcon color="disabled" fontSize="small" />
+              <Typography variant="subtitle2" color={grey[700]}>
+                {eTrainingTopics[training.topic]}
+              </Typography>
+            </Stack>
+          )}
+          {training.description && (
+            <Stack direction="row" spacing={1}>
+              <Typography variant="body2" color={grey[700]}>
+                {training.description}
+              </Typography>
+            </Stack>
+          )}
+        </Stack>
+        <Stack spacing={0.5}>
           <Typography fontWeight="bold" fontSize="1.4rem">
             Trainers
           </Typography>
@@ -131,7 +134,7 @@ export function ViewTrainingPage() {
             {Object.keys(training.trainers).map((trainerId) => {
               let trainer = training.trainers[trainerId];
               return (
-                <Grid key={trainerId} item xs={6} md={4}>
+                <Grid key={trainerId} item xs={6} md={2}>
                   <Chip
                     label={`${trainer.profile?.name} ${trainer.profile?.surname}`}
                     icon={
@@ -148,7 +151,7 @@ export function ViewTrainingPage() {
             })}
           </Grid>
         </Stack>
-        <Stack spacing={1} sx={{ gridArea: 'pax-box' }}>
+        <Stack spacing={0.5}>
           <Typography fontWeight="bold" fontSize="1.4rem">
             Participants
           </Typography>
@@ -156,7 +159,7 @@ export function ViewTrainingPage() {
             {Object.keys(training.participants).map((participantId) => {
               let participant = training.participants[participantId];
               return (
-                <Grid key={participantId} item xs={6} md={4}>
+                <Grid key={participantId} item xs={6} md={2}>
                   <Chip
                     label={`${participant.profile?.name} ${participant.profile?.surname}`}
                     icon={
@@ -174,7 +177,7 @@ export function ViewTrainingPage() {
           </Grid>
         </Stack>
         {notifications.length !== 0 && (
-          <AnnouncementsContainer>
+          <Stack spacing={1} useFlexGap>
             <Typography fontWeight="bold" fontSize="1.4rem">
               Announcements
             </Typography>
@@ -185,15 +188,44 @@ export function ViewTrainingPage() {
                 </Grid>
               ))}
             </Grid>
-            <Stack
-              direction="row"
-              spacing={2}
-              useFlexGap
-              flexWrap="wrap"
-            ></Stack>
-          </AnnouncementsContainer>
+          </Stack>
         )}
-      </TrainingInfoContainer>
+      </Stack>
+      <Stack spacing={2} gridArea="sidebar">
+        <ViewTrainingSidebar
+          training={training}
+          userId={userId}
+          getTraining={getTraining}
+        />
+        {!isMobile && tasks.length !== 0 && (
+          <Stack>
+            <Typography fontWeight="bold" fontSize="1.4rem">
+              Tasks
+            </Typography>
+            <Grid container marginTop={1} spacing={1}>
+              {tasks.map((task) => (
+                <Grid item xs={12} key={task.id}>
+                  <Task task={task} onTaskComplete={onTaskComplete} />
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
+        )}
+      </Stack>
+      {isMobile && tasks.length !== 0 && (
+        <Stack>
+          <Typography fontWeight="bold" fontSize="1.4rem">
+            Tasks
+          </Typography>
+          <Grid container marginTop={1} spacing={1}>
+            {tasks.map((task) => (
+              <Grid item xs={12} key={task.id}>
+                <Task task={task} onTaskComplete={onTaskComplete} />
+              </Grid>
+            ))}
+          </Grid>
+        </Stack>
+      )}
     </ViewTrainingPageContainer>
   );
 }

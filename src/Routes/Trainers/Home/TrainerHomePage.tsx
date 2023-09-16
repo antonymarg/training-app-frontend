@@ -14,12 +14,13 @@ const TrainerHomePage = () => {
     <TrainerHomePageContainer>
       <TrainingsContainer>
         <TrainingsTable
-          label="My trainings"
+          label="My upcoming trainings"
           userId={userProfile?.userId as string}
           role="trainer"
           timePeriod="presentAndFuture"
           trainingStatus={eTrainingConfirmStatus.Pending}
           allowAddTrainingButton={true}
+          showFooter
         />
       </TrainingsContainer>
       <ProfileContainer>

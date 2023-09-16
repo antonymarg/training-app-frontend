@@ -89,7 +89,7 @@ const getAllAnnouncementsForTraining = async (
   const notifications: INotification[] = [];
   snapshot.forEach((childSnapshot) => {
     const notification: IFetchedNotification = childSnapshot.val();
-    if (notification.type === 'announcement')
+    if (notification.type === 'announcement' || notification.type === 'task')
       notifications.push({
         ...notification,
         status: eRecipientStatus.notReceived,

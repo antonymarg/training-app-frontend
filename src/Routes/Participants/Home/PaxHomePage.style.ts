@@ -4,14 +4,16 @@ export const PaxHomePageContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: auto;
-  grid-template-areas: 'trainings trainings trainings . profile profile';
+  grid-template-areas: 'trainings trainings trainings . profile profile'
+  'tasks tasks tasks tasks tasks tasks';
 
   @media only screen and (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 16px;
     grid-template-areas:
       'profile'
-      'trainings';
+      'trainings'
+      'tasks'';
   }
 `;
 

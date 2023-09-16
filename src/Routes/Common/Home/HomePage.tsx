@@ -246,8 +246,8 @@ export const StyledTextField = (props: TextFieldProps) => (
         color: 'secondary.main',
       },
       'input:-webkit-autofill, input:-webkit-autofill:focus': {
-        'box-shadow': '0 0 0 1000px #0b2027 inset',
-        '-webkit-text-fill-color': '#ffba08',
+        boxShadow: '0 0 0 1000px #0b2027 inset',
+        WebkitTextFillColor: '#ffba08',
       },
     }}
     {...props}

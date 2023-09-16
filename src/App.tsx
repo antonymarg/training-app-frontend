@@ -18,6 +18,7 @@ import { SendNAFormPage } from './Routes/Participants/SendNAFormPage/SendNAFormP
 import TrainerHomePage from './Routes/Trainers/Home/TrainerHomePage';
 import PaxHomePage from './Routes/Participants/Home/PaxHomePage';
 import { EditTrainingPage } from './Routes/Trainers/EditTrainingPage/EditTrainingPage';
+import { ViewAllTrainingsPage } from './Routes/Common/ViewAllTrainingsPage/ViewAllTrainingsPage';
 
 function App() {
   const userRole = useSelector(getUserRole);
@@ -43,6 +44,7 @@ function App() {
             <Route path="signup" element={<SignupPage />} />
             <Route path="signup/complete" element={<SignupCompletePage />} />
             <Route path="create" element={<AddTrainingPage />} />
+            <Route path="trainings" element={<ViewAllTrainingsPage />} />
             <Route
               path="trainings/:trainingId"
               element={<ViewTrainingPage />}

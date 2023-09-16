@@ -13,11 +13,12 @@ interface ITrainingTableProps {
   trainingStatus: eTrainingConfirmStatus;
   allowAddTrainingButton: boolean;
   label: string;
+  showFooter?: boolean;
 }
 type ITrainingDetailsTable = {
   id: string;
   title: string;
-  type: string;
+  topic: string;
   date: string;
 };
 
@@ -25,12 +26,12 @@ export function TrainingsTable({
   userId,
   label,
   allowAddTrainingButton,
+  showFooter,
   ...searchCriteria
 }: ITrainingTableProps) {
   const [trainings, setTrainings] = useState<ITrainingDetailsTable[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
   useEffect(() => {
     (async function () {
       setIsLoading(true);
@@ -41,11 +42,11 @@ export function TrainingsTable({
       );
       setTrainings(
         res.map((training) => {
-          let { id, title, type, startDate } = training;
+          let { id, title, topic, startDate } = training;
           return {
             id,
             title,
-            type,
+            topic,
             date: moment.unix(startDate.seconds).calendar(),
           };
         })
@@ -60,7 +61,7 @@ export function TrainingsTable({
       isLoading={isLoading}
       noDataMessage="No trainings"
       tableData={{
-        headers: ['Title', 'Type', 'Starting'].map((h) => ({ label: h })),
+        headers: ['Title', 'Topic', 'Starting'].map((h) => ({ label: h })),
         data: [...trainings],
       }}
       title={label}
@@ -68,6 +69,7 @@ export function TrainingsTable({
       onCreateClick={() => navigate('/create')}
       createButtonLabel="Add Training"
       onRowClick={(e, id) => navigate(`/trainings/${id}`)}
+      showFooter={showFooter}
     />
   );
 }

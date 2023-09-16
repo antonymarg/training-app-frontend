@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 import { SidebarContainer } from './viewTrainingSidebar.style';
 import { ITraining } from '../../../../Firebase/trainingModule/trainingModule.types';
-import { eFeedbackFormStatus } from '../../../../lib/enums';
 import { ConfirmationChips } from '../../../../Components';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -31,57 +30,41 @@ export function ViewTrainingSidebar({
   userId,
   getTraining,
 }: IViewTrainingSidebarProps) {
-  const { actions, permissions, isModalOpen, onModalClose, modalBody } =
-    useTrainingSidebar({ training, userId, getTraining });
+  const {
+    drawerButtons,
+    isPartOfTheSession,
+    hasConfirmedAttendance,
+    isModalOpen,
+    onModalClose,
+    modalBody,
+  } = useTrainingSidebar({ training, userId, getTraining });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const isMobile = useMediaQuery('@media only screen and (max-width: 768px)');
 
-  const trainerButtons = (
-    <Stack spacing={1}>
-      {!permissions.hasSessionStarted && (
-        <Button variant="contained" onClick={actions.onEditTraining}>
-          Edit training
-        </Button>
-      )}
-      <Button variant="contained" onClick={actions.onSendAnnouncement}>
-        Send announcement
-      </Button>
-      {/* <Button variant="contained" onClick={actions.onCreateTask}>
-        Create task
-      </Button> */}
-      <Button variant="contained" onClick={actions.onViewNAFormResults}>
-        See results of enrollment form
-      </Button>
-      {permissions.hasSessionFinished &&
-        training.feedbackFormStatus === eFeedbackFormStatus.notSent && (
-          <Button variant="contained" onClick={actions.onSendFeedbackForm}>
-            Send feedback form
-          </Button>
+  if (!isPartOfTheSession) return null;
+
+  let dialog = (
+    <Dialog
+      open={isModalOpen}
+      onClose={() => onModalClose(false)}
+      fullWidth
+      maxWidth={isMobile ? 'lg' : 'sm'}
+    >
+      <DialogTitle
+        sx={{ background: theme.palette.primary.main, color: 'white' }}
+      >
+        {modalBody === 'task' ? 'Create new task' : 'Send announcement'}
+      </DialogTitle>
+      <Box padding={2}>
+        {modalBody === 'task' ? (
+          <CreateTaskPage onCreated={onModalClose} training={training} />
+        ) : (
+          <SendAnnouncementPage onSent={onModalClose} />
         )}
-      {permissions.hasSessionFinished &&
-        training.feedbackFormStatus === eFeedbackFormStatus.sent && (
-          <Button
-            variant="contained"
-            onClick={actions.onViewFeedbackFormResults}
-          >
-            See feedback form results
-          </Button>
-        )}
-    </Stack>
+      </Box>
+    </Dialog>
   );
 
-  const participantButtons = (
-    <Stack spacing={1}>
-      {permissions.hasSessionFinished &&
-        training.feedbackFormStatus === eFeedbackFormStatus.sent &&
-        !permissions.hasFilledFeedback && (
-          <Button variant="contained" onClick={actions.onSendFeedbackForm}>
-            Fill out feedback form
-          </Button>
-        )}
-    </Stack>
-  );
-  if (!permissions.isPartOfTheSession) return null;
   if (isMobile)
     return (
       <>
@@ -97,57 +80,54 @@ export function ViewTrainingSidebar({
           onClose={() => setIsDrawerOpen(false)}
         >
           <Stack spacing={4}>
-            {permissions.isPartOfTheSession &&
-              !permissions.hasConfirmedAttendance && (
-                <ConfirmationChips
-                  trainingId={training.id}
-                  getTraining={getTraining}
-                />
-              )}
-            {permissions.hasConfirmedAttendance && (
+            {isPartOfTheSession && !hasConfirmedAttendance && (
+              <ConfirmationChips
+                trainingId={training.id}
+                getTraining={getTraining}
+              />
+            )}
+            {drawerButtons.length > 0 && (
               <SidebarContainer>
-                {permissions.isTrainerInTheSession && trainerButtons}
-                {permissions.isParticipantInTheSession && participantButtons}
+                <Stack spacing={1}>
+                  {drawerButtons.map((button) => (
+                    <Button
+                      key={button.key}
+                      variant="contained"
+                      onClick={button.onClick}
+                    >
+                      {button.label}
+                    </Button>
+                  ))}
+                </Stack>
               </SidebarContainer>
             )}
           </Stack>
+          {dialog}
         </Drawer>
       </>
     );
+
   return (
     <Stack spacing={4} minWidth="200px">
-      {permissions.isPartOfTheSession &&
-        !permissions.hasConfirmedAttendance && (
-          <ConfirmationChips
-            trainingId={training.id}
-            getTraining={getTraining}
-          />
-        )}
-      {permissions.hasConfirmedAttendance && (
+      {isPartOfTheSession && !hasConfirmedAttendance && (
+        <ConfirmationChips trainingId={training.id} getTraining={getTraining} />
+      )}
+      {drawerButtons.length > 0 && (
         <SidebarContainer>
-          {permissions.isTrainerInTheSession && trainerButtons}
-          {permissions.isParticipantInTheSession && participantButtons}
+          <Stack spacing={1}>
+            {drawerButtons.map((button) => (
+              <Button
+                key={button.key}
+                variant="contained"
+                onClick={button.onClick}
+              >
+                {button.label}
+              </Button>
+            ))}
+          </Stack>
         </SidebarContainer>
       )}
-      <Dialog
-        open={isModalOpen}
-        onClose={() => onModalClose(false)}
-        fullWidth
-        maxWidth={isMobile ? 'lg' : 'sm'}
-      >
-        <DialogTitle
-          sx={{ background: theme.palette.primary.main, color: 'white' }}
-        >
-          {modalBody === 'task' ? 'Create new task' : 'Send announcement'}
-        </DialogTitle>
-        <Box padding={2}>
-          {modalBody === 'task' ? (
-            <CreateTaskPage onCreated={onModalClose} training={training} />
-          ) : (
-            <SendAnnouncementPage onSent={onModalClose} />
-          )}
-        </Box>
-      </Dialog>
+      {dialog}
     </Stack>
   );
 }

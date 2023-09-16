@@ -1,31 +1,32 @@
-import {
-  PaxHomePageContainer,
-  TrainingsContainer,
-  ProfileContainer,
-} from './PaxHomePage.style';
+import { PaxHomePageContainer } from './PaxHomePage.style';
 import { TrainingsTable, Profile } from '../../../Components';
 import { eTrainingConfirmStatus } from '../../../lib/enums';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
+import { PaxTasks } from './PaxTasks/PaxTasks';
 
 const PaxHomePage = () => {
   const userProfile = useSelector(getUserProfile);
 
   return (
     <PaxHomePageContainer>
-      <TrainingsContainer>
+      <div style={{ gridArea: 'trainings' }}>
         <TrainingsTable
-          label="My trainings"
+          label="My upcoming trainings"
           userId={userProfile?.userId as string}
-          role="participant"
+          role="trainer"
           timePeriod="presentAndFuture"
           trainingStatus={eTrainingConfirmStatus.Pending}
           allowAddTrainingButton={false}
+          showFooter
         />
-      </TrainingsContainer>
-      <ProfileContainer>
+      </div>
+      <div style={{ gridArea: 'profile' }}>
         <Profile />
-      </ProfileContainer>
+      </div>
+      <div style={{ gridArea: 'tasks' }}>
+        <PaxTasks />
+      </div>
     </PaxHomePageContainer>
   );
 };

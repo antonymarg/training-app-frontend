@@ -3,62 +3,15 @@ import styled from 'styled-components';
 export const ViewTrainingPageContainer = styled.div`
   display: grid;
   grid-template-columns: 8fr 2fr;
-  grid-template-rows: fit-content;
   gap: 64px;
-  row-gap: 0px;
   grid-template-areas:
-    'title sidebar'
-    'trainingInfo sidebar';
-
+    'main-content sidebar'
+    'main-content tasks';
   @media only screen and (max-width: 768px) {
     grid-template-columns: 1fr min-content;
-    grid-template-rows: fit-content;
     gap: 16px;
-    row-gap: 0px;
-
     grid-template-areas:
-      'title sidebar'
-      'trainingInfo trainingInfo';
+      'main-content sidebar'
+      'tasks _';
   }
-`;
-
-export const TrainingInfoContainer = styled.div`
-  grid-area: trainingInfo;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto;
-  grid-template-areas:
-    'title title . .'
-    'details details details details'
-    'trainers-box trainers-box pax-box pax-box'
-    'announcements announcements announcements announcements';
-  gap: 16px;
-  row-gap: 16px;
-  @media only screen and (max-width: 768px) {
-    grid-template-columns: 1fr;
-    padding: 0;
-    grid-template-areas:
-      'title'
-      'details'
-      'trainers-box'
-      'pax-box'
-      'announcements';
-  }
-`;
-
-export const TitleContainer = styled.div`
-  grid-area: title;
-`;
-export const DetailsContainer = styled.div`
-  grid-area: details;
-`;
-
-export const AnnouncementsContainer = styled.div`
-  grid-area: announcements;
-  display: grid;
-  gap: 8px;
-`;
-
-export const SidebarContainer = styled.div`
-  grid-area: sidebar;
 `;

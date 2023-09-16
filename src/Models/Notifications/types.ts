@@ -1,7 +1,11 @@
 import { Timestamp } from 'firebase/firestore';
 import { eRecipientStatus } from '../../lib/enums';
 
-export type INotificationTypes = 'announcement' | 'invitation' | 'reminder';
+export type INotificationTypes =
+  | 'announcement'
+  | 'task'
+  | 'invitation'
+  | 'reminder';
 
 export interface INotificationBodyOnCreate {
   senderId: string;

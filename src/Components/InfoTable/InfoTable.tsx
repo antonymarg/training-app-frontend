@@ -8,6 +8,7 @@ import {
   TableCell,
   TableRow,
   TableBody,
+  Link,
 } from '@mui/material';
 import { TableHeader } from './infoTable.style';
 import AddIcon from '@mui/icons-material/Add';
@@ -32,6 +33,7 @@ interface IInfoTableProps {
   onCreateClick?: (e: React.MouseEvent) => void;
   createButtonLabel?: string;
   isLoading?: boolean;
+  showFooter?: boolean;
 }
 
 export function InfoTable({
@@ -43,6 +45,7 @@ export function InfoTable({
   onCreateClick,
   createButtonLabel,
   onRowClick,
+  showFooter,
 }: IInfoTableProps) {
   if (isLoading) return <FullBodyLoader />;
 
@@ -68,6 +71,19 @@ export function InfoTable({
         ))}
       </TableRow>
     ));
+  };
+
+  const getTableFooter = () => {
+    if (showFooter)
+      return (
+        <TableRow>
+          <TableCell colSpan={4}>
+            <Link href="/trainings">
+              <Typography textAlign="right">View all trainings</Typography>
+            </Link>
+          </TableCell>
+        </TableRow>
+      );
   };
 
   return (
@@ -104,7 +120,10 @@ export function InfoTable({
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>{getTableBody()}</TableBody>
+        <TableBody>
+          {getTableBody()}
+          {getTableFooter()}
+        </TableBody>
       </Table>
     </TableContainer>
   );

@@ -26,11 +26,17 @@ export function Announcement({ announcement }: IAnnouncementProps) {
 
   return (
     <AnnouncementsContainer>
-      <Stack direction="row" spacing={2} alignItems="center">
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        flexWrap="wrap"
+        useFlexGap
+      >
         <Typography fontWeight="bold" fontSize="1.2rem">
           {announcement.title}
         </Typography>
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
           {announcement.status === eRecipientStatus.received && (
             <TransparentChip
               label="New"
@@ -52,7 +58,13 @@ export function Announcement({ announcement }: IAnnouncementProps) {
           )}
         </Stack>
       </Stack>
-      <Stack direction="row" spacing={1} alignItems="center">
+      <Stack
+        direction="row"
+        spacing={1}
+        alignItems="center"
+        flexWrap="wrap"
+        useFlexGap
+      >
         <Stack direction="row" spacing={0.5}>
           <CalendarMonthIcon color="disabled" fontSize="small" />
           <Typography variant="subtitle2" color={grey[700]}>

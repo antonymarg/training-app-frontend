@@ -20,38 +20,37 @@ export function CreateTaskPage({
   if (!trainingId) return <FullBodyLoader />;
   return (
     <Stack spacing={2}>
-      <Stack direction="column" spacing={1}>
-        <TextField
-          id="title"
-          label="Title"
-          value={formData.title}
-          required
-          fullWidth
-          onChange={(v) => setFormData({ ...formData, title: v.target.value })}
-        />
-        <TextField
-          id="description"
-          label="Description"
-          value={formData.description}
-          multiline
-          minRows={2}
-          fullWidth
-          onChange={(v) =>
-            setFormData({ ...formData, description: v.target.value })
-          }
-        />
-        <DateTimePicker
-          value={formData.deadline}
-          setValue={(v) => setFormData({ ...formData, deadline: v })}
-          label="Deadline"
-          id="deadline"
-        />
-      </Stack>
+      <TextField
+        id="title"
+        label="Title"
+        value={formData.title}
+        required
+        fullWidth
+        onChange={(v) => setFormData({ ...formData, title: v.target.value })}
+      />
+      <TextField
+        id="description"
+        label="Description"
+        value={formData.description}
+        multiline
+        minRows={2}
+        fullWidth
+        onChange={(v) =>
+          setFormData({ ...formData, description: v.target.value })
+        }
+      />
+      <DateTimePicker
+        value={formData.deadline}
+        setValue={(v) => setFormData({ ...formData, deadline: v })}
+        label="Deadline"
+        id="deadline"
+      />
+
       <Button
         variant="contained"
         size="large"
         onClick={onCreateTask}
-        style={{ gridArea: 'button' }}
+        style={{ width: 'min-content', marginLeft: 'auto' }}
       >
         {isLoading ? (
           <CircularProgress color="secondary" size={25} />

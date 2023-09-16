@@ -32,7 +32,9 @@ export function useNotifications() {
             status: fetchedNotif[1],
           });
         }
-
+        notifications.sort((a, b) =>
+          a.sentAt.seconds > b.sentAt.seconds ? -1 : 1
+        );
         if (notifications.length !== 0)
           dispatch(updateNotifications(notifications));
       }
@@ -45,11 +47,7 @@ export function useNotifications() {
         notification.notificationId,
         userId
       );
-    if (
-      (notification.type === 'invitation' ||
-        notification.type === 'announcement') &&
-      notification.trainingId
-    )
+    if (notification.trainingId)
       navigate('trainings/' + notification.trainingId);
   };
 

@@ -1,7 +1,6 @@
 import { Announcement } from './Announcement/Announcement';
 import { AutocompleteUserMultiple } from './AutocompleteUserMultiple/AutocompleteUserMultiple';
 import { AvatarWithBadge } from './AvatarWithBadge/AvatarWithBadge';
-
 import { ConfirmationChips } from './ConfirmationChips/ConfirmationChips';
 import { DateTimePicker } from './DateTimePicker/DateTimePicker';
 import { FullBodyLoader } from './FullBodyLoader/FullBodyLoader';
@@ -11,6 +10,7 @@ import { Menu } from './Menu/Menu';
 import { Navbar } from './Navbar/Navbar';
 import { NotificationsMenu } from './NotificationsMenu/NotificationMenu';
 import { Profile } from './Profile/Profile';
+import { Task } from './Task/Task';
 import { TrainingsTable } from './TrainingsTable/TrainingsTable';
 import { TransparentChip } from './TransparentChip/TransparentChip';
 
@@ -27,6 +27,7 @@ export {
   Navbar,
   NotificationsMenu,
   Profile,
+  Task,
   TrainingsTable,
   TransparentChip,
 };

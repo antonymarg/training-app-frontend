@@ -88,9 +88,9 @@ const getTrainings = async (
     let training = tr.data();
     if (
       (criteria.timePeriod === 'past' &&
-        moment.unix(training.startDate).isAfter(moment())) ||
+        moment.unix(training.startDate).isBefore(moment())) ||
       (criteria.timePeriod === 'presentAndFuture' &&
-        moment.unix(training.startDate).isBefore(moment()))
+        moment.unix(training.startDate).isAfter(moment()))
     )
       return;
     trainings.push({ id: tr.id, ...training } as ITraining);
@@ -124,7 +124,6 @@ const updateTraining = async (
   trainingId: string,
   training: ITrainingOnCreate
 ) => {
-  console.log(trainingId);
   const ref = doc(db, 'trainings', trainingId);
   return await updateDoc(ref, { ...training });
 };
