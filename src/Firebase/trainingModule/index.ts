@@ -10,6 +10,7 @@ import {
   Timestamp,
   updateDoc,
   QueryFieldFilterConstraint,
+  arrayUnion,
 } from '@firebase/firestore';
 import { db } from '../firebase';
 import { ITraining, ITrainingOnCreate } from './trainingModule.types';
@@ -17,6 +18,7 @@ import { IUserRole } from '../../Models/User/types';
 import { eFeedbackFormStatus, eTrainingConfirmStatus } from '../../lib/enums';
 import { userModule } from '../userModule';
 import moment from 'moment';
+import { assetsModule } from '../assetsModule';
 
 interface ITrainingSearchCriteria {
   timePeriod: 'past' | 'presentAndFuture' | 'all';
@@ -128,6 +130,24 @@ const updateTraining = async (
   return await updateDoc(ref, { ...training });
 };
 
+const uploadFollowUpMaterial = async (
+  trainingId: string,
+  material: { file: File; title: string; description?: string }
+) => {
+  const upload = await assetsModule.uploadAsset(
+    `trainings/${trainingId}/followUpMaterial`,
+    material.file
+  );
+  const ref = doc(db, 'trainings', trainingId);
+  return updateDoc(ref, {
+    followUpMaterials: arrayUnion({
+      title: material.title,
+      fileUrl: upload.metadata.fullPath,
+      description: material.description,
+    }),
+  });
+};
+
 export const trainingModule = {
   createTraining,
   updateTraining,
@@ -135,4 +155,5 @@ export const trainingModule = {
   getTrainingById,
   updateUserStatus,
   updateFeedbackField,
+  uploadFollowUpMaterial,
 };

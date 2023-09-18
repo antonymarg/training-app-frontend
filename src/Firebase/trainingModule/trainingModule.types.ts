@@ -23,10 +23,15 @@ export interface ITrainingOnCreate {
   type: eTrainingTypes;
   location?: string;
 }
+export interface IFollowUpMaterial {
+  title: string;
+  fileUrl: string;
+}
 
 export interface ITraining extends ITrainingOnCreate {
   id: string;
   feedbackFormStatus: eFeedbackFormStatus;
+  followUpMaterials: IFollowUpMaterial[];
 }
 
 export interface ITrainingUser {

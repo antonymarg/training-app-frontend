@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
-import { Chip, Typography, Stack, Grid, useMediaQuery } from '@mui/material';
+import {
+  Chip,
+  Typography,
+  Stack,
+  Grid,
+  useMediaQuery,
+  Link,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
 import {
   Announcement,
@@ -20,7 +27,11 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import { useSelector } from 'react-redux';
 import { getUserProfile } from '../../../Models/User/selectors';
 
-import { notificationsModule, trainingModule } from '../../../Firebase';
+import {
+  assetsModule,
+  notificationsModule,
+  trainingModule,
+} from '../../../Firebase';
 import { eTrainingTopics, eTrainingTypes } from '../../../lib/enums';
 import { INotification } from '../../../Models/Notifications/types';
 import { ITraining } from '../../../Firebase/trainingModule/trainingModule.types';
@@ -198,6 +209,31 @@ export function ViewTrainingPage() {
           userId={userId}
           getTraining={getTraining}
         />
+        {!isMobile && training.followUpMaterials.length && (
+          <Stack>
+            <Typography fontWeight="bold" fontSize="1.4rem">
+              Follow-up materials
+            </Typography>
+            <ul>
+              <Stack spacing={1}>
+                {training.followUpMaterials.map((material, index) => (
+                  <li key={index}>
+                    <Link
+                      onClick={async () => {
+                        const link = await assetsModule.getAsset(
+                          material.fileUrl
+                        );
+                        window.open(link, '_blank');
+                      }}
+                    >
+                      <Typography>{material.title}</Typography>
+                    </Link>
+                  </li>
+                ))}
+              </Stack>
+            </ul>
+          </Stack>
+        )}
         {!isMobile && tasks.length !== 0 && (
           <Stack>
             <Typography fontWeight="bold" fontSize="1.4rem">

@@ -21,7 +21,9 @@ export function useTrainingSidebar({
   const navigate = useNavigate();
   const [hasFilledFeedback, setHasFilledFeedback] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalBody, setModalBody] = useState<'announcement' | 'task'>();
+  const [modalBody, setModalBody] = useState<
+    'announcement' | 'task' | 'followUp'
+  >();
 
   useEffect(() => {
     (async function () {
@@ -35,10 +37,11 @@ export function useTrainingSidebar({
     [navigate, training.id]
   );
 
-  const openModalWithBody = (page: 'announcement' | 'task') => () => {
-    setModalBody(page);
-    setIsModalOpen(true);
-  };
+  const openModalWithBody =
+    (page: 'announcement' | 'task' | 'followUp') => () => {
+      setModalBody(page);
+      setIsModalOpen(true);
+    };
 
   const onRefresh = async () => await getTraining();
 
@@ -89,6 +92,12 @@ export function useTrainingSidebar({
           key: 'edit-training',
           label: 'Edit training',
           onClick: navigateToTrainingPage('edit'),
+        });
+      if (hasSessionFinished)
+        buttons.push({
+          key: 'send-follow-up-materials',
+          label: 'Send follow up materials',
+          onClick: openModalWithBody('followUp'),
         });
       if (
         hasSessionFinished &&

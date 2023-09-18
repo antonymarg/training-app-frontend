@@ -18,6 +18,7 @@ import { useState } from 'react';
 import { CreateTaskPage } from '../../../Trainers/CreateTaskPage/CreateTaskPage';
 import { SendAnnouncementPage } from '../../../Trainers/SendAnnouncementPage/SendAnnouncementPage';
 import { theme } from '../../../../theme';
+import { SendFollowUpPage } from '../../../Trainers/SendFollowUpPage/SendFollowUpPage';
 
 export interface IViewTrainingSidebarProps {
   training: ITraining;
@@ -43,27 +44,43 @@ export function ViewTrainingSidebar({
 
   if (!isPartOfTheSession) return null;
 
-  let dialog = (
-    <Dialog
-      open={isModalOpen}
-      onClose={() => onModalClose(false)}
-      fullWidth
-      maxWidth={isMobile ? 'lg' : 'sm'}
-    >
-      <DialogTitle
-        sx={{ background: theme.palette.primary.main, color: 'white' }}
-      >
-        {modalBody === 'task' ? 'Create new task' : 'Send announcement'}
-      </DialogTitle>
-      <Box padding={2}>
-        {modalBody === 'task' ? (
+  let getDialog = () => {
+    let title = '';
+    let mainBody = <></>;
+
+    switch (modalBody) {
+      case 'task':
+        title = 'Create Task';
+        mainBody = (
           <CreateTaskPage onCreated={onModalClose} training={training} />
-        ) : (
-          <SendAnnouncementPage onSent={onModalClose} />
-        )}
-      </Box>
-    </Dialog>
-  );
+        );
+        break;
+      case 'announcement':
+        title = 'Send Announcement';
+        mainBody = <SendAnnouncementPage onSent={onModalClose} />;
+        break;
+      case 'followUp':
+        title = 'Send follow-up material';
+        mainBody = <SendFollowUpPage onSent={onModalClose} />;
+        break;
+    }
+
+    return (
+      <Dialog
+        open={isModalOpen}
+        onClose={() => onModalClose(false)}
+        fullWidth
+        maxWidth={isMobile ? 'lg' : 'sm'}
+      >
+        <DialogTitle
+          sx={{ background: theme.palette.primary.main, color: 'white' }}
+        >
+          {title}
+        </DialogTitle>
+        <Box padding={2}>{mainBody}</Box>
+      </Dialog>
+    );
+  };
 
   if (isMobile)
     return (
@@ -102,7 +119,7 @@ export function ViewTrainingSidebar({
               </SidebarContainer>
             )}
           </Stack>
-          {dialog}
+          {getDialog()}
         </Drawer>
       </>
     );
@@ -127,7 +144,7 @@ export function ViewTrainingSidebar({
           </Stack>
         </SidebarContainer>
       )}
-      {dialog}
+      {getDialog()}
     </Stack>
   );
 }
