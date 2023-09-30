@@ -209,7 +209,7 @@ export function ViewTrainingPage() {
           userId={userId}
           getTraining={getTraining}
         />
-        {!isMobile && training.followUpMaterials.length && (
+        {!isMobile && training.followUpMaterials && (
           <Stack>
             <Typography fontWeight="bold" fontSize="1.4rem">
               Follow-up materials
