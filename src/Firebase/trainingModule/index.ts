@@ -90,9 +90,9 @@ const getTrainings = async (
     let training = tr.data();
     if (
       (criteria.timePeriod === 'past' &&
-        moment.unix(training.startDate).isBefore(moment())) ||
+        moment.unix(training.startDate.seconds).isAfter(moment())) ||
       (criteria.timePeriod === 'presentAndFuture' &&
-        moment.unix(training.startDate).isAfter(moment()))
+        moment.unix(training.startDate.seconds).isBefore(moment()))
     )
       return;
     trainings.push({ id: tr.id, ...training } as ITraining);
