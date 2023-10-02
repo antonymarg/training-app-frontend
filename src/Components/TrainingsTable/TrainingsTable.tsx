@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { trainingModule } from '../../Firebase';
 import moment from 'moment';
-import { eTrainingConfirmStatus } from '../../lib/enums';
+import { eTrainingConfirmStatus, eTrainingTopics } from '../../lib/enums';
 import { IUserRole } from '../../Models/User/types';
 import { InfoTable } from '../InfoTable/InfoTable';
 
@@ -46,7 +46,7 @@ export function TrainingsTable({
           return {
             id,
             title,
-            topic,
+            topic: eTrainingTopics[topic],
             date: moment.unix(startDate.seconds).calendar(),
           };
         })
