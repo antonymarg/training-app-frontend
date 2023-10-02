@@ -27,7 +27,7 @@ export function ViewNAFormPage() {
   return (
     <Stack spacing={2}>
       <Typography fontSize="1.4em" fontWeight="bold">
-        Need assessment form responses
+        Enrollment form responses
       </Typography>
       {NAReplies.length === 0 ? (
         <Typography>No responses</Typography>

@@ -7,6 +7,7 @@ import {
 } from '../../../../lib/enums';
 import { feedbackModule } from '../../../../Firebase/feedbackModule/feedbackModule';
 import { IViewTrainingSidebarProps } from './ViewTrainingSidebar';
+import { trainingModule } from '../../../../Firebase';
 interface IButton {
   key: string;
   label: string;
@@ -71,6 +72,7 @@ export function useTrainingSidebar({
     let hasSessionStarted =
       training.startDate.seconds < Timestamp.now().seconds;
     let hasSessionFinished = training.endDate.seconds < Timestamp.now().seconds;
+
     if (isTrainerInTheSession) {
       buttons.push({
         key: 'send-announcement',
@@ -99,14 +101,17 @@ export function useTrainingSidebar({
           label: 'Send follow up materials',
           onClick: openModalWithBody('followUp'),
         });
-      if (
-        hasSessionFinished &&
-        training.feedbackFormStatus === eFeedbackFormStatus.notSent
-      )
+      if (hasSessionFinished && training.feedbackFormStatus === undefined)
         buttons.push({
           key: 'send-feedback-form',
           label: 'Send feedback form',
-          onClick: navigateToTrainingPage('feedback'),
+          onClick: () => {
+            trainingModule.updateFeedbackField(
+              training.id,
+              eFeedbackFormStatus.sent
+            );
+            getTraining();
+          },
         });
       if (
         hasSessionFinished &&
@@ -121,7 +126,7 @@ export function useTrainingSidebar({
     if (isParticipantInTheSession) {
       if (
         hasSessionFinished &&
-        training.feedbackFormStatus === eFeedbackFormStatus.notSent &&
+        training.feedbackFormStatus === eFeedbackFormStatus.sent &&
         !hasFilledFeedback
       )
         buttons.push({
@@ -132,15 +137,17 @@ export function useTrainingSidebar({
     }
     return buttons;
   }, [
-    permissions,
-    hasFilledFeedback,
-    navigateToTrainingPage,
+    permissions.hasConfirmedAttendance,
+    training.participants,
+    training.trainers,
+    training.startDate.seconds,
     training.endDate.seconds,
     training.feedbackFormStatus,
-    training.participants,
-    training.startDate.seconds,
-    training.trainers,
+    training.id,
     userId,
+    navigateToTrainingPage,
+    getTraining,
+    hasFilledFeedback,
   ]);
 
   return {
