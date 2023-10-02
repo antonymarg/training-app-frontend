@@ -14,7 +14,7 @@ const PaxHomePage = () => {
         <TrainingsTable
           label="My upcoming trainings"
           userId={userProfile?.userId as string}
-          role="trainer"
+          role="participant"
           timePeriod="presentAndFuture"
           trainingStatus={eTrainingConfirmStatus.Pending}
           allowAddTrainingButton={false}
