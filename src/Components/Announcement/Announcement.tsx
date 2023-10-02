@@ -56,6 +56,9 @@ export function Announcement({ announcement }: IAnnouncementProps) {
           {announcement.type === 'reminder' && (
             <TransparentChip variant="outlined" label="reminder" color="info" />
           )}
+          {announcement.type === 'task' && (
+            <TransparentChip variant="outlined" label="Task" color="secondary" />
+          )}
         </Stack>
       </Stack>
       <Stack
