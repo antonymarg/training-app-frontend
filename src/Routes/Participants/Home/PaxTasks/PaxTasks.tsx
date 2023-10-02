@@ -13,7 +13,7 @@ export function PaxTasks() {
   useEffect(() => {
     (async function () {
       const taskRes = await taskModule.getUserTasks(userId);
-      setTasks(taskRes);
+      setTasks(taskRes.filter((task) => task.status === 'pending'));
     })();
   }, [userId]);
   return (
