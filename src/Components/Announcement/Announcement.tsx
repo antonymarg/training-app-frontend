@@ -26,63 +26,73 @@ export function Announcement({ announcement }: IAnnouncementProps) {
 
   return (
     <AnnouncementsContainer>
-      <Stack
-        direction="row"
-        spacing={2}
-        alignItems="center"
-        flexWrap="wrap"
-        useFlexGap
-      >
-        <Typography fontWeight="bold" fontSize="1.2rem">
-          {announcement.title}
-        </Typography>
-        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          {announcement.status === eRecipientStatus.received && (
-            <TransparentChip
-              label="New"
-              color="secondary"
-              variant="outlined"
-              size="small"
-            />
-          )}
-          {announcement.type === 'announcement' && (
-            <TransparentChip
-              variant="outlined"
-              label="Announcement"
-              color="info"
-              size="small"
-            />
-          )}
-          {announcement.type === 'reminder' && (
-            <TransparentChip variant="outlined" label="reminder" color="info" />
-          )}
-          {announcement.type === 'task' && (
-            <TransparentChip variant="outlined" label="Task" color="secondary" />
-          )}
-        </Stack>
-      </Stack>
-      <Stack
-        direction="row"
-        spacing={1}
-        alignItems="center"
-        flexWrap="wrap"
-        useFlexGap
-      >
-        <Stack direction="row" spacing={0.5}>
-          <CalendarMonthIcon color="disabled" fontSize="small" />
-          <Typography variant="subtitle2" color={grey[700]}>
-            {moment.unix(announcement.sentAt.seconds).calendar()}
+      <Stack spacing={1}>
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          flexWrap="wrap"
+          useFlexGap
+        >
+          <Typography fontWeight="bold" fontSize="1.2rem">
+            {announcement.title}
           </Typography>
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+            {announcement.status === eRecipientStatus.received && (
+              <TransparentChip
+                label="New"
+                color="secondary"
+                variant="outlined"
+                size="small"
+              />
+            )}
+            {announcement.type === 'announcement' && (
+              <TransparentChip
+                variant="outlined"
+                label="Announcement"
+                color="info"
+                size="small"
+              />
+            )}
+            {announcement.type === 'reminder' && (
+              <TransparentChip
+                variant="outlined"
+                label="reminder"
+                color="info"
+              />
+            )}
+            {announcement.type === 'task' && (
+              <TransparentChip
+                variant="outlined"
+                label="Task"
+                color="secondary"
+              />
+            )}
+          </Stack>
         </Stack>
-        <Stack direction="row" spacing={0.5}>
-          <PersonIcon color="disabled" fontSize="small" />
-          <Typography variant="subtitle2" color={grey[700]}>
-            {sender}
-          </Typography>
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          flexWrap="wrap"
+          useFlexGap
+        >
+          <Stack direction="row" spacing={0.5}>
+            <CalendarMonthIcon color="disabled" fontSize="small" />
+            <Typography variant="subtitle2" color={grey[700]}>
+              {moment.unix(announcement.sentAt.seconds).calendar()}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={0.5}>
+            <PersonIcon color="disabled" fontSize="small" />
+            <Typography variant="subtitle2" color={grey[700]}>
+              {sender}
+            </Typography>
+          </Stack>
         </Stack>
+        <Divider style={{ margin: '8px 0px' }} />
+        <Typography>{announcement.mainText}</Typography>
       </Stack>
-      <Divider style={{ margin: '8px 0px' }} />
-      <Typography>{announcement.mainText}</Typography>
     </AnnouncementsContainer>
   );
 }
