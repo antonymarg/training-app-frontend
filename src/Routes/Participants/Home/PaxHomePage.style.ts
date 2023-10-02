@@ -13,7 +13,7 @@ export const PaxHomePageContainer = styled.div`
     grid-template-areas:
       'profile'
       'trainings'
-      'tasks'';
+      'tasks';
   }
 `;
 

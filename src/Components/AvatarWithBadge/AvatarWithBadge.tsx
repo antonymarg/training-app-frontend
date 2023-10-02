@@ -32,7 +32,9 @@ const getBadgeColour = (status: eTrainingConfirmStatus) => {
       return 'error';
     case eTrainingConfirmStatus.Pending:
       return 'secondary';
-  }
+      default: 
+      return 'primary'
+   }
 };
 
 const StyledBadge = styled(Badge)(
@@ -40,6 +42,7 @@ const StyledBadge = styled(Badge)(
     theme,
     status,
   }: BadgeProps & { status: eTrainingConfirmStatus; theme: Theme }) => ({
+    'color': `${console.log(getBadgeColour(status))} + a`,
     '& .MuiBadge-badge': {
       backgroundColor: theme.palette[getBadgeColour(status)].main,
       color: theme.palette[getBadgeColour(status)].main,
