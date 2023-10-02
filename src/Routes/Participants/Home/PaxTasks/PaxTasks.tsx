@@ -20,14 +20,16 @@ export function PaxTasks() {
     <Stack spacing={1}>
       <Typography variant="h4">My tasks</Typography>
       {tasks.length ? (
-        tasks.map((task) => (
-          <Task
-            key={task.id}
-            task={task}
-            showTraining={true}
-            userRole="participant"
-          />
-        ))
+        <Stack direction="row" flexWrap="wrap" spacing={2}>
+          {tasks.map((task) => (
+            <Task
+              key={task.id}
+              task={task}
+              showTraining={true}
+              userRole="participant"
+            />
+          ))}
+        </Stack>
       ) : (
         <Typography>Congrats! No tasks for you</Typography>
       )}

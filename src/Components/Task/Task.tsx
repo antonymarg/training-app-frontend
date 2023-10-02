@@ -45,7 +45,7 @@ export function Task({
               />
             )}
             {task.status === 'pending' &&
-              moment().isAfter(task.deadline.seconds) && (
+              moment().isAfter(task.deadline.seconds * 1000) && (
                 <TransparentChip
                   variant="outlined"
                   label="Overdue"
@@ -59,7 +59,7 @@ export function Task({
       <Stack direction="row" spacing={0.5}>
         <HourglassTopIcon color="disabled" fontSize="small" />
         <Typography variant="subtitle2" color={grey[700]}>
-          {moment.unix(task.createdAt.seconds).calendar()}
+          {moment.unix(task.deadline.seconds).calendar()}
         </Typography>
       </Stack>
       {userRole === 'trainer' && task.completedBy && (
