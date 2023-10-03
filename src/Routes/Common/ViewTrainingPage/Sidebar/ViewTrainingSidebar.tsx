@@ -82,7 +82,13 @@ export function ViewTrainingSidebar({
     );
   };
 
-  if (isMobile)
+  if (isMobile) {
+    if (
+      !drawerButtons.length &&
+      !(isPartOfTheSession && !hasConfirmedAttendance)
+    )
+      return <></>;
+
     return (
       <>
         <IconButton
@@ -105,7 +111,7 @@ export function ViewTrainingSidebar({
             )}
             {drawerButtons.length > 0 && (
               <SidebarContainer>
-                <Stack spacing={1}>
+                <Stack spacing={1} padding={2}>
                   {drawerButtons.map((button) => (
                     <Button
                       key={button.key}
@@ -123,6 +129,7 @@ export function ViewTrainingSidebar({
         </Drawer>
       </>
     );
+  }
 
   return (
     <Stack spacing={4} minWidth="200px">

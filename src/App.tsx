@@ -19,6 +19,7 @@ import TrainerHomePage from './Routes/Trainers/Home/TrainerHomePage';
 import PaxHomePage from './Routes/Participants/Home/PaxHomePage';
 import { EditTrainingPage } from './Routes/Trainers/EditTrainingPage/EditTrainingPage';
 import { ViewAllTrainingsPage } from './Routes/Common/ViewAllTrainingsPage/ViewAllTrainingsPage';
+import { ReceivedMaterialsPage } from './Routes/Participants/ReceivedMaterialsPage/ReceivedMaterialsPage';
 
 function App() {
   const userRole = useSelector(getUserRole);
@@ -70,6 +71,7 @@ function App() {
               }
             />
             <Route path="user/:userId" element={<ViewUser />} />
+            <Route path="materials" element={<ReceivedMaterialsPage />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </LayoutContainer>

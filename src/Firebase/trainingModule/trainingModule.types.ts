@@ -25,6 +25,7 @@ export interface ITrainingOnCreate {
 }
 export interface IFollowUpMaterial {
   title: string;
+  description: string;
   fileUrl: string;
 }
 

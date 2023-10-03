@@ -8,7 +8,6 @@ import {
   TableCell,
   TableRow,
   TableBody,
-  Link,
 } from '@mui/material';
 import { TableHeader } from './infoTable.style';
 import AddIcon from '@mui/icons-material/Add';
@@ -27,7 +26,7 @@ interface IInfoTableData {
 interface IInfoTableProps {
   tableData: IInfoTableData;
   noDataMessage: string;
-  onRowClick?: (e: React.MouseEvent, id: string) => void;
+  onRowClick?: (e: React.MouseEvent, id: string) => Promise<void> | void;
   title: string;
   showCreateButton?: boolean;
   onCreateClick?: (e: React.MouseEvent) => void;
@@ -45,7 +44,6 @@ export function InfoTable({
   onCreateClick,
   createButtonLabel,
   onRowClick,
-  showFooter,
 }: IInfoTableProps) {
   if (isLoading) return <FullBodyLoader />;
 
@@ -53,7 +51,7 @@ export function InfoTable({
     if (tableData.data.length === 0)
       return (
         <TableRow>
-          <TableCell colSpan={3}>
+          <TableCell colSpan={tableData.headers.length}>
             <Typography color="gray">{noDataMessage}</Typography>
           </TableCell>
         </TableRow>
@@ -73,25 +71,20 @@ export function InfoTable({
     ));
   };
 
-  const getTableFooter = () => {
-    if (showFooter)
-      return (
-        <TableRow>
-          <TableCell colSpan={4}>
-            <Link href="/trainings">
-              <Typography textAlign="right">View all trainings</Typography>
-            </Link>
-          </TableCell>
-        </TableRow>
-      );
-  };
-
   return (
     <TableContainer component={Paper}>
       <Table>
+        <colgroup>
+          {tableData.headers.map((_, i) => (
+            <col style={{ width: `${100 / tableData.headers.length}%` }} />
+          ))}
+        </colgroup>
         <TableHead>
           <TableRow style={{ padding: 0 }}>
-            <TableCell colSpan={4} style={{ padding: '0px' }}>
+            <TableCell
+              colSpan={tableData.headers.length}
+              style={{ padding: '0px' }}
+            >
               <TableHeader>
                 <Typography
                   variant="body1"
@@ -120,10 +113,7 @@ export function InfoTable({
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {getTableBody()}
-          {getTableFooter()}
-        </TableBody>
+        <TableBody>{getTableBody()}</TableBody>
       </Table>
     </TableContainer>
   );

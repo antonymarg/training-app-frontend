@@ -27,10 +27,11 @@ export function useNotifications() {
           let notif = await notificationsModule.getNotificationById(
             fetchedNotif[0]
           );
-          notifications.push({
-            ...notif,
-            status: fetchedNotif[1],
-          });
+          if (notif.notificationId)
+            notifications.push({
+              ...notif,
+              status: fetchedNotif[1],
+            });
         }
         notifications.sort((a, b) =>
           a.sentAt.seconds > b.sentAt.seconds ? -1 : 1
