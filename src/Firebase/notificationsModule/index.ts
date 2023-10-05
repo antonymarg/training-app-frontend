@@ -89,7 +89,11 @@ const getAllAnnouncementsForTraining = async (
   const notifications: INotification[] = [];
   snapshot.forEach((childSnapshot) => {
     const notification: IFetchedNotification = childSnapshot.val();
-    if (notification.type === 'announcement' || notification.type === 'task')
+    if (
+      notification.type === 'announcement' ||
+      notification.type === 'task' ||
+      notification.type === 'reminder'
+    )
       notifications.push({
         ...notification,
         status: eRecipientStatus.notReceived,
@@ -131,7 +135,7 @@ const markNotificationAsSeen = (
   recipientId: string
 ) => {
   const userRef = userNotificationsRef(recipientId);
-  set(userRef, { [notificationId]: eRecipientStatus.seen });
+  update(userRef, { [notificationId]: eRecipientStatus.seen });
 };
 
 export const notificationsModule = {

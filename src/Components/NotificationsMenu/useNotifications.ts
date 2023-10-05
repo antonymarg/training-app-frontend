@@ -34,7 +34,7 @@ export function useNotifications() {
             });
         }
         notifications.sort((a, b) =>
-          a.sentAt.seconds > b.sentAt.seconds ? -1 : 1
+          a.sentAt.seconds < b.sentAt.seconds ? -1 : 1
         );
         if (notifications.length !== 0)
           dispatch(updateNotifications(notifications));

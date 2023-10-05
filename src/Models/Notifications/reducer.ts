@@ -12,7 +12,15 @@ const notificationsSlice = createSlice({
     builder.addCase(
       updateNotifications,
       (state, action: IAction<INotification[]>) => {
-        return action.payload;
+        let notifications = [...state];
+        for (let notif of action.payload) {
+          let indexOfNotif = notifications.findIndex(
+            (n) => n.notificationId === notif.notificationId
+          );
+          if (indexOfNotif !== -1) notifications[indexOfNotif] = notif;
+          else notifications.unshift(notif);
+        }
+        return notifications;
       }
     );
     builder.addCase(clearNotifications, () => []);
