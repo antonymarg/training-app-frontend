@@ -76,7 +76,10 @@ export function InfoTable({
       <Table>
         <colgroup>
           {tableData.headers.map((_, i) => (
-            <col style={{ width: `${100 / tableData.headers.length}%` }} />
+            <col
+              key={i.toString()}
+              style={{ width: `${100 / tableData.headers.length}%` }}
+            />
           ))}
         </colgroup>
         <TableHead>
