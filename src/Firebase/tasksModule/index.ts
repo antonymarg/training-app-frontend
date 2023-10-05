@@ -47,10 +47,12 @@ const getTasksForTraining = async (
       query(userTaskStatusRef(userId, trainingId))
     );
     const taskStatusData = taskStatusReq.val();
-    tasksArray = tasksArray.map((task) => ({
-      ...task,
-      status: taskStatusData[task.id],
-    }));
+
+    if (taskStatusData)
+      tasksArray = tasksArray.map((task) => ({
+        ...task,
+        status: taskStatusData[task.id],
+      }));
   }
   return tasksArray;
 };

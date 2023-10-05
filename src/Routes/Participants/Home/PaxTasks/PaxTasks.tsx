@@ -16,23 +16,26 @@ export function PaxTasks() {
       setTasks(taskRes.filter((task) => task.status === 'pending'));
     })();
   }, [userId]);
-  if (!tasks.length) return <Typography>Congrats! No tasks for you</Typography>;
 
   return (
     <Stack spacing={1} useFlexGap>
       <Typography variant="h4">My tasks</Typography>
-      <Grid container spacing={2}>
-        {tasks.map((task) => (
-          <Grid item xs={12} md={6} key={task.id}>
-            <Task
-              key={task.id}
-              task={task}
-              showTraining={true}
-              userRole="participant"
-            />
-          </Grid>
-        ))}
-      </Grid>
+      {!tasks.length ? (
+        <Typography>Congrats! No tasks for you</Typography>
+      ) : (
+        <Grid container spacing={2}>
+          {tasks.map((task) => (
+            <Grid item xs={12} md={6} key={task.id}>
+              <Task
+                key={task.id}
+                task={task}
+                showTraining={true}
+                userRole="participant"
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Stack>
   );
 }
