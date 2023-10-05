@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ITask } from '../../../../Firebase/tasksModule/tasksModule.types';
 import { taskModule } from '../../../../Firebase/tasksModule';
@@ -16,23 +16,23 @@ export function PaxTasks() {
       setTasks(taskRes.filter((task) => task.status === 'pending'));
     })();
   }, [userId]);
+  if (!tasks.length) return <Typography>Congrats! No tasks for you</Typography>;
+
   return (
-    <Stack spacing={1}>
+    <Stack spacing={1} useFlexGap>
       <Typography variant="h4">My tasks</Typography>
-      {tasks.length ? (
-        <Stack direction="row" flexWrap="wrap" spacing={2}>
-          {tasks.map((task) => (
+      <Grid container spacing={2}>
+        {tasks.map((task) => (
+          <Grid item xs={12} md={6} key={task.id}>
             <Task
               key={task.id}
               task={task}
               showTraining={true}
               userRole="participant"
             />
-          ))}
-        </Stack>
-      ) : (
-        <Typography>Congrats! No tasks for you</Typography>
-      )}
+          </Grid>
+        ))}
+      </Grid>
     </Stack>
   );
 }
