@@ -42,13 +42,15 @@ export function ViewNAFormPage() {
                   </Link>
                 </Typography>
                 <Stack>
-                  <Typography>
+                  <Typography fontWeight="bold">
                     Why do you want to attend this session?
                   </Typography>
                   <Typography>{repl.response.motivation}</Typography>
                 </Stack>
                 <Stack>
-                  <Typography>Why do you expect from this session?</Typography>
+                  <Typography fontWeight="bold">
+                    Why do you expect from this session?
+                  </Typography>
                   <Typography>{repl.response.expectation}</Typography>
                 </Stack>
               </Stack>
