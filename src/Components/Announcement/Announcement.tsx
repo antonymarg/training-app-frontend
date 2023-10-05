@@ -57,8 +57,8 @@ export function Announcement({ announcement }: IAnnouncementProps) {
             {announcement.type === 'reminder' && (
               <TransparentChip
                 variant="outlined"
-                label="reminder"
-                color="info"
+                label="Reminder"
+                color="warning"
               />
             )}
             {announcement.type === 'task' && (

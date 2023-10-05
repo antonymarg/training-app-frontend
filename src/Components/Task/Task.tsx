@@ -10,6 +10,7 @@ import CheckIcon from '@mui/icons-material/Check';
 interface ITaskProps {
   task: ITask;
   onTaskComplete?: (taskId: string) => Promise<void>;
+  onRemind?: (task: ITask) => Promise<void>;
   showTraining?: boolean;
   userRole: IUserRole;
 }
@@ -17,6 +18,7 @@ interface ITaskProps {
 export function Task({
   task,
   onTaskComplete,
+  onRemind,
   showTraining,
   userRole,
 }: ITaskProps) {
@@ -93,6 +95,17 @@ export function Task({
             Mark as completed
           </Button>
         )}
+      {userRole === 'trainer' && onRemind && (
+        <Button
+          size="small"
+          variant="contained"
+          onClick={async () => {
+            await onRemind(task);
+          }}
+        >
+          Send reminder
+        </Button>
+      )}
     </TasksContainer>
   );
 }

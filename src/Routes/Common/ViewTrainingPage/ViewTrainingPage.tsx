@@ -104,6 +104,20 @@ export function ViewTrainingPage() {
     await getTraining();
   };
 
+  const onRemind = async (task: ITask) => {
+    if (!training) return;
+    await notificationsModule.sendNotification({
+      senderId: userId,
+      title: `Reminder for "${task.title}"!`,
+      mainText: `Please complete the task by: ${moment
+        .unix(task.deadline.seconds)
+        .format('MMMM Do YYYY, h:mm:ss a')}`,
+      type: 'reminder',
+      trainingId: trainingId as string,
+      recipients: Object.keys(training.participants),
+    });
+  };
+
   if (isLoading || !training) return <FullBodyLoader />;
   return (
     <ViewTrainingPageContainer>
@@ -244,6 +258,7 @@ export function ViewTrainingPage() {
                 <Grid item xs={12} key={task.id}>
                   <Task
                     task={task}
+                    onRemind={onRemind}
                     onTaskComplete={onTaskComplete}
                     userRole={profile?.role as IUserRole}
                   />
@@ -263,6 +278,7 @@ export function ViewTrainingPage() {
               <Grid item xs={12} key={task.id}>
                 <Task
                   task={task}
+                  onRemind={onRemind}
                   onTaskComplete={onTaskComplete}
                   userRole={profile?.role as IUserRole}
                 />
